@@ -1,0 +1,5 @@
+.gitignore
+.idea/
+target/
+cdstore.iml
+dependency-reduced-pom.xml
