@@ -7,7 +7,7 @@ import static pl.jojczykp.cdstore.client.cds.CreateCdRequest.aCreateCdRequest
 
 class CreateCdIT extends Specification {
 
-	UUID id = randomUUID();
+	UUID id = randomUUID()
 	String title = "Some Title"
 
 	def "should create a new cd"() {

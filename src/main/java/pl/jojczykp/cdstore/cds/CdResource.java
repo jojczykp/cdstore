@@ -41,7 +41,7 @@ public class CdResource {
 
 	@GET
 	@Timed
-	@Produces(CD_LIST_MEDIA_TYPE)
+	@Produces(CD_MEDIA_TYPE)
 	@Path("/{id}")
 	public Cd getCd(@PathParam("id") UUID id) {
 		return manager.getCd(id);
@@ -49,7 +49,7 @@ public class CdResource {
 
 	@GET
 	@Timed
-	@Produces(CD_MEDIA_TYPE)
+	@Produces(CD_LIST_MEDIA_TYPE)
 	public List<Cd> getCds() {
 		return manager.getCds();
 	}

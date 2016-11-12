@@ -33,6 +33,12 @@ public class CreateCdRequest {
 		return this;
 	}
 
+	public CreateCdRequest withCd(Cd cd) {
+		this.id = cd.getId();
+		this.title = cd.getTitle();
+		return this;
+	}
+
 	public Cd makeSuccessfully() {
 		ClientResponse response = make();
 		assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
