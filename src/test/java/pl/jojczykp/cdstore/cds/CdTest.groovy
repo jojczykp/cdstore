@@ -11,9 +11,11 @@ class CdTest extends Specification {
 
 	def "should return with getters what was set in constructor"() {
 		when:
-			Cd cd = aCd().withId(id).withTitle(title).build()
+			Cd cd = aCd()
+					.withId(id)
+					.withTitle(title)
+					.build()
 		then:
-			cd.id == id
-			cd.title == title
+			cd == new Cd(id: id, title: title)
 	}
 }

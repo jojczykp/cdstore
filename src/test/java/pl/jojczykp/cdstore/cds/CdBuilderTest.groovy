@@ -17,7 +17,6 @@ class CdBuilderTest extends Specification {
 					.withTitle(title)
 					.build()
 		then:
-			cd.id == id
-			cd.title == title
+			cd == new Cd(id: id, title: title)
 	}
 }

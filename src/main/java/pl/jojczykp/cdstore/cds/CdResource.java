@@ -8,14 +8,17 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
+
+import static javax.ws.rs.core.Response.Status.CREATED;
 
 @Path("/cds")
 public class CdResource {
 
-	private static final String CD_MEDIA_TYPE = "application/vnd-cdstore.1+json";
-	private static final String CD_LIST_MEDIA_TYPE = "application/vnd-cdstore-list.1+json";
+	public static final String CD_MEDIA_TYPE = "application/vnd-cdstore.1+json";
+	public static final String CD_LIST_MEDIA_TYPE = "application/vnd-cdstore-list.1+json";
 
 	private CdManager manager;
 
@@ -27,8 +30,13 @@ public class CdResource {
 	@Timed
 	@Produces(CD_MEDIA_TYPE)
 	@Consumes(CD_MEDIA_TYPE)
-	public Cd createCd(Cd cd) {
-		return manager.createCd(cd);
+	public Response createCd(Cd cd) {
+		Cd created = manager.createCd(cd);
+
+		return Response
+				.status(CREATED)
+				.entity(created)
+				.build();
 	}
 
 	@GET

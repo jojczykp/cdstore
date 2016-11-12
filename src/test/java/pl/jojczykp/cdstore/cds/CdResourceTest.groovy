@@ -1,6 +1,9 @@
 package pl.jojczykp.cdstore.cds
 
+import com.sun.jersey.api.client.ClientResponse
 import spock.lang.Specification
+
+import javax.ws.rs.core.Response
 
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
 
@@ -16,10 +19,10 @@ class CdResourceTest extends Specification {
 
 	def "should delegate create cd to manager"() {
 		when:
-			Cd result = resource.createCd(cd1)
+			Response result = resource.createCd(cd1)
 		then:
 			1 * manager.createCd(cd1) >> cd2
-			result == cd2
+			result.entity == cd2
 	}
 
 	def "should delegate get cd by id to manager"() {

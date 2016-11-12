@@ -12,7 +12,7 @@ class CdHealthCheckTest extends Specification {
 		when:
 			String name = healthCheck.name
 		then:
-			name == "cd"
+			name == "cds"
 	}
 
 	def "should be healthy"() {

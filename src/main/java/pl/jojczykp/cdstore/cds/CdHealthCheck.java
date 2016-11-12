@@ -11,7 +11,7 @@ public class CdHealthCheck extends HealthCheck {
 	}
 
 	public String getName() {
-		return "cd";
+		return "cds";
 	}
 
 	@Override

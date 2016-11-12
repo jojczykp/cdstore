@@ -59,9 +59,9 @@ class CdRepositoryTest extends Specification {
 			List<Cd> cds = repository.getCds()
 		then:
 			cds == [
-					aCd().withId(new UUID(1, 1)).withTitle(dbUrl + " 1").build(),
-					aCd().withId(new UUID(2, 2)).withTitle(dbUrl + " 2").build(),
-					aCd().withId(new UUID(3, 3)).withTitle(dbUrl + " 3").build()
+					new Cd(id: new UUID(1, 1), title: dbUrl + " 1"),
+					new Cd(id: new UUID(2, 2), title: dbUrl + " 2"),
+					new Cd(id: new UUID(3, 3), title: dbUrl + " 3")
 			]
 	}
 }

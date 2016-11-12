@@ -23,11 +23,11 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
-		registerCd(cdStoreConfiguration.getCd(), environment);
+		registerCds(cdStoreConfiguration.getCd(), environment);
 		registerExceptionsMappers(environment);
 	}
 
-	private void registerCd(CdConfiguration configuration, Environment environment) {
+	private void registerCds(CdConfiguration configuration, Environment environment) {
 		CdRepository repository = new CdRepository(configuration.getDbUrl());
 		CdManager manager = new CdManager(repository);
 		CdResource resource = new CdResource(manager);
