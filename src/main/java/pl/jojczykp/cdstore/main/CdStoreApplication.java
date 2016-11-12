@@ -7,6 +7,8 @@ import pl.jojczykp.cdstore.cds.CdHealthCheck;
 import pl.jojczykp.cdstore.cds.CdManager;
 import pl.jojczykp.cdstore.cds.CdRepository;
 import pl.jojczykp.cdstore.cds.CdResource;
+import pl.jojczykp.cdstore.exceptions.EntityAlreadyExistsExceptionMapper;
+import pl.jojczykp.cdstore.exceptions.EntityNotFoundExceptionMapper;
 
 public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
@@ -22,6 +24,7 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
 		registerCd(cdStoreConfiguration.getCd(), environment);
+		registerExceptionsMappers(environment);
 	}
 
 	private void registerCd(CdConfiguration configuration, Environment environment) {
@@ -32,5 +35,10 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 		CdHealthCheck healthCheck = new CdHealthCheck(configuration);
 		environment.healthChecks().register(healthCheck.getName(), healthCheck);
+	}
+
+	private void registerExceptionsMappers(Environment environment) {
+		environment.jersey().register(new EntityNotFoundExceptionMapper());
+		environment.jersey().register(new EntityAlreadyExistsExceptionMapper());
 	}
 }

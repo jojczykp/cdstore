@@ -1,6 +1,7 @@
 package pl.jojczykp.cdstore.cds;
 
-import pl.jojczykp.cdstore.main.CdStoreException;
+import pl.jojczykp.cdstore.exceptions.EntityAlreadyExistsException;
+import pl.jojczykp.cdstore.exceptions.EntityNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class CdRepository {
 	public Cd createCd(Cd cd) {
 		Cd previous = content.putIfAbsent(cd.getId(), cd);
 		if (previous != null) {
-			throw new CdStoreException("cd with given id already exists");
+			throw new EntityAlreadyExistsException("cd with given id already exists");
 		} else {
 			return cd;
 		}
@@ -44,7 +45,7 @@ public class CdRepository {
 	public Cd getCd(UUID id) {
 		Cd result = content.get(id);
 		if (result == null) {
-			throw new CdStoreException("cd with given id does not exist");
+			throw new EntityNotFoundException("cd with given id does not exist");
 		}
 
 		return result;

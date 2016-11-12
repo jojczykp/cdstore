@@ -1,6 +1,7 @@
 package pl.jojczykp.cdstore.cds
 
-import pl.jojczykp.cdstore.main.CdStoreException
+import pl.jojczykp.cdstore.exceptions.EntityAlreadyExistsException
+import pl.jojczykp.cdstore.exceptions.EntityNotFoundException
 import spock.lang.Specification
 
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
@@ -29,7 +30,7 @@ class CdRepositoryTest extends Specification {
 		when:
 			repository.createCd(newCd)
 		then:
-			CdStoreException ex = thrown()
+			EntityAlreadyExistsException ex = thrown()
 			ex.message == "cd with given id already exists"
 	}
 
@@ -49,7 +50,7 @@ class CdRepositoryTest extends Specification {
 		when:
 			repository.getCd(notExistingId)
 		then:
-			CdStoreException ex = thrown()
+			EntityNotFoundException ex = thrown()
 			ex.message == "cd with given id does not exist"
 	}
 
