@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.cd;
+package pl.jojczykp.cdstore.cds;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;

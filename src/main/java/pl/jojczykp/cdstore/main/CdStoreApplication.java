@@ -2,11 +2,11 @@ package pl.jojczykp.cdstore.main;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import pl.jojczykp.cdstore.cd.CdConfiguration;
-import pl.jojczykp.cdstore.cd.CdHealthCheck;
-import pl.jojczykp.cdstore.cd.CdManager;
-import pl.jojczykp.cdstore.cd.CdRepository;
-import pl.jojczykp.cdstore.cd.CdResource;
+import pl.jojczykp.cdstore.cds.CdConfiguration;
+import pl.jojczykp.cdstore.cds.CdHealthCheck;
+import pl.jojczykp.cdstore.cds.CdManager;
+import pl.jojczykp.cdstore.cds.CdRepository;
+import pl.jojczykp.cdstore.cds.CdResource;
 
 public class CdStoreApplication extends Application<CdStoreConfiguration> {
 

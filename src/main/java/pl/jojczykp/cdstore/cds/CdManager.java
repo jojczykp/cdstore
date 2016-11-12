@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.cd;
+package pl.jojczykp.cdstore.cds;
 
 import java.util.List;
 import java.util.UUID;

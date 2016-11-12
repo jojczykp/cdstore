@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.cd
+package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 import com.codahale.metrics.health.HealthCheck

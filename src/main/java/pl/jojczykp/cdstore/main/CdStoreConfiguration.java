@@ -3,8 +3,7 @@ package pl.jojczykp.cdstore.main;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
-import org.hibernate.validator.constraints.NotEmpty;
-import pl.jojczykp.cdstore.cd.CdConfiguration;
+import pl.jojczykp.cdstore.cds.CdConfiguration;
 
 import javax.validation.constraints.NotNull;
 

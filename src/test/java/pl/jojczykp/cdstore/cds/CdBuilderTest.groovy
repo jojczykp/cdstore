@@ -1,8 +1,8 @@
-package pl.jojczykp.cdstore.cd
+package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cd.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
 
 
 class CdBuilderTest extends Specification {

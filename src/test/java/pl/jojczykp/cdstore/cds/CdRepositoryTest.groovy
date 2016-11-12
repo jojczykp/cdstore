@@ -1,9 +1,9 @@
-package pl.jojczykp.cdstore.cd
+package pl.jojczykp.cdstore.cds
 
 import pl.jojczykp.cdstore.main.CdStoreException
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cd.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
 
 
 class CdRepositoryTest extends Specification {

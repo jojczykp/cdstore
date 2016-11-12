@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.cd;
+package pl.jojczykp.cdstore.cds;
 
 import pl.jojczykp.cdstore.main.CdStoreException;
 
@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.stream.Collectors.toList;
-import static pl.jojczykp.cdstore.cd.Cd.CdBuilder.aCd;
+import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
 
 public class CdRepository {
 
