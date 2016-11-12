@@ -2,7 +2,8 @@ package pl.jojczykp.cdstore.cd
 
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cd.Cd.CdBuilder.aCd
+
 
 class CdResourceTest extends Specification {
 
@@ -12,6 +13,14 @@ class CdResourceTest extends Specification {
 
 	CdManager manager = Mock(CdManager)
 	CdResource resource = new CdResource(manager)
+
+	def "should delegate create cd to manager"() {
+		when:
+			Cd result = resource.createCd(cd1)
+		then:
+			1 * manager.createCd(cd1) >> cd2
+			result == cd2
+	}
 
 	def "should delegate get cd by id to manager"() {
 		when:

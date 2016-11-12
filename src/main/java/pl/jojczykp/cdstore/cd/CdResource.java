@@ -2,7 +2,9 @@ package pl.jojczykp.cdstore.cd;
 
 import com.codahale.metrics.annotation.Timed;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +21,14 @@ public class CdResource {
 
 	public CdResource(CdManager manager) {
 		this.manager = manager;
+	}
+
+	@POST
+	@Timed
+	@Produces(CD_MEDIA_TYPE)
+	@Consumes(CD_MEDIA_TYPE)
+	public Cd createCd(Cd cd) {
+		return manager.createCd(cd);
 	}
 
 	@GET

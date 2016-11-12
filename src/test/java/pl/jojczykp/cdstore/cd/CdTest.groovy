@@ -2,6 +2,8 @@ package pl.jojczykp.cdstore.cd
 
 import spock.lang.Specification
 
+import static pl.jojczykp.cdstore.cd.Cd.CdBuilder.aCd
+
 class CdTest extends Specification {
 
 	UUID id = new UUID(1, 2)
@@ -9,7 +11,7 @@ class CdTest extends Specification {
 
 	def "should return with getters what was set in constructor"() {
 		when:
-			Cd cd = new Cd(id, title)
+			Cd cd = aCd().withId(id).withTitle(title).build()
 		then:
 			cd.id == id
 			cd.title == title

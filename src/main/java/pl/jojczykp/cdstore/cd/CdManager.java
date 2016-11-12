@@ -11,6 +11,10 @@ public class CdManager {
 		this.repository = repository;
 	}
 
+	public Cd createCd(Cd cd) {
+		return repository.createCd(cd);
+	}
+
 	public Cd getCd(UUID id) {
 		return repository.getCd(id);
 	}
@@ -18,5 +22,4 @@ public class CdManager {
 	public List<Cd> getCds() {
 		return repository.getCds();
 	}
-
 }

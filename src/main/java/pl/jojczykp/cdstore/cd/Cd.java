@@ -11,20 +11,16 @@ import static org.apache.commons.lang3.builder.ToStringStyle.DEFAULT_STYLE;
 
 public class Cd {
 
+	@JsonProperty
 	private UUID id;
-	private String title;
-
-	Cd(UUID id, String title) {
-		this.id = id;
-		this.title = title;
-	}
 
 	@JsonProperty
+	private String title;
+
 	public UUID getId() {
 		return id;
 	}
 
-	@JsonProperty
 	public String getTitle() {
 		return title;
 	}
@@ -42,5 +38,35 @@ public class Cd {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, DEFAULT_STYLE, true);
+	}
+
+	public static class CdBuilder {
+
+		private UUID id;
+		private String title;
+
+		private CdBuilder() {}
+
+		public static CdBuilder aCd() {
+			return new CdBuilder();
+		}
+
+		public CdBuilder withId(UUID id) {
+			this.id = id;
+			return this;
+		}
+
+		public CdBuilder withTitle(String title) {
+			this.title = title;
+			return this;
+		}
+
+		public Cd build() {
+			Cd cd = new Cd();
+			cd.id = id;
+			cd.title = title;
+
+			return cd;
+		}
 	}
 }
