@@ -4,6 +4,7 @@ import pl.jojczykp.cdstore.exceptions.EntityAlreadyExistsException
 import pl.jojczykp.cdstore.exceptions.EntityNotFoundException
 import spock.lang.Specification
 
+import static java.util.UUID.randomUUID
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
 
 
@@ -67,7 +68,7 @@ class CdRepositoryTest extends Specification {
 
 	def "should update cd"() {
 		given:
-			UUID id = UUID.randomUUID()
+			UUID id = randomUUID()
 			Cd cd = aCd().withId(id).withTitle("Old Title").build()
 			Cd patch = aCd().withTitle("New Title").build()
 			Cd expectedCd = aCd().from(cd).withTitle(patch.getTitle()).build()
@@ -81,13 +82,33 @@ class CdRepositoryTest extends Specification {
 
 	def "should fail on update cd if it does not exists"() {
 		given:
-			UUID id = UUID.randomUUID()
+			UUID id = randomUUID()
 			Cd patch = aCd().withTitle("New Title").build()
 		when:
 			repository.updateCd(id, patch)
 		then:
 			EntityNotFoundException ex = thrown()
 			ex.message == "cd with given id not found"
+	}
+
+	def "should delete cd"() {
+		given:
+			UUID id = randomUUID()
+			Cd cd = aCd().withId(id).withTitle("A Title").build()
+			repository.createCd(cd)
+		when:
+			repository.deleteCd(id)
+		then:
+			true
+	}
+
+	def "should succeed on deleting not existing cd"() {
+		given:
+			UUID id = randomUUID()
+		when:
+			repository.deleteCd(id)
+		then:
+			true
 	}
 
 }

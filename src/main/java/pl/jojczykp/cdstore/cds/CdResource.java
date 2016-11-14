@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.jersey.PATCH;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 
 @Path("/cds")
 public class CdResource {
@@ -62,6 +64,17 @@ public class CdResource {
 	@Path("/{id}")
 	public Cd updateCd(@PathParam("id") UUID id, Cd cd) {
 		return manager.updateCd(id, cd);
+	}
+
+	@DELETE
+	@Timed
+	@Path("/{id}")
+	public Response deleteCd(@PathParam("id") UUID id) {
+		manager.deleteCd(id);
+
+		return Response
+				.status(NO_CONTENT)
+				.build();
 	}
 
 }

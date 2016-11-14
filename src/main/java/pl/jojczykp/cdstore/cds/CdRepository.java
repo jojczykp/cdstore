@@ -63,4 +63,9 @@ public class CdRepository {
 			return newValue;
 		}
 	}
+
+	public void deleteCd(UUID id) {
+		content.remove(id);
+	}
+
 }

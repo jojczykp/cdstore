@@ -26,4 +26,9 @@ public class CdManager {
 	public Cd updateCd(UUID id, Cd cd) {
 		return repository.updateCd(id, cd);
 	}
+
+	public void deleteCd(UUID id) {
+		repository.deleteCd(id);
+	}
+
 }

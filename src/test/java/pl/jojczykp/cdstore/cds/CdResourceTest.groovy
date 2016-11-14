@@ -48,4 +48,11 @@ class CdResourceTest extends Specification {
 		result == cd2
 	}
 
+	def "should delegate delete cd to manager"() {
+		when:
+			resource.deleteCd(id)
+		then:
+			1 * manager.deleteCd(id)
+	}
+
 }

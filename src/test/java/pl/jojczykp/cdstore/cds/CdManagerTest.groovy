@@ -48,4 +48,11 @@ class CdManagerTest extends Specification {
 			result == cd2
 	}
 
+	def "should delegate delete cd to repository"() {
+		when:
+			manager.deleteCd(id)
+		then:
+			1 * repository.deleteCd(id)
+	}
+
 }
