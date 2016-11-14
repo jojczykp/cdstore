@@ -19,4 +19,29 @@ class CdBuilderTest extends Specification {
 		then:
 			cd == new Cd(id: id, title: title)
 	}
+
+	def "should build a copy"() {
+		given:
+			Cd original = new Cd(id: id, title: title)
+		when:
+			Cd copy = aCd()
+					.from(original)
+					.build()
+		then:
+			copy == original
+	}
+
+	def "should build a copy overriding property"() {
+		given:
+			UUID newId = new UUID(1, 3)
+			Cd original = new Cd(id: id, title: title)
+		when:
+			Cd copy = aCd()
+					.from(original)
+					.withId(newId)
+					.build()
+		then:
+			copy == new Cd(id: newId, title: title)
+	}
+
 }

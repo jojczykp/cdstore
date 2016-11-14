@@ -22,4 +22,8 @@ public class CdManager {
 	public List<Cd> getCds() {
 		return repository.getCds();
 	}
+
+	public Cd updateCd(UUID id, Cd cd) {
+		return repository.updateCd(id, cd);
+	}
 }

@@ -55,4 +55,12 @@ public class CdRepository {
 		return content.values().stream().collect(toList());
 	}
 
+	public Cd updateCd(UUID id, Cd cd) {
+		Cd newValue = content.computeIfPresent(id, (i, c) -> aCd().from(cd).withId(id).build());
+		if (newValue == null) {
+			throw new EntityNotFoundException("cd with given id not found");
+		} else {
+			return newValue;
+		}
+	}
 }

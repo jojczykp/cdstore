@@ -6,58 +6,53 @@ import pl.jojczykp.cdstore.cds.Cd;
 
 import java.util.UUID;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
+import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
 import static pl.jojczykp.cdstore.cds.CdResource.CD_MEDIA_TYPE;
 
-public class CreateCdRequest {
+public class UpdateCdRequest {
 
 	private UUID id;
 	private String title;
 
-	private CreateCdRequest() {
+	private UpdateCdRequest() {
 	}
 
-	public static CreateCdRequest aCreateCdRequest() {
-		return new CreateCdRequest();
+	public static UpdateCdRequest anUpdateCdRequest() {
+		return new UpdateCdRequest();
 	}
 
-	public CreateCdRequest withId(UUID id) {
+	public UpdateCdRequest withId(UUID id) {
 		this.id = id;
 		return this;
 	}
 
-	public CreateCdRequest withTitle(String title) {
+	public UpdateCdRequest withTitle(String title) {
 		this.title = title;
-		return this;
-	}
-
-	public CreateCdRequest withCd(Cd cd) {
-		this.id = cd.getId();
-		this.title = cd.getTitle();
 		return this;
 	}
 
 	public Cd makeSuccessfully() {
 		ClientResponse response = make();
-		assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
+		assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
 
 		return response.getEntity(Cd.class);
 	}
 
 	public ClientResponse make() {
 		Client client = Client.create();
+		client.getProperties().put(PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND, true);
 
 		ClientResponse response = client
-				.resource("http://localhost:8080").path("cds")
+				.resource("http://localhost:8080").path("cds").path(id.toString())
 				.accept(CD_MEDIA_TYPE)
 				.type(CD_MEDIA_TYPE)
 				.entity(aCd()
-						.withId(id)
 						.withTitle(title)
 						.build())
-				.post(ClientResponse.class);
+				.method("PATCH", ClientResponse.class);
 
 		response.bufferEntity();
 

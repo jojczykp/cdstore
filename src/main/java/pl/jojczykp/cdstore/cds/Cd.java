@@ -51,6 +51,12 @@ public class Cd {
 			return new CdBuilder();
 		}
 
+		public CdBuilder from(Cd cd) {
+			withId(cd.id);
+			withTitle(cd.title);
+			return this;
+		}
+
 		public CdBuilder withId(UUID id) {
 			this.id = id;
 			return this;

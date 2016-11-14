@@ -1,6 +1,7 @@
 package pl.jojczykp.cdstore.cds;
 
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.jersey.PATCH;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -52,6 +53,15 @@ public class CdResource {
 	@Produces(CD_LIST_MEDIA_TYPE)
 	public List<Cd> getCds() {
 		return manager.getCds();
+	}
+
+	@PATCH
+	@Timed
+	@Consumes(CD_MEDIA_TYPE)
+	@Produces(CD_MEDIA_TYPE)
+	@Path("/{id}")
+	public Cd updateCd(@PathParam("id") UUID id, Cd cd) {
+		return manager.updateCd(id, cd);
 	}
 
 }

@@ -1,6 +1,5 @@
 package pl.jojczykp.cdstore.cds
 
-import com.sun.jersey.api.client.ClientResponse
 import spock.lang.Specification
 
 import javax.ws.rs.core.Response
@@ -39,6 +38,14 @@ class CdResourceTest extends Specification {
 		then:
 			1 * manager.getCds() >> [cd1, cd2]
 			result == [cd1, cd2]
+	}
+
+	def "should delegate update cd to manager"() {
+		when:
+			Cd result = resource.updateCd(id, cd1)
+		then:
+			1 * manager.updateCd(id, cd1) >> cd2
+		result == cd2
 	}
 
 }

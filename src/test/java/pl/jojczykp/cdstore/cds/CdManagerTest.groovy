@@ -37,4 +37,15 @@ class CdManagerTest extends Specification {
 			1 * repository.getCds() >> [cd1, cd2]
 			result == [cd1, cd2]
 	}
+
+	def "should delegate update cd to repository"() {
+		given:
+			UUID id = new UUID(3, 4)
+		when:
+			Cd result = manager.updateCd(id, cd1)
+		then:
+			1 * repository.updateCd(id, cd1) >> cd2
+			result == cd2
+	}
+
 }
