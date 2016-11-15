@@ -15,24 +15,12 @@ class CdRepositoryTest extends Specification {
 
 	def "should create cd"() {
 		given:
-			UUID id = new UUID(4, 4)
-			Cd newCd = aCd().withId(id).build()
+			Cd newCd = aCd().withTitle("A Title").build()
 		when:
 			Cd createdCd = repository.createCd(newCd)
 		then:
-			createdCd == newCd
+			createdCd == aCd().from(newCd).withId(createdCd.getId()).build()
 			// TODO assert call to DB made once db connection implemented
-	}
-
-	def "should fail on create cd with already existing id"() {
-		given:
-			UUID id = new UUID(1, 1)
-			Cd newCd = aCd().withId(id).build()
-		when:
-			repository.createCd(newCd)
-		then:
-			EntityAlreadyExistsException ex = thrown()
-			ex.message == "cd with given id already exists"
 	}
 
 	def "should get cd by id"() {
@@ -68,13 +56,11 @@ class CdRepositoryTest extends Specification {
 
 	def "should update cd"() {
 		given:
-			UUID id = randomUUID()
-			Cd cd = aCd().withId(id).withTitle("Old Title").build()
+			Cd originalCd = repository.createCd(aCd().withTitle("Old Title").build())
 			Cd patch = aCd().withTitle("New Title").build()
-			Cd expectedCd = aCd().from(cd).withTitle(patch.getTitle()).build()
-			repository.createCd(cd)
+			Cd expectedCd = aCd().from(originalCd).withTitle(patch.getTitle()).build()
 		when:
-			Cd updatedCd = repository.updateCd(id, patch)
+			Cd updatedCd = repository.updateCd(originalCd.getId(), patch)
 		then:
 			updatedCd == expectedCd
 			// TODO assert call to DB made once db connection implemented

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
 
@@ -34,11 +35,15 @@ public class CdRepository {
 	}
 
 	public Cd createCd(Cd cd) {
-		Cd previous = content.putIfAbsent(cd.getId(), cd);
+		UUID id = randomUUID();
+		Cd newCd = aCd().from(cd).withId(id).build();
+
+		Cd previous = content.putIfAbsent(id, newCd);
+
 		if (previous != null) {
 			throw new EntityAlreadyExistsException("cd with given id already exists");
 		} else {
-			return cd;
+			return newCd;
 		}
 	}
 

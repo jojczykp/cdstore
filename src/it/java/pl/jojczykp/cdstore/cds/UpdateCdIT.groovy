@@ -2,22 +2,20 @@ package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
-import static java.util.UUID.randomUUID
 import static pl.jojczykp.cdstore.client.cds.CreateCdRequest.aCreateCdRequest
 import static pl.jojczykp.cdstore.client.cds.UpdateCdRequest.anUpdateCdRequest
 
 class UpdateCdIT extends Specification {
 
-	UUID id = randomUUID()
 	String title = "Some Title"
 	String newTitle = "Some New Title"
 
 	def "should update cd"() {
 		given:
-			aCreateCdRequest()
-					.withId(id)
+			UUID id = aCreateCdRequest()
 					.withTitle(title)
 					.makeSuccessfully()
+					.getId()
 		when:
 			Cd result = anUpdateCdRequest()
 					.withId(id)
