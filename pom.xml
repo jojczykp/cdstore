@@ -7,6 +7,35 @@
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
 	<version>1.0-SNAPSHOT</version>
+	<name>cdstore</name>
+	<url>https://github.com/jojczykp/cdstore</url>
+
+	<issueManagement>
+		<url>https://github.com/jojczykp/cdstore/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License (GPL) version 3</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/jojczykp/cdstore</url>
+		<connection>scm:git:git://github.com/jojczykp/cdstore.git</connection>
+		<developerConnection>scm:git:git@github.com:jojczykp/cdstore.git</developerConnection>
+	</scm>
+
+	<developers>
+		<developer>
+			<email>pawel.jojczyk@gmail.com</email>
+			<name>Paweł Jojczyk</name>
+			<url>https://github.com/jojczykp</url>
+			<id>jojczykp</id>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

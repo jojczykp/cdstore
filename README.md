@@ -1,8 +1,10 @@
 CD Store
 
-A small pet project using:
-- RESTful
+Small pet project created with:
 - Java 8
 - Maven
-- Dropwizard
 - Spock
+
+- RESTful
+- BDD
+- Basics of Domain Driven Design
