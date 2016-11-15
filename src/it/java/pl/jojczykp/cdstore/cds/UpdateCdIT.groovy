@@ -2,6 +2,7 @@ package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
+import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
 import static pl.jojczykp.cdstore.client.cds.CreateCdRequest.aCreateCdRequest
 import static pl.jojczykp.cdstore.client.cds.UpdateCdRequest.anUpdateCdRequest
 
@@ -12,17 +13,19 @@ class UpdateCdIT extends Specification {
 
 	def "should update cd"() {
 		given:
-			UUID id = aCreateCdRequest()
+			Cd cd = aCreateCdRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-					.getId()
 		when:
 			Cd result = anUpdateCdRequest()
-					.withId(id)
+					.withId(cd.getId())
 					.withTitle(newTitle)
 					.makeSuccessfully()
 		then:
-			result == new Cd(id: id, title: newTitle)
+			result == aCd()
+					.from(cd)
+					.withTitle(newTitle)
+					.build()
 	}
 
 }
