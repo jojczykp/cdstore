@@ -198,6 +198,7 @@
 				<version>1.0-m5.1</version>
 				<configuration>
 					<scmCommentPrefix xml:space="preserve">[RELEASE] </scmCommentPrefix>
+					<squash>true</squash>
 					<enableSshAgent>true</enableSshAgent>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<pushFeatures>true</pushFeatures>
