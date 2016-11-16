@@ -6,7 +6,7 @@
 
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>cdstore</name>
 	<url>https://github.com/jojczykp/cdstore</url>
 
@@ -191,7 +191,7 @@
 				<artifactId>jgitflow-maven-plugin</artifactId>
 				<version>1.0-m5.1</version>
 				<configuration>
-					<!--<scmCommentPrefix>[RELEASE] </scmCommentPrefix>-->
+					<scmCommentPrefix>[RELEASE] </scmCommentPrefix>
 					<enableSshAgent>true</enableSshAgent>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<pushFeatures>true</pushFeatures>
