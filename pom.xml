@@ -197,7 +197,7 @@
 				<artifactId>jgitflow-maven-plugin</artifactId>
 				<version>1.0-m5.1</version>
 				<configuration>
-					<scmCommentPrefix>[RELEASE] </scmCommentPrefix>
+					<scmCommentPrefix xml:space="preserve">[RELEASE] </scmCommentPrefix>
 					<enableSshAgent>true</enableSshAgent>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<pushFeatures>true</pushFeatures>
