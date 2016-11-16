@@ -23,7 +23,7 @@
 	</licenses>
 
 	<scm>
-		<url>https://github.com/jojczykp/cdstore</url>
+		<url>scm:git:git@github.com:jojczykp/cdstore.git</url>
 		<connection>scm:git:git://github.com/jojczykp/cdstore.git</connection>
 		<developerConnection>scm:git:git@github.com:jojczykp/cdstore.git</developerConnection>
 	</scm>
