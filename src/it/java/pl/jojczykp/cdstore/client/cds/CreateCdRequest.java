@@ -23,11 +23,6 @@ public class CreateCdRequest {
 		return new CreateCdRequest();
 	}
 
-	public CreateCdRequest withId(UUID id) {
-		this.id = id;
-		return this;
-	}
-
 	public CreateCdRequest withTitle(String title) {
 		this.title = title;
 		return this;
