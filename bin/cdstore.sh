@@ -16,8 +16,10 @@ case $1 in
         echo "Starting ${SERVICE_NAME} ..."
         if [ ! -f ${PATH_TO_PID} ]; then
             nohup \
-                java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} && \
-                echo $! > ${PATH_TO_PID} \
+                java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} && \
+                PID=$! & \
+                echo "Process PID: ${PID}"
+                echo ${PID} > ${PATH_TO_PID} \
                     &
             echo "${SERVICE_NAME} waiting ..."
             while [ $(curl -s http://localhost:8081/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
@@ -40,8 +42,13 @@ case $1 in
     stop)
         if [ -f ${PATH_TO_PID} ]; then
             PID=$(cat ${PATH_TO_PID});
-            echo "${SERVICE_NAME} stopping ..."
+            echo "${SERVICE_NAME} stopping (${PID})..."
             kill ${PID};
+            while [ $(netstat -ano | grep 8081 | grep LISTEN | wc -l) -gt 0 ]
+            do
+                echo "${SERVICE_NAME} waiting for stop ..."
+                sleep 1
+            done
             echo "${SERVICE_NAME} stopped ..."
             rm ${PATH_TO_PID}
         else
