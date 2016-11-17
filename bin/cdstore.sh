@@ -11,21 +11,24 @@ PATH_TO_ERR=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.err
 
 ADMIN_PORT=8081
 
-java -version 2>&1 > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
+java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
 
 write_pid() {
     echo ${1} >  ${PATH_TO_PID}
 }
 
 read_pid() {
-    echo $(cat ${PATH_TO_PID})
+    echo $(cat ${PATH_TO_PID} || { echo "ERROR: cannot read PID from ${PATH_TO_PID}"; exit 1; } )
 }
 
 start() {
     echo "jar: ${PATH_TO_JAR}"
     echo "out: ${PATH_TO_OUT}"
     echo "err: ${PATH_TO_ERR}"
-    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
+
+    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} \
+        || { echo "ERROR: cannot start process"; exit 1; } &
+
     PID=$!
     echo "Started ${SERVICE_NAME}, PID: ${PID}"
     echo ${PID} > ${PATH_TO_PID}
@@ -35,7 +38,7 @@ start() {
 stop() {
     local PID=$(read_pid)
     echo "Stopping ${SERVICE_NAME}, PID: ${PID}..."
-    kill -SIGTERM ${PID}
+    kill ${PID} || exit 1
     echo "Deleting PID file ${PATH_TO_PID}"
     rm ${PATH_TO_PID}
 }
