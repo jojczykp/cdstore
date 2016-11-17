@@ -43,18 +43,22 @@ stop() {
 }
 
 wait_for_start() {
+    local i=0
     while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
     do
-        echo "Waiting for ${SERVICE_NAME} health check ..."
+        ((i++)) && ((i>10)) && break
+        echo "Waiting for ${SERVICE_NAME} health check (${i}) ..."
         sleep 1
     done
     echo "${SERVICE_NAME} started"
 }
 
 wait_for_stop() {
+    local i=0
     while [ $(netstat -ano | grep ${ADMIN_PORT} | grep LISTEN | wc -l) -gt 0 ]
     do
-        echo "Waiting for ${SERVICE_NAME} admin port (${ADMIN_PORT}) to close ..."
+        ((i++)) && ((i>10)) && break
+        echo "Waiting for ${SERVICE_NAME} admin port (${ADMIN_PORT}) to close (${i}) ..."
         sleep 1
     done
 
@@ -91,6 +95,7 @@ case $1 in
         if [ -f ${PATH_TO_PID} ]
         then
             stop
+            wait_for_stop
         else
             echo "${SERVICE_NAME} is not running"
         fi
