@@ -23,10 +23,10 @@ read_pid() {
 
 start() {
     nohup \
-        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} && \
-        PID=$! & \
-        echo "Started ${SERVICE_NAME}, PID: ${PID}"
-        echo ${PID} > ${PATH_TO_PID} \
+        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} ; \
+        PID=$! ; \
+        echo "Started ${SERVICE_NAME}, PID: ${PID}" ; \
+        echo ${PID} > ${PATH_TO_PID} ; \
         echo "Wrote PID file ${PATH_TO_PID}" \
             &
 }
