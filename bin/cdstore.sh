@@ -23,6 +23,7 @@ case $1 in
             while [ $(curl -s http://localhost:8081/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
             do
                 echo "${SERVICE_NAME} waiting for healthcheck ..."
+                sleep 1
             done
             echo "${SERVICE_NAME} started ..."
             echo "===== STDOUT ====="
