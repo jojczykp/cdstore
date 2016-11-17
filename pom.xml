@@ -4,7 +4,7 @@
 
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<name>cdstore</name>
 	<url>https://github.com/jojczykp/cdstore</url>
 
@@ -198,6 +198,7 @@
 				<version>1.0-m5.1</version>
 				<configuration>
 					<scmCommentPrefix xml:space="preserve">[RELEASE] </scmCommentPrefix>
+					<squash>true</squash>
 					<enableSshAgent>true</enableSshAgent>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<pushFeatures>true</pushFeatures>
