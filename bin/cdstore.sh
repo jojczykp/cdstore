@@ -18,21 +18,21 @@ write_pid() {
 }
 
 read_pid() {
-    return $(cat ${PATH_TO_PID})
+    echo $(cat ${PATH_TO_PID})
 }
 
 start() {
     nohup \
-        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} && \
-        PID=$! & \
-        echo "Started ${SERVICE_NAME}, PID: ${PID}"
-        echo ${PID} > ${PATH_TO_PID} \
+        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} ; \
+        PID=$! ; \
+        echo "Started ${SERVICE_NAME}, PID: ${PID}" ; \
+        echo ${PID} > ${PATH_TO_PID} ; \
         echo "Wrote PID file ${PATH_TO_PID}" \
             &
 }
 
 stop() {
-    local PID=read_pid
+    local PID=$(read_pid)
     echo "Stopping ${SERVICE_NAME}, PID: ${PID}..."
     kill -s SIGTERM ${PID}
     echo "Deleting PID file ${PATH_TO_PID}"
@@ -55,7 +55,7 @@ wait_for_stop() {
         sleep 1
     done
 
-    local PID=read_pid
+    local PID=$(read_pid)
     echo "Waiting for ${SERVICE_NAME} process (${PID}) to terminate ..."
     wait ${PID}
 
@@ -66,7 +66,7 @@ print_outs() {
     echo "===== STDOUT ====="
     cat ${PATH_TO_OUT}
     echo "===== STDERR ====="
-    cat ${PATH_TO_OUT}
+    cat ${PATH_TO_ERR}
     echo "=================="
 }
 
@@ -79,7 +79,7 @@ case $1 in
             wait_for_start
             print_outs
         else
-            PID=read_pid
+            PID=$(read_pid)
             echo "${SERVICE_NAME} is already running, PID: ${PID}"
         fi
     ;;
@@ -104,5 +104,9 @@ case $1 in
 #        rm -rf /var/run
 #        rm -rf /var/log/${SERVICE_NAME}
 #    ;;
+
+    *)
+        echo "Usage: $0 [start|stop]"
+    ;;
 
 esac
