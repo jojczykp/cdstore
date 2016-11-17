@@ -22,6 +22,9 @@ read_pid() {
 }
 
 start() {
+    echo "jar: ${PATH_TO_JAR}"
+    echo "out: ${PATH_TO_OUT}"
+    echo "err: ${PATH_TO_ERR}"
     nohup \
         java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} ; \
         PID=$! ; \
@@ -34,7 +37,7 @@ start() {
 stop() {
     local PID=$(read_pid)
     echo "Stopping ${SERVICE_NAME}, PID: ${PID}..."
-    kill -s SIGTERM ${PID}
+    kill -SIGTERM ${PID}
     echo "Deleting PID file ${PATH_TO_PID}"
     rm ${PATH_TO_PID}
 }
