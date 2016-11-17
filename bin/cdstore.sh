@@ -9,7 +9,7 @@ PATH_TO_PID=/var/run/${SERVICE_NAME}/${SERVICE_NAME}.pid
 PATH_TO_OUT=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.out
 PATH_TO_ERR=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.err
 
-java -version || { echo "ERROR: java executable not found" ; exit 1; }
+java -version > /dev/null || { echo "ERROR: java executable not found" ; exit 1; }
 
 case $1 in
     start)
@@ -17,6 +17,11 @@ case $1 in
         if [ ! -f ${PATH_TO_PID} ]; then
             nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} &
             echo $! > ${PATH_TO_PID}
+            echo "${SERVICE_NAME} waiting ..."
+            while [ $(curl http://localhost:8081/healthcheck?pretty=true | grep "healthy" | grep "true") -ne 2 ]
+            do
+                echo "${SERVICE_NAME} waiting for healthcheck ..."
+            done
             echo "${SERVICE_NAME} started ..."
         else
             PID=$(cat ${PATH_TO_PID});
