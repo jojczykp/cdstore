@@ -26,8 +26,7 @@ start() {
     echo "out: ${PATH_TO_OUT}"
     echo "err: ${PATH_TO_ERR}"
 
-    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} \
-        || { echo "ERROR: cannot start process"; exit 1; } &
+    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
 
     PID=$!
     echo "Started ${SERVICE_NAME}, PID: ${PID}"
