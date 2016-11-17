@@ -26,12 +26,11 @@ start() {
     echo "out: ${PATH_TO_OUT}"
     echo "err: ${PATH_TO_ERR}"
     nohup \
-        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} ; \
+        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} & \
         PID=$! ; \
         echo "Started ${SERVICE_NAME}, PID: ${PID}" ; \
         echo ${PID} > ${PATH_TO_PID} ; \
-        echo "Wrote PID file ${PATH_TO_PID}" \
-            &
+        echo "Wrote PID file ${PATH_TO_PID}"
 }
 
 stop() {
