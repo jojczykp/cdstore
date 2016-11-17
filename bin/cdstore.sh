@@ -9,66 +9,87 @@ PATH_TO_PID=/var/run/${SERVICE_NAME}/${SERVICE_NAME}.pid
 PATH_TO_OUT=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.out
 PATH_TO_ERR=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.err
 
-java -version > /dev/null || { echo "ERROR: java executable not found" ; exit 1; }
+ADMIN_PORT=8081
+
+java -version > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
+
+write_pid() {
+    echo ${1} >  ${PATH_TO_PID}
+}
+
+read_pid() {
+    return $(cat ${PATH_TO_PID})
+}
+
+start() {
+    nohup \
+        java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} && \
+        PID=$! & \
+        echo "Started ${SERVICE_NAME}, PID: ${PID}"
+        echo ${PID} > ${PATH_TO_PID} \
+        echo "Wrote PID file ${PATH_TO_PID}" \
+            &
+}
+
+stop() {
+    local PID=read_pid
+    echo "Stopping ${SERVICE_NAME}, PID: ${PID}..."
+    kill -s SIGTERM ${PID}
+    echo "Deleting PID file ${PATH_TO_PID}"
+    rm ${PATH_TO_PID}
+}
+
+wait_for_start() {
+    while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
+    do
+        echo "Waiting for ${SERVICE_NAME} health check ..."
+        sleep 1
+    done
+    echo "${SERVICE_NAME} started"
+}
+
+wait_for_stop() {
+    while [ $(netstat -ano | grep ${ADMIN_PORT} | grep LISTEN | wc -l) -gt 0 ]
+    do
+        echo "Waiting for ${SERVICE_NAME} admin port (${ADMIN_PORT}) to close ..."
+        sleep 1
+    done
+
+    local PID=read_pid
+    echo "Waiting for ${SERVICE_NAME} process (${PID}) to terminate ..."
+    wait ${PID}
+
+    echo "${SERVICE_NAME} stopped"
+}
+
+print_outs() {
+    echo "===== STDOUT ====="
+    cat ${PATH_TO_OUT}
+    echo "===== STDERR ====="
+    cat ${PATH_TO_OUT}
+    echo "=================="
+}
 
 case $1 in
     start)
         echo "Starting ${SERVICE_NAME} ..."
-        if [ ! -f ${PATH_TO_PID} ]; then
-            nohup \
-                java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} && \
-                PID=$! & \
-                echo "Process PID: ${PID}"
-                echo ${PID} > ${PATH_TO_PID} \
-                    &
-            echo "${SERVICE_NAME} waiting ..."
-            while [ $(curl -s http://localhost:8081/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
-            do
-                echo "${SERVICE_NAME} waiting for healthcheck ..."
-                sleep 1
-            done
-            echo "${SERVICE_NAME} started ..."
-            echo "===== STDOUT ====="
-            cat ${PATH_TO_OUT}
-            echo "===== STDERR ====="
-            cat ${PATH_TO_OUT}
-            echo "=================="
+        if [ ! -f ${PATH_TO_PID} ]
+        then
+            start
+            wait_for_start
+            print_outs
         else
-            PID=$(cat ${PATH_TO_PID});
-            echo "${SERVICE_NAME} is already running (${PID}) ..."
+            PID=read_pid
+            echo "${SERVICE_NAME} is already running, PID: ${PID}"
         fi
     ;;
 
     stop)
-        if [ -f ${PATH_TO_PID} ]; then
-            PID=$(cat ${PATH_TO_PID});
-            echo "${SERVICE_NAME} stopping (${PID})..."
-            kill ${PID};
-            while [ $(netstat -ano | grep 8081 | grep LISTEN | wc -l) -gt 0 ]
-            do
-                echo "${SERVICE_NAME} waiting for stop ..."
-                sleep 1
-            done
-            echo "${SERVICE_NAME} stopped ..."
-            rm ${PATH_TO_PID}
+        if [ -f ${PATH_TO_PID} ]
+        then
+            stop
         else
-            echo "${SERVICE_NAME} is not running ..."
-        fi
-    ;;
-
-    restart)
-        if [ -f ${PATH_TO_PID} ]; then
-            PID=$(cat ${PATH_TO_PID});
-            echo "${SERVICE_NAME} stopping ...";
-            kill ${PID};
-            echo "${SERVICE_NAME} stopped ...";
-            rm ${PATH_TO_PID}
-            echo "${SERVICE_NAME} starting ..."
-            nohup java -jar ${PATH_TO_JAR} ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} &
-                        echo $! > ${PATH_TO_PID}
-            echo "${SERVICE_NAME} started ..."
-        else
-            echo "${SERVICE_NAME} is not running ..."
+            echo "${SERVICE_NAME} is not running"
         fi
     ;;
 
