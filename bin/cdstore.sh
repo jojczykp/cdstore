@@ -25,7 +25,7 @@ start() {
     echo "jar: ${PATH_TO_JAR}"
     echo "out: ${PATH_TO_OUT}"
     echo "err: ${PATH_TO_ERR}"
-    nohup BUILD_ID=dontKillMe java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
+    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
     PID=$!
     echo "Started ${SERVICE_NAME}, PID: ${PID}"
     echo ${PID} > ${PATH_TO_PID}
