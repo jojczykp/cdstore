@@ -15,8 +15,7 @@ case $1 in
     start)
         echo "Starting ${SERVICE_NAME} ..."
         if [ ! -f ${PATH_TO_PID} ]; then
-            echo "nohup java -jar ${PATH_TO_JAR} ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} &"
-            nohup java -jar ${PATH_TO_JAR} ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} &
+            nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2>> ${PATH_TO_ERR} >> ${PATH_TO_OUT} &
             echo $! > ${PATH_TO_PID}
             echo "${SERVICE_NAME} started ..."
         else
