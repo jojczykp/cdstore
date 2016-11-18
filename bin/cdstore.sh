@@ -3,13 +3,13 @@
 SERVICE_NAME=cdstore
 
 PATH_TO_JAR=/usr/lib/${SERVICE_NAME}/${SERVICE_NAME}.jar
-PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/${SERVICE_NAME}.yml
 PATH_TO_PID=/var/run/${SERVICE_NAME}/${SERVICE_NAME}.pid
+PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/production.yml
 
 PATH_TO_OUT=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.out
 PATH_TO_ERR=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.err
 
-ADMIN_PORT=8081
+ADMIN_PORT=8080
 
 java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
 

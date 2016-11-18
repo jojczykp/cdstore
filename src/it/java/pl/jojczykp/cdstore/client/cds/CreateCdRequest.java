@@ -3,6 +3,7 @@ package pl.jojczykp.cdstore.client.cds;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import pl.jojczykp.cdstore.cds.Cd;
+import pl.jojczykp.cdstore.client.Request;
 
 import java.util.UUID;
 
@@ -11,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
 import static pl.jojczykp.cdstore.cds.CdResource.CD_MEDIA_TYPE;
 
-public class CreateCdRequest {
+public class CreateCdRequest extends Request {
 
 	private UUID id;
 	private String title;
@@ -45,7 +46,7 @@ public class CreateCdRequest {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource("http://localhost:8080").path("cds")
+				.resource(serverUrl).path("cds")
 				.accept(CD_MEDIA_TYPE)
 				.type(CD_MEDIA_TYPE)
 				.entity(aCd()

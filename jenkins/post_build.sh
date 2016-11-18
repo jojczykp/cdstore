@@ -10,7 +10,7 @@ mvn org.apache.maven.plugins:maven-dependency-plugin:2.10:get \
     -Ddest=${DST}/cdstore.jar \
         || { echo "Deployment of jar file failed"; exit 1; }
 
-cp cfg/cdstore.yml ${DST} || { echo "Deployment of config failed"; exit 1; }
+cp cfg/production.yml ${DST} || { echo "Deployment of config failed"; exit 1; }
 
 cp bin/cdstore.sh ${DST} || { echo "Deployment of start/stop script failed"; exit 1; }
 chmod +x ${BIN} || { echo "Changing permissions to start/stop script failed"; exit 1; }
