@@ -1,7 +1,11 @@
 #! /bin/bash
 
-DST=/usr/lib/cdstore
-BIN=${DST}/cdstore.sh
+DST="/usr/lib/cdstore"
+BIN="${DST}/cdstore.sh"
+
+ENVIRONMENT=${1}
+
+echo "Deploying to ${ENVIRONMENT}, ${DST}"
 
 ${BIN} stop || { echo "Stopping service failed"; exit 1; }
 
@@ -10,9 +14,10 @@ mvn org.apache.maven.plugins:maven-dependency-plugin:2.10:get \
     -Ddest=${DST}/cdstore.jar \
         || { echo "Deployment of jar file failed"; exit 1; }
 
-cp cfg/production.yml ${DST} || { echo "Deployment of config failed"; exit 1; }
+cp cfg/${ENVIRONMENT}.yml ${DST} || { echo "Error copying configuration file"; exit 1; }
 
 cp bin/cdstore.sh ${DST} || { echo "Deployment of start/stop script failed"; exit 1; }
+sed -i 's/%ENVIRONMENT%/${ENVIRONMENT}/' || { echo "Update start/stop script failed"; exit 1; }
 chmod +x ${BIN} || { echo "Changing permissions to start/stop script failed"; exit 1; }
 
-bash ${BIN} start  || { echo "Starting service failed"; exit 1; }
+${BIN} start  || { echo "Starting service failed"; exit 1; }

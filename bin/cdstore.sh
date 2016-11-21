@@ -2,16 +2,29 @@
 
 SERVICE_NAME=cdstore
 
+# To be set during deployment
+ENVIRONMENT=%ENVIRONMENT%
+
+PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/${ENVIRONMENT}.yml
 PATH_TO_JAR=/usr/lib/${SERVICE_NAME}/${SERVICE_NAME}.jar
 PATH_TO_PID=/var/run/${SERVICE_NAME}/${SERVICE_NAME}.pid
-PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/production.yml
 
 PATH_TO_OUT=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.out
 PATH_TO_ERR=/var/log/${SERVICE_NAME}/${SERVICE_NAME}.err
 
-ADMIN_PORT=8080
-
 java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
+
+get_admin_port() {
+    local PORT_STR=$(cat ${PATH_TO_CFG} | grep -A10 "server:" | grep -A10 "adminConnectors:" | grep "port:" | cut -d ':' -f 2)
+    if [[ $! -ne 0 ]]
+    then
+        echo "ERROR: can't read admin port"
+        exit 1
+    fi
+
+    ADMIN_PORT=${PORT_STR//[[:blank:]]/}
+    echo "Admin port: '${ADMIN_PORT}'"
+}
 
 write_pid() {
     echo ${1} >  ${PATH_TO_PID}
@@ -82,6 +95,7 @@ case $1 in
         echo "Starting ${SERVICE_NAME} ..."
         if [ ! -f ${PATH_TO_PID} ]
         then
+            get_admin_port
             start
             wait_for_start
             print_outs
@@ -94,24 +108,13 @@ case $1 in
     stop)
         if [ -f ${PATH_TO_PID} ]
         then
+            get_admin_port
             stop
             wait_for_stop
         else
             echo "${SERVICE_NAME} is not running"
         fi
     ;;
-
-#    install)
-#        mkdir -p /usr/lib/${SERVICE_NAME}
-#        mkdir -p /var/run
-#        mkdir -p /var/log/${SERVICE_NAME}
-#    ;;
-#
-#    uninstall)
-#        rm -rf /usr/lib/${SERVICE_NAME}
-#        rm -rf /var/run
-#        rm -rf /var/log/${SERVICE_NAME}
-#    ;;
 
     *)
         echo "Usage: $0 [start|stop]"
