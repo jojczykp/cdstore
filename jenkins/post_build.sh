@@ -17,7 +17,7 @@ mvn org.apache.maven.plugins:maven-dependency-plugin:2.10:get \
 cp cfg/${ENVIRONMENT}.yml ${DST} || { echo "Error copying configuration file"; exit 1; }
 
 cp bin/cdstore.sh ${DST} || { echo "Deployment of start/stop script failed"; exit 1; }
-sed -i 's/%ENVIRONMENT%/${ENVIRONMENT}/' || { echo "Update start/stop script failed"; exit 1; }
+sed -i 's/%ENVIRONMENT%/${ENVIRONMENT}/' ${BIN} || { echo "Update start/stop script failed"; exit 1; }
 chmod +x ${BIN} || { echo "Changing permissions to start/stop script failed"; exit 1; }
 
 rm -rf ~/.m2/repository/pl/jojczykp/cdstore || { echo "Failed clean local maven repo"; exit 1; }
