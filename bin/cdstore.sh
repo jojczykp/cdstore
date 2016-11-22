@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SERVICE_NAME=CdStore
+SERVICE_NAME=cdstore
 
 # To be set during deployment
 ENVIRONMENT=%ENVIRONMENT%
