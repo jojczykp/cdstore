@@ -2,13 +2,14 @@ package pl.jojczykp.cdstore.client.cds;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import pl.jojczykp.cdstore.client.Request;
 
 import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteCdRequest {
+public class DeleteCdRequest extends Request {
 
 	private UUID id;
 
@@ -34,7 +35,7 @@ public class DeleteCdRequest {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource("http://localhost:8080").path("cds").path(id.toString())
+				.resource(serverUrl).path("cds").path(id.toString())
 				.delete(ClientResponse.class);
 
 		response.bufferEntity();
