@@ -83,8 +83,13 @@ wait_for_stop() {
         sleep 1
     done
 
-    echo "Waiting for ${SERVICE_NAME} process (${PID}) to terminate ..."
-    wait ${PID}
+    if [ -z ${PID} ]
+    then
+        echo "Skipping waiting for PID"
+    else
+        echo "Waiting for ${SERVICE_NAME} process (${PID}) to terminate ..."
+        wait ${PID}
+    fi
 
     echo "${SERVICE_NAME} stopped"
 }
