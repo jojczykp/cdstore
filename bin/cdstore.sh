@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-SERVICE_NAME=cdstore
+SERVICE_NAME=CdStore
 
 # To be set during deployment
 ENVIRONMENT=%ENVIRONMENT%
@@ -18,10 +18,8 @@ PID=""
 java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
 
 get_admin_port() {
-    echo "Getting admin port from ${PATH_TO_CFG}"
-
     local PORT_STR=$(cat ${PATH_TO_CFG} | grep -A10 "server:" | grep -A10 "adminConnectors:" | grep "port:" | cut -d ':' -f 2)
-    $! || { echo "ERROR: can't read admin port"; exit 1 }
+    $! || { echo "ERROR: can't read admin port"; exit 1; }
 
     ADMIN_PORT=${PORT_STR//[[:blank:]]/}
     echo "Admin port: '${ADMIN_PORT}'"
@@ -33,16 +31,10 @@ write_pid() {
 }
 
 read_pid() {
-    echo "Reading running process PID from ${PATH_TO_PID}"
-    PID=$(cat ${PATH_TO_PID} || { echo "ERROR: cannot read PID from ${PATH_TO_PID}"; exit 1; } )
-    echo "Running process PID: ${PID}"
+    PID=$(cat ${PATH_TO_PID}) || { echo "ERROR: cannot read PID from ${PATH_TO_PID}"; exit 1; }
 }
 
 start() {
-    echo "jar: ${PATH_TO_JAR}"
-    echo "out: ${PATH_TO_OUT}"
-    echo "err: ${PATH_TO_ERR}"
-
     BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
     PID=$!
 
@@ -57,7 +49,6 @@ stop() {
         echo "Stopping ${SERVICE_NAME}, PID: ${PID}..."
         kill ${PID} || echo "WARNING: cannot kill ${PID}"
     fi
-    echo "Deleting PID file ${PATH_TO_PID}"
     rm ${PATH_TO_PID} || echo "WARNING: cannot delete PID file ${PATH_TO_PID}"
 }
 
@@ -70,28 +61,38 @@ wait_for_start() {
         echo "Waiting for ${SERVICE_NAME} health check (${i}) ..."
         sleep 1
     done
-    echo "${SERVICE_NAME} started"
 }
 
-wait_for_stop() {
-    echo "Waiting for ${SERVICE_NAME} to stop"
+wait_for_stop_admin_port() {
+    echo "Waiting for ${SERVICE_NAME} to close admin port ${ADMIN_PORT}"
     local i=0
     while [ $(netstat -ano | grep ${ADMIN_PORT} | grep LISTEN | wc -l) -gt 0 ]
     do
-        ((i++)) && ((i>10)) && { echo "ERROR: Waiting for ${SERVICE_NAME} to stop timeout"; exit 1; }
-        echo "Waiting for ${SERVICE_NAME} admin port (${ADMIN_PORT}) to close (${i}) ..."
+        ((i++)) && ((i>10)) && { echo "ERROR: Waiting for ${SERVICE_NAME} to close admin port timeout"; exit 1; }
+        echo "Waiting for ${SERVICE_NAME} to close admin port ${ADMIN_PORT} (${i}) ..."
         sleep 1
     done
+}
 
+wait_for_stop_pid() {
     if [ -z ${PID} ]
     then
-        echo "Skipping waiting for PID"
+        echo "Skipping waiting for process to close (unknown PID)"
     else
-        echo "Waiting for ${SERVICE_NAME} process (${PID}) to terminate ..."
-        wait ${PID}
+        echo "Waiting for ${SERVICE_NAME} (${PID}) to terminate"
+        local i=0
+        while [ -e /proc/${PID} ]
+        do
+            ((i++)) && ((i>10)) && { echo "ERROR: Waiting for ${SERVICE_NAME} to stop timeout"; exit 1; }
+            echo "Waiting for ${SERVICE_NAME} to terminate (${i}) ..."
+            sleep 1
+        done
     fi
+}
 
-    echo "${SERVICE_NAME} stopped"
+wait_for_stop() {
+    wait_for_stop_admin_port
+    wait_for_stop_pid
 }
 
 print_outs() {
@@ -112,10 +113,10 @@ case ${1} in
             write_pid
             wait_for_start
             print_outs
+            echo "${SERVICE_NAME} started"
         else
             echo "${SERVICE_NAME} already running"
             read_pid
-            echo "PID: ${PID}"
         fi
     ;;
 
@@ -127,6 +128,7 @@ case ${1} in
             get_admin_port
             stop
             wait_for_stop
+            echo "${SERVICE_NAME} stopped"
         else
             echo "${SERVICE_NAME} is not running"
         fi
