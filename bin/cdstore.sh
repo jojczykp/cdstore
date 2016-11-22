@@ -5,7 +5,7 @@ SERVICE_NAME=cdstore
 # To be set during deployment
 ENVIRONMENT=%ENVIRONMENT%
 
-PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/${ENVIRONMENT}.yml
+PATH_TO_CFG=/usr/lib/${SERVICE_NAME}/${SERVICE_NAME}.yml
 PATH_TO_JAR=/usr/lib/${SERVICE_NAME}/${SERVICE_NAME}.jar
 PATH_TO_PID=/var/run/${SERVICE_NAME}/${SERVICE_NAME}.pid
 
