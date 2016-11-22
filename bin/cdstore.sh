@@ -22,7 +22,7 @@ get_admin_port() {
     $! || { echo "ERROR: can't read admin port"; exit 1; }
 
     ADMIN_PORT=${PORT_STR//[[:blank:]]/}
-    echo "Admin port: '${ADMIN_PORT}'"
+    echo "Admin port: ${ADMIN_PORT}"
 }
 
 write_pid() {
@@ -53,7 +53,6 @@ stop() {
 }
 
 wait_for_start() {
-    echo "Waiting for ${SERVICE_NAME} to start"
     local i=0
     while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
     do
@@ -64,7 +63,6 @@ wait_for_start() {
 }
 
 wait_for_stop_admin_port() {
-    echo "Waiting for ${SERVICE_NAME} to close admin port ${ADMIN_PORT}"
     local i=0
     while [ $(netstat -ano | grep ${ADMIN_PORT} | grep LISTEN | wc -l) -gt 0 ]
     do
@@ -79,7 +77,6 @@ wait_for_stop_pid() {
     then
         echo "Skipping waiting for process to close (unknown PID)"
     else
-        echo "Waiting for ${SERVICE_NAME} (${PID}) to terminate"
         local i=0
         while [ -e /proc/${PID} ]
         do
