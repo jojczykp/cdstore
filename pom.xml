@@ -4,7 +4,7 @@
 
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
-	<version>1.0.45</version>
+	<version>1.0.46-SNAPSHOT</version>
 	<name>cdstore</name>
 	<url>https://github.com/jojczykp/cdstore</url>
 
