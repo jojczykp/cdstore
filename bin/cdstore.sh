@@ -17,6 +17,8 @@ PID=""
 
 java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
 
+JAVA_PARAMS="-Xmx10m"
+
 get_admin_port() {
     local PORT_STR=$(cat ${PATH_TO_CFG} | grep -A10 "server:" | grep -A10 "adminConnectors:" | grep "port:" | cut -d ':' -f 2)
     $! || { echo "ERROR: can't read admin port"; exit 1; }
@@ -35,7 +37,7 @@ read_pid() {
 }
 
 start() {
-    BUILD_ID=dontKillMe nohup java -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
+    BUILD_ID=dontKillMe nohup java ${JAVA_PARAMS} -jar ${PATH_TO_JAR} server ${PATH_TO_CFG} 2> ${PATH_TO_ERR} > ${PATH_TO_OUT} &
     PID=$!
 
     echo "Started ${SERVICE_NAME}, PID: ${PID}"
