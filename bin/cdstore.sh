@@ -17,7 +17,7 @@ PID=""
 
 java -version 2>/dev/null > /dev/null || { echo "ERROR: java executable not found"; exit 1; }
 
-JAVA_PARAMS="-Xmx10m"
+JAVA_PARAMS=""
 
 get_admin_port() {
     local PORT_STR=$(cat ${PATH_TO_CFG} | grep -A10 "server:" | grep -A10 "adminConnectors:" | grep "port:" | cut -d ':' -f 2)
