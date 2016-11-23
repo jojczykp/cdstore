@@ -15,7 +15,7 @@ import static io.dropwizard.jackson.Jackson.newObjectMapper;
 public abstract class Request {
 
 	private static final String HOST = "localhost";
-	private static final File CONFIG = Paths.get("cfg", "tests.yml").toFile();
+	private static final File CONFIG = Paths.get("cfg", "development.yml").toFile();
 
 	protected String serverUrl;
 
