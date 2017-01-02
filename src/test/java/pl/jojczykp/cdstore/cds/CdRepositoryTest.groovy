@@ -1,11 +1,10 @@
 package pl.jojczykp.cdstore.cds
 
-import pl.jojczykp.cdstore.exceptions.EntityAlreadyExistsException
 import pl.jojczykp.cdstore.exceptions.EntityNotFoundException
 import spock.lang.Specification
 
 import static java.util.UUID.randomUUID
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.aCd
 
 
 class CdRepositoryTest extends Specification {
@@ -15,11 +14,11 @@ class CdRepositoryTest extends Specification {
 
 	def "should create cd"() {
 		given:
-			Cd newCd = aCd().withTitle("A Title").build()
+			Cd newCd = aCd().title("A Title").build()
 		when:
 			Cd createdCd = repository.createCd(newCd)
 		then:
-			createdCd == aCd().from(newCd).withId(createdCd.getId()).build()
+			createdCd == newCd.toBuilder().id(createdCd.getId()).build()
 			// TODO assert call to DB made once db connection implemented
 	}
 
@@ -48,17 +47,17 @@ class CdRepositoryTest extends Specification {
 			List<Cd> cds = repository.getCds()
 		then:
 			cds == [
-					new Cd(id: new UUID(1, 1), title: dbUrl + " 1"),
-					new Cd(id: new UUID(2, 2), title: dbUrl + " 2"),
-					new Cd(id: new UUID(3, 3), title: dbUrl + " 3")
+					new Cd(new UUID(1, 1), dbUrl + " 1"),
+					new Cd(new UUID(2, 2), dbUrl + " 2"),
+					new Cd(new UUID(3, 3), dbUrl + " 3")
 			]
 	}
 
 	def "should update cd"() {
 		given:
-			Cd originalCd = repository.createCd(aCd().withTitle("Old Title").build())
-			Cd patch = aCd().withTitle("New Title").build()
-			Cd expectedCd = aCd().from(originalCd).withTitle(patch.getTitle()).build()
+			Cd originalCd = repository.createCd(aCd().id(new UUID(1, 1)).title("Old Title").build())
+			Cd patch = aCd().title("New Title").build()
+			Cd expectedCd = originalCd.toBuilder().title(patch.getTitle()).build()
 		when:
 			Cd updatedCd = repository.updateCd(originalCd.getId(), patch)
 		then:
@@ -69,7 +68,7 @@ class CdRepositoryTest extends Specification {
 	def "should fail on update cd if it does not exists"() {
 		given:
 			UUID id = randomUUID()
-			Cd patch = aCd().withTitle("New Title").build()
+			Cd patch = aCd().title("New Title").build()
 		when:
 			repository.updateCd(id, patch)
 		then:
@@ -80,7 +79,7 @@ class CdRepositoryTest extends Specification {
 	def "should delete cd"() {
 		given:
 			UUID id = randomUUID()
-			Cd cd = aCd().withId(id).withTitle("A Title").build()
+			Cd cd = aCd().id(id).title("A Title").build()
 			repository.createCd(cd)
 		when:
 			repository.deleteCd(id)

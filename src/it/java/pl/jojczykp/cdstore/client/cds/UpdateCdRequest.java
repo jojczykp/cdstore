@@ -10,7 +10,7 @@ import java.util.UUID;
 import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
+import static pl.jojczykp.cdstore.cds.Cd.aCd;
 import static pl.jojczykp.cdstore.cds.CdResource.CD_MEDIA_TYPE;
 
 public class UpdateCdRequest extends Request {
@@ -51,7 +51,7 @@ public class UpdateCdRequest extends Request {
 				.accept(CD_MEDIA_TYPE)
 				.type(CD_MEDIA_TYPE)
 				.entity(aCd()
-						.withTitle(title)
+						.title(title)
 						.build())
 				.method("PATCH", ClientResponse.class);
 

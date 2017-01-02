@@ -2,7 +2,7 @@ package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.aCd
 import static pl.jojczykp.cdstore.client.cds.CreateCdRequest.aCreateCdRequest
 import static pl.jojczykp.cdstore.client.cds.GetCdRequest.aGetCdRequest
 import static pl.jojczykp.cdstore.client.cds.GetCdsRequest.aGetCdsRequest
@@ -25,8 +25,8 @@ class GetCdIT extends Specification {
 	}
 
 	def "should get all cds"() {
-		Cd cd1 = aCd().withTitle("Title 1").build()
-		Cd cd2 = aCd().withTitle("Title 2").build()
+		Cd cd1 = aCd().title("Title 1").build()
+		Cd cd2 = aCd().title("Title 2").build()
 
 		given:
 			Cd cdCreated1 = aCreateCdRequest().withCd(cd1).makeSuccessfully()

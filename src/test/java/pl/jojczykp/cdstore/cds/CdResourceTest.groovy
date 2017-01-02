@@ -4,8 +4,7 @@ import spock.lang.Specification
 
 import javax.ws.rs.core.Response
 
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
-
+import static pl.jojczykp.cdstore.cds.Cd.aCd
 
 class CdResourceTest extends Specification {
 
