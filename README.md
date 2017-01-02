@@ -1,10 +1,13 @@
 CD Store
 
-Small pet project created with:
+Small pet project to play with:
 - Java 8
 - Maven
+- Dropwizard
 - Spock
+- Lombok
+- jGitFlow
 
 - RESTful
 - BDD
-- Basics of Domain Driven Design
+- Some of Domain Driven Design
