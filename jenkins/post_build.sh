@@ -5,6 +5,14 @@ BIN="${DST}/cdstore.sh"
 
 ENVIRONMENT=${1}
 
+
+echo "Squashing release commits into a single one"
+
+SQUASHED_MESSAGE=$(git log --pretty=format:"%s" -3 | tail -1) || { echo "Obtaining release message failed"; exit 1; }
+git reset --soft HEAD~4 || { echo "Uncommiting last changes failed"; exit 1; }
+git commit -m ${SQUASHED_MESSAGE} || { echo "Commiting back last changes with message '${SQUASHED_MESSAGE}' failed"; exit 1; }
+
+
 echo "Deploying to ${ENVIRONMENT}, ${DST}"
 
 ${BIN} stop || { echo "Stopping service failed"; exit 1; }
