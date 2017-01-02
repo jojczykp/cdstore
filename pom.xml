@@ -4,7 +4,7 @@
 
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
-	<version>1.0.63</version>
+	<version>1.0.62</version>
 	<name>cdstore</name>
 	<url>https://github.com/jojczykp/cdstore</url>
 
@@ -61,6 +61,7 @@
 				<version>3.6.0</version>
 				<configuration>
 					<compilerId>groovy-eclipse-compiler</compilerId>
+					<fork>true</fork>
 					<compilerArguments>
 						<javaAgentClass>lombok.launch.Agent</javaAgentClass>
 					</compilerArguments>
