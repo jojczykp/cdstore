@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
+import static pl.jojczykp.cdstore.cds.Cd.aCd;
 
 public class CdRepository {
 
@@ -30,13 +30,13 @@ public class CdRepository {
 	}
 
 	private void createSampleCd(int num) {
-		UUID id1 = new UUID(num, num);
-		content.put(id1, aCd().withId(id1).withTitle(dbUrl + " " + num).build());
+		UUID id = new UUID(num, num);
+		content.put(id, aCd().id(id).title(dbUrl + " " + num).build());
 	}
 
 	public Cd createCd(Cd cd) {
 		UUID id = randomUUID();
-		Cd newCd = aCd().from(cd).withId(id).build();
+		Cd newCd = cd.toBuilder().id(id).build();
 
 		Cd previous = content.putIfAbsent(id, newCd);
 
@@ -61,7 +61,7 @@ public class CdRepository {
 	}
 
 	public Cd updateCd(UUID id, Cd cd) {
-		Cd newValue = content.computeIfPresent(id, (i, c) -> aCd().from(cd).withId(id).build());
+		Cd newValue = content.computeIfPresent(id, (i, c) -> cd.toBuilder().id(id).build());
 		if (newValue == null) {
 			throw new EntityNotFoundException("cd with given id not found");
 		} else {

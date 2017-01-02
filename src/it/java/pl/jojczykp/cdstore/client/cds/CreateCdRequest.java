@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd;
+import static pl.jojczykp.cdstore.cds.Cd.aCd;
 import static pl.jojczykp.cdstore.cds.CdResource.CD_MEDIA_TYPE;
 
 public class CreateCdRequest extends Request {
@@ -50,8 +50,8 @@ public class CreateCdRequest extends Request {
 				.accept(CD_MEDIA_TYPE)
 				.type(CD_MEDIA_TYPE)
 				.entity(aCd()
-						.withId(id)
-						.withTitle(title)
+						.id(id)
+						.title(title)
 						.build())
 				.post(ClientResponse.class);
 

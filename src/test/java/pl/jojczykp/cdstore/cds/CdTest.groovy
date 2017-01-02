@@ -2,7 +2,7 @@ package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.aCd
 
 class CdTest extends Specification {
 
@@ -12,10 +12,10 @@ class CdTest extends Specification {
 	def "should return with getters what was set in constructor"() {
 		when:
 			Cd cd = aCd()
-					.withId(id)
-					.withTitle(title)
+					.id(id)
+					.title(title)
 					.build()
 		then:
-			cd == new Cd(id: id, title: title)
+			cd == aCd().id(id).title(title).build()
 	}
 }

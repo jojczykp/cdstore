@@ -2,7 +2,7 @@ package pl.jojczykp.cdstore.cds
 
 import spock.lang.Specification
 
-import static pl.jojczykp.cdstore.cds.Cd.CdBuilder.aCd
+import static pl.jojczykp.cdstore.cds.Cd.aCd
 
 
 class CdManagerTest extends Specification {
