@@ -1,6 +1,5 @@
 CD Store
 
-
 Small pet project to play with:
 - Java 8
 - Maven
