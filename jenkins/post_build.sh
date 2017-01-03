@@ -32,3 +32,4 @@ chmod +x ${BIN} || { echo "Changing permissions to start/stop script failed"; ex
 rm -rf ~/.m2/repository/pl/jojczykp/cdstore || { echo "Failed clean local maven repo"; exit 1; }
 
 ${BIN} start  || { echo "Starting service failed"; exit 1; }
+
