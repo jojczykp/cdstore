@@ -8,6 +8,7 @@ Small pet project to play with:
 - Lombok
 - jGitFlow
 
+
 - RESTful
 - BDD
 - Some of Domain Driven Design
