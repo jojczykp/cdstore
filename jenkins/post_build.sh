@@ -8,7 +8,7 @@ ENVIRONMENT=${1}
 
 echo "Squashing release commits into a single one"
 
-SQUASHED_MESSAGE=$(git log --pretty=format:"%s" -3 | tail -1) || { echo "Obtaining new commit message failed"; exit 1; }
+SQUASHED_MESSAGE=$(git log --pretty=format:"%s" -4 | grep release | head -1) || { echo "Obtaining new commit message failed"; exit 1; }
 echo "New commit message obtained: '${SQUASHED_MESSAGE}'"
 git reset --soft HEAD~4 || { echo "Uncommiting last changes failed"; exit 1; }
 git commit -m "${SQUASHED_MESSAGE}" || { echo "Commiting back last changes with message '${SQUASHED_MESSAGE}' failed"; exit 1; }
