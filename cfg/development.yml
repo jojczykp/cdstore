@@ -7,4 +7,6 @@ server:
     port: 8181
 
 albums:
-  dbUrl: s3://jojczykp.pl/albums-store
+  region: eu-west-1
+  profile: cdstore
+  endpoint: http://localhost:8182

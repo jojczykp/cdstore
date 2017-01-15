@@ -32,11 +32,13 @@ class AlbumsResourceTest extends Specification {
 	}
 
 	def "should delegate get all albums to manager"() {
+		given:
+			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			List<Album> result = resource.getAlbums()
+			Set<Album> result = resource.getAlbums()
 		then:
-			1 * manager.getAlbums() >> [album1, album2]
-			result == [album1, album2]
+			1 * manager.getAlbums() >> expectedResult
+			result == expectedResult
 	}
 
 	def "should delegate update album to manager"() {

@@ -1,6 +1,6 @@
 package pl.jojczykp.cdstore.albums;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class AlbumsManager {
@@ -19,7 +19,7 @@ public class AlbumsManager {
 		return repository.getAlbum(id);
 	}
 
-	public List<Album> getAlbums() {
+	public Set<Album> getAlbums() {
 		return repository.getAlbums();
 	}
 

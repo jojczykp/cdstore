@@ -1,16 +1,28 @@
 package pl.jojczykp.cdstore.albums
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded
+import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
 
-import static java.util.UUID.randomUUID
 import static Album.anAlbum
-
+import static java.util.UUID.randomUUID
 
 class AlbumsRepositoryTest extends Specification {
 
-	String dbUrl = "s3://com.abc/db"
-	AlbumsRepository repository = new AlbumsRepository(dbUrl)
+	AmazonDynamoDB dynamodb
+	AlbumsRepository repository
+
+	def setup() {
+		System.setProperty("sqlite4java.library.path", "target/dynamodb/DynamoDBLocal_lib")
+		dynamodb = DynamoDBEmbedded.create()
+		repository = new AlbumsRepository(dynamodb)
+	}
+
+	def cleanup() {
+		dynamodb?.shutdown()
+	}
 
 	def "should create album"() {
 		given:
@@ -18,18 +30,20 @@ class AlbumsRepositoryTest extends Specification {
 		when:
 			Album createdAlbum = repository.createAlbum(newAlbum)
 		then:
+			createdAlbum == dbGetAlbum(createdAlbum.getId())
 			createdAlbum == newAlbum.toBuilder().id(createdAlbum.getId()).build()
-			// TODO assert call to DB made once db connection implemented
 	}
 
 	def "should get album by id"() {
 		given:
-			UUID id = new UUID(1, 1)
+			UUID id = randomUUID()
+			String title = "Some Title"
+			dbPutAlbum(id, title)
 		when:
 			Album album = repository.getAlbum(id)
 		then:
 			album.id == id
-			album.title == dbUrl + " 1"
+			album.title == title
 	}
 
 	def "should fail on get album by non-existing id"() {
@@ -43,26 +57,30 @@ class AlbumsRepositoryTest extends Specification {
 	}
 
 	def "should get all albums"() {
-		when:
-			List<Album> albums = repository.getAlbums()
-		then:
-			albums == [
-					new Album(new UUID(1, 1), dbUrl + " 1"),
-					new Album(new UUID(2, 2), dbUrl + " 2"),
-					new Album(new UUID(3, 3), dbUrl + " 3")
+		given:
+			Set<Album> createdAlbums = [
+					new Album(new UUID(1, 1), "Title 1"),
+					new Album(new UUID(2, 2), "Title 2"),
+					new Album(new UUID(3, 3), "Title 3")
 			]
+			createdAlbums.each { dbPutAlbum(it.id, it.title) }
+		when:
+			Set<Album> returnedAlbums = repository.getAlbums()
+		then:
+			returnedAlbums == createdAlbums
 	}
 
 	def "should update album"() {
 		given:
-			Album originalAlbum = repository.createAlbum(anAlbum().id(new UUID(1, 1)).title("Old Title").build())
+			UUID id = randomUUID()
 			Album patch = anAlbum().title("New Title").build()
-			Album expectedAlbum = originalAlbum.toBuilder().title(patch.getTitle()).build()
+			Album expectedAlbum = anAlbum().id(id).title(patch.getTitle()).build()
+			dbPutAlbum(id, "Old Title")
 		when:
-			Album updatedAlbum = repository.updateAlbum(originalAlbum.getId(), patch)
+			Album updatedAlbum = repository.updateAlbum(id, patch)
 		then:
+			dbGetAlbum(id) == expectedAlbum
 			updatedAlbum == expectedAlbum
-			// TODO assert call to DB made once db connection implemented
 	}
 
 	def "should fail on update album if it does not exists"() {
@@ -79,12 +97,11 @@ class AlbumsRepositoryTest extends Specification {
 	def "should delete album"() {
 		given:
 			UUID id = randomUUID()
-			Album album = anAlbum().id(id).title("A Title").build()
-			repository.createAlbum(album)
+			dbPutAlbum(id, "A Title")
 		when:
 			repository.deleteAlbum(id)
 		then:
-			true
+			dbGetAlbum(id) == null
 	}
 
 	def "should succeed on deleting not existing album"() {
@@ -94,6 +111,28 @@ class AlbumsRepositoryTest extends Specification {
 			repository.deleteAlbum(id)
 		then:
 			true
+	}
+
+	private void dbPutAlbum(UUID id, String title) {
+		dynamodb.putItem("cdstore-Albums", [
+				"id"   : new AttributeValue(id.toString()),
+				"title": new AttributeValue(title)
+		])
+	}
+
+	private Album dbGetAlbum(UUID id) {
+		def item = dynamodb.getItem("cdstore-Albums", [
+				"id": new AttributeValue(id.toString())
+		]).item
+
+		return (item == null) ? null : toItem(item)
+	}
+
+	private Album toItem(Map<String, AttributeValue> item) {
+		anAlbum()
+				.id(UUID.fromString(item.get("id").getS()))
+				.title(item.get("title").getS())
+				.build()
 	}
 
 }

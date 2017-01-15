@@ -31,11 +31,13 @@ class AlbumsManagerTest extends Specification {
 	}
 
 	def "should delegate get all albums to repository"() {
+		given:
+			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			List<Album> result = manager.getAlbums()
+			Set<Album> result = manager.getAlbums()
 		then:
-			1 * repository.getAlbums() >> [album1, album2]
-			result == [album1, album2]
+			1 * repository.getAlbums() >> expectedResult
+			result == expectedResult
 	}
 
 	def "should delegate update album to repository"() {

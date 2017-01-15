@@ -1,5 +1,9 @@
 package pl.jojczykp.cdstore.main;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import pl.jojczykp.cdstore.albums.AlbumsConfiguration;
@@ -28,7 +32,19 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 	}
 
 	private void registerAlbums(AlbumsConfiguration configuration, Environment environment) {
-		AlbumsRepository repository = new AlbumsRepository(configuration.getDbUrl());
+		AmazonDynamoDB amazonDynamoDB;
+
+		if (configuration.getEndpoint() != null) {
+			amazonDynamoDB = new AmazonDynamoDBClient();
+			amazonDynamoDB.setEndpoint(configuration.getEndpoint());
+		} else {
+			amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
+					.withRegion(configuration.getRegion())
+					.withCredentials(new ProfileCredentialsProvider(configuration.getProfile()))
+					.build();
+		}
+
+		AlbumsRepository repository = new AlbumsRepository(amazonDynamoDB);
 		AlbumsManager manager = new AlbumsManager(repository);
 		AlbumsResource resource = new AlbumsResource(manager);
 		environment.jersey().register(resource);
