@@ -1,10 +1,10 @@
-package pl.jojczykp.cdstore.cds;
+package pl.jojczykp.cdstore.albums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class CdConfiguration {
+public class AlbumsConfiguration {
 
 	@NotEmpty
 	@JsonProperty

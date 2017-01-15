@@ -3,7 +3,7 @@ package pl.jojczykp.cdstore.main;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
-import pl.jojczykp.cdstore.cds.CdConfiguration;
+import pl.jojczykp.cdstore.albums.AlbumsConfiguration;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,11 +11,11 @@ public class CdStoreConfiguration extends Configuration {
 
 	@NotNull
 	@JsonProperty
-	private CdConfiguration cd;
+	private AlbumsConfiguration albums;
 
 	@JsonProperty
-	public CdConfiguration getCd() {
-		return cd;
+	public AlbumsConfiguration getAlbums() {
+		return albums;
 	}
 
 }

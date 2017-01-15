@@ -1,8 +1,8 @@
-package pl.jojczykp.cdstore.client.cds;
+package pl.jojczykp.cdstore.client.albums;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import pl.jojczykp.cdstore.cds.Cd;
+import pl.jojczykp.cdstore.albums.Album;
 import pl.jojczykp.cdstore.client.Request;
 
 import java.util.UUID;
@@ -10,36 +10,36 @@ import java.util.UUID;
 import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.cds.Cd.aCd;
-import static pl.jojczykp.cdstore.cds.CdResource.CD_MEDIA_TYPE;
+import static pl.jojczykp.cdstore.albums.Album.anAlbum;
+import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 
-public class UpdateCdRequest extends Request {
+public class UpdateAlbumRequest extends Request {
 
 	private UUID id;
 	private String title;
 
-	private UpdateCdRequest() {
+	private UpdateAlbumRequest() {
 	}
 
-	public static UpdateCdRequest anUpdateCdRequest() {
-		return new UpdateCdRequest();
+	public static UpdateAlbumRequest anUpdateAlbumRequest() {
+		return new UpdateAlbumRequest();
 	}
 
-	public UpdateCdRequest withId(UUID id) {
+	public UpdateAlbumRequest withId(UUID id) {
 		this.id = id;
 		return this;
 	}
 
-	public UpdateCdRequest withTitle(String title) {
+	public UpdateAlbumRequest withTitle(String title) {
 		this.title = title;
 		return this;
 	}
 
-	public Cd makeSuccessfully() {
+	public Album makeSuccessfully() {
 		ClientResponse response = make();
 		assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
 
-		return response.getEntity(Cd.class);
+		return response.getEntity(Album.class);
 	}
 
 	public ClientResponse make() {
@@ -47,10 +47,10 @@ public class UpdateCdRequest extends Request {
 		client.getProperties().put(PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND, true);
 
 		ClientResponse response = client
-				.resource(serverUrl).path("cds").path(id.toString())
-				.accept(CD_MEDIA_TYPE)
-				.type(CD_MEDIA_TYPE)
-				.entity(aCd()
+				.resource(serverUrl).path("albums").path(id.toString())
+				.accept(ALBUM_MEDIA_TYPE)
+				.type(ALBUM_MEDIA_TYPE)
+				.entity(anAlbum()
 						.title(title)
 						.build())
 				.method("PATCH", ClientResponse.class);
