@@ -112,15 +112,14 @@ case ${1} in
             get_admin_port
             start
             write_pid
-
             started="0"; wait_for_start started
+            print_outs
             if [ ${started} == "1" ]
             then
                 echo "${SERVICE_NAME} not started in expected period of time. Making cleanup..."
                 stop
                 exit 1
             else
-                print_outs
                 echo "${SERVICE_NAME} started"
             fi
         else
