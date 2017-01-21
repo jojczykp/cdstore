@@ -38,8 +38,6 @@ public class AlbumsRepository {
 	private final Table table;
 
 	public AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
-		//TODO externalize client setup, tests
-		//TODO externalize table creation (puppet?)
 		DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
 		table = Optional.ofNullable(dynamoDB.getTable(TABLE_NAME)).orElse(createTable(dynamoDB));
 	}

@@ -11,17 +11,17 @@ import static java.util.UUID.randomUUID
 
 class AlbumsRepositoryTest extends Specification {
 
-	AmazonDynamoDB dynamodb
+	AmazonDynamoDB dynamoDB
 	AlbumsRepository repository
 
 	def setup() {
 		System.setProperty("sqlite4java.library.path", "target/dynamodb/DynamoDBLocal_lib")
-		dynamodb = DynamoDBEmbedded.create()
-		repository = new AlbumsRepository(dynamodb)
+		dynamoDB = DynamoDBEmbedded.create()
+		repository = new AlbumsRepository(dynamoDB)
 	}
 
 	def cleanup() {
-		dynamodb?.shutdown()
+		dynamoDB?.shutdown()
 	}
 
 	def "should create album"() {
@@ -114,14 +114,14 @@ class AlbumsRepositoryTest extends Specification {
 	}
 
 	private void dbPutAlbum(UUID id, String title) {
-		dynamodb.putItem("cdstore-Albums", [
+		dynamoDB.putItem("cdstore-Albums", [
 				"id"   : new AttributeValue(id.toString()),
 				"title": new AttributeValue(title)
 		])
 	}
 
 	private Album dbGetAlbum(UUID id) {
-		def item = dynamodb.getItem("cdstore-Albums", [
+		def item = dynamoDB.getItem("cdstore-Albums", [
 				"id": new AttributeValue(id.toString())
 		]).item
 
