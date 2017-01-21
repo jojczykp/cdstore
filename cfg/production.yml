@@ -7,5 +7,5 @@ server:
     port: 8081
 
 albums:
-  region: eu-west-1
   profile: cdstore
+  endpoint: https://dynamodb.eu-west-1.amazonaws.com

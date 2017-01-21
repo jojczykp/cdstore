@@ -7,6 +7,5 @@ server:
     port: 8181
 
 albums:
-  region: eu-west-1
   profile: cdstore
   endpoint: http://localhost:8182
