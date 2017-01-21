@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.cds;
+package pl.jojczykp.cdstore.albums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -12,8 +12,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
-@Builder(toBuilder = true, builderMethodName = "aCd")
-public class Cd {
+@Builder(toBuilder = true, builderMethodName = "anAlbum")
+public class Album {
 
 	@JsonProperty
 	private final @Getter UUID id;

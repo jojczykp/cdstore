@@ -1,39 +1,39 @@
-package pl.jojczykp.cdstore.client.cds;
+package pl.jojczykp.cdstore.client.albums;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
-import pl.jojczykp.cdstore.cds.Cd;
+import pl.jojczykp.cdstore.albums.Album;
 import pl.jojczykp.cdstore.client.Request;
 
 import java.util.List;
 
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.cds.CdResource.CD_LIST_MEDIA_TYPE;
+import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_LIST_MEDIA_TYPE;
 
-public class GetCdsRequest extends Request {
+public class GetAlbumsRequest extends Request {
 
-	private GetCdsRequest() {
+	private GetAlbumsRequest() {
 	}
 
-	public static GetCdsRequest aGetCdsRequest() {
-		return new GetCdsRequest();
+	public static GetAlbumsRequest aGetAlbumsRequest() {
+		return new GetAlbumsRequest();
 	}
 
-	public List<Cd> makeSuccessfully() {
+	public List<Album> makeSuccessfully() {
 		ClientResponse response = make();
 		assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
 
-		return response.getEntity(new GenericType<List<Cd>>() {});
+		return response.getEntity(new GenericType<List<Album>>() {});
 	}
 
 	public ClientResponse make() {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("cds")
-				.accept(CD_LIST_MEDIA_TYPE)
+				.resource(serverUrl).path("albums")
+				.accept(ALBUM_LIST_MEDIA_TYPE)
 				.get(ClientResponse.class);
 
 		response.bufferEntity();

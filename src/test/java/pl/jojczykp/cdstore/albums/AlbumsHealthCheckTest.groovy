@@ -1,18 +1,18 @@
-package pl.jojczykp.cdstore.cds
+package pl.jojczykp.cdstore.albums
 
 import spock.lang.Specification
 import com.codahale.metrics.health.HealthCheck
 
-class CdHealthCheckTest extends Specification {
+class AlbumsHealthCheckTest extends Specification {
 
-	CdConfiguration configuration = Mock(CdConfiguration)
-	CdHealthCheck healthCheck = new CdHealthCheck(configuration)
+	AlbumsConfiguration configuration = Mock(AlbumsConfiguration)
+	AlbumsHealthCheck healthCheck = new AlbumsHealthCheck(configuration)
 
 	def "should return name"() {
 		when:
 			String name = healthCheck.name
 		then:
-			name == "cds"
+			name == "albums"
 	}
 
 	def "should be healthy"() {

@@ -6,17 +6,17 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON_TYPE;
-import static javax.ws.rs.core.Response.Status.CONFLICT;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
-public class EntityAlreadyExistsExceptionMapper implements ExceptionMapper<EntityAlreadyExistsException> {
+public class ItemNotFoundExceptionMapper implements ExceptionMapper<ItemNotFoundException> {
 
 	@Override
-	public Response toResponse(EntityAlreadyExistsException e) {
+	public Response toResponse(ItemNotFoundException e) {
 		return Response
-				.status(CONFLICT)
+				.status(NOT_FOUND)
 				.type(APPLICATION_JSON_TYPE)
 				.entity(ImmutableMap.of(
-						"code", 102,
+						"code", 101,
 						"message", e.getMessage()))
 				.build();
 	}

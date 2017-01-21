@@ -1,4 +1,4 @@
-package pl.jojczykp.cdstore.client.cds;
+package pl.jojczykp.cdstore.client.albums;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -9,18 +9,18 @@ import java.util.UUID;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteCdRequest extends Request {
+public class DeleteAlbumRequest extends Request {
 
 	private UUID id;
 
-	private DeleteCdRequest() {
+	private DeleteAlbumRequest() {
 	}
 
-	public static DeleteCdRequest aDeleteCdRequest() {
-		return new DeleteCdRequest();
+	public static DeleteAlbumRequest aDeleteAlbumRequest() {
+		return new DeleteAlbumRequest();
 	}
 
-	public DeleteCdRequest withId(UUID id) {
+	public DeleteAlbumRequest withId(UUID id) {
 		this.id = id;
 		return this;
 	}
@@ -35,7 +35,7 @@ public class DeleteCdRequest extends Request {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("cds").path(id.toString())
+				.resource(serverUrl).path("albums").path(id.toString())
 				.delete(ClientResponse.class);
 
 		response.bufferEntity();
