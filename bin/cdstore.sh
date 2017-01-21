@@ -55,13 +55,15 @@ stop() {
 }
 
 wait_for_start() {
+    local __resultvar=$1
     local i=0
     while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
     do
-        ((i++)) && ((i>10)) && break
+        ((i++)) && ((i>10)) && { echo "ERROR: Waiting for ${SERVICE_NAME} to start timeout"; eval ${__resultvar}="0"; break; }
         echo "Waiting for ${SERVICE_NAME} health check (${i}) ..."
         sleep 1
     done
+    eval ${__resultvar}="1"
 }
 
 wait_for_stop_admin_port() {
@@ -110,9 +112,17 @@ case ${1} in
             get_admin_port
             start
             write_pid
-            wait_for_start
-            print_outs
-            echo "${SERVICE_NAME} started"
+
+            started="0"; wait_for_start started
+            if [ ${started} == "1" ]
+            then
+                echo "${SERVICE_NAME} not started in expected period of time. Making cleanup..."
+                stop
+                exit 1
+            else
+                print_outs
+                echo "${SERVICE_NAME} started"
+            fi
         else
             echo "${SERVICE_NAME} already running"
             read_pid
