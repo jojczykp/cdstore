@@ -11,6 +11,7 @@ public class AlbumsConfiguration {
 	@Getter
 	private String profile;
 
+    @NotEmpty
 	@JsonProperty
 	@Getter
 	private String endpoint;
