@@ -42,6 +42,7 @@
 		<spock.version>1.1-groovy-2.4-rc-3</spock.version>
         <aws.s3.region>us-west-2</aws.s3.region>
         <dynamodb.port>8182</dynamodb.port>
+        <lombok.version>1.16.12</lombok.version>
 	</properties>
 
     <repositories>
@@ -91,7 +92,7 @@
 					<dependency>
 						<groupId>org.projectlombok</groupId>
 						<artifactId>lombok</artifactId>
-						<version>1.16.12</version>
+						<version>${lombok.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -345,7 +346,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.12</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
