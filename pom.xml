@@ -206,6 +206,8 @@
                                 <argument>--endpoint-url</argument>
                                 <argument>http://localhost:${dynamodb.port}</argument>
                                 <argument>--table-name</argument>
+                                <argument>--profile</argument>
+                                <argument>cdstore</argument>
                                 <argument>cdstore-Albums</argument>
                                 <argument>--attribute-definitions</argument>
                                 <argument>AttributeName=id,AttributeType=S</argument>
