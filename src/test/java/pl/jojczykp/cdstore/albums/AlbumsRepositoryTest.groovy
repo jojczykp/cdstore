@@ -2,12 +2,19 @@ package pl.jojczykp.cdstore.albums
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
 import com.amazonaws.services.dynamodbv2.local.embedded.DynamoDBEmbedded
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement
+import com.amazonaws.services.dynamodbv2.model.KeyType
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
 
 import static Album.anAlbum
 import static java.util.UUID.randomUUID
+import static pl.jojczykp.cdstore.albums.AlbumsRepository.ATTR_ID
+import static pl.jojczykp.cdstore.albums.AlbumsRepository.TABLE_NAME
 
 class AlbumsRepositoryTest extends Specification {
 
@@ -17,7 +24,16 @@ class AlbumsRepositoryTest extends Specification {
 	def setup() {
 		System.setProperty("sqlite4java.library.path", "target/dynamodb/DynamoDBLocal_lib")
 		dynamoDB = DynamoDBEmbedded.create()
+		createTable(dynamoDB)
 		repository = new AlbumsRepository(dynamoDB)
+	}
+
+	def createTable(AmazonDynamoDB dynamoDB) {
+		dynamoDB.createTable(new CreateTableRequest()
+				.withTableName(TABLE_NAME)
+				.withAttributeDefinitions(new AttributeDefinition(ATTR_ID, "S"))
+				.withKeySchema(new KeySchemaElement(ATTR_ID, KeyType.HASH))
+				.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))
 	}
 
 	def cleanup() {
@@ -128,7 +144,7 @@ class AlbumsRepositoryTest extends Specification {
 		return (item == null) ? null : toItem(item)
 	}
 
-	private Album toItem(Map<String, AttributeValue> item) {
+	private static Album toItem(Map<String, AttributeValue> item) {
 		anAlbum()
 				.id(UUID.fromString(item.get("id").getS()))
 				.title(item.get("title").getS())

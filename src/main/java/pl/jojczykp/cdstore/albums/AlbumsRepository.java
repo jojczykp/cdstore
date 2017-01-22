@@ -9,17 +9,11 @@ import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
-import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
-import com.amazonaws.services.dynamodbv2.model.KeyType;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.model.ReturnValue;
 import pl.jojczykp.cdstore.exceptions.ItemAlreadyExistsException;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.UUID;
@@ -31,26 +25,14 @@ import static pl.jojczykp.cdstore.albums.Album.anAlbum;
 
 public class AlbumsRepository {
 
-	private static final String TABLE_NAME = "cdstore-Albums";
-	private static final String ATTR_ID = "id";
-	private static final String ATTR_TITLE = "title";
+	static final String TABLE_NAME = "cdstore-Albums";
+	static final String ATTR_ID = "id";
+	static final String ATTR_TITLE = "title";
 
 	private final Table table;
 
 	public AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
-		DynamoDB dynamoDB = new DynamoDB(amazonDynamoDB);
-		table = Optional.ofNullable(dynamoDB.getTable(TABLE_NAME)).orElse(createTable(dynamoDB));
-	}
-
-	private Table createTable(DynamoDB dynamoDB) {
-		dynamoDB.createTable(new CreateTableRequest()
-				.withTableName(TABLE_NAME)
-				.withAttributeDefinitions(
-						new AttributeDefinition("id", "S"))
-				.withKeySchema(
-						new KeySchemaElement("id", KeyType.HASH))
-				.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)));
-		return dynamoDB.getTable(TABLE_NAME);
+		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
 	}
 
 	public Album createAlbum(Album album) {

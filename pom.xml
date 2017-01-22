@@ -41,6 +41,7 @@
 		<groovy.version>2.4.7</groovy.version>
 		<spock.version>1.1-groovy-2.4-rc-3</spock.version>
         <aws.s3.region>us-west-2</aws.s3.region>
+        <dynamodb.port>8182</dynamodb.port>
 	</properties>
 
     <repositories>
@@ -184,9 +185,34 @@
                                 <argument>-jar</argument>
                                 <argument>dynamodb/DynamoDBLocal.jar</argument>
                                 <argument>-port</argument>
-                                <argument>8182</argument>
+                                <argument>${dynamodb.port}</argument>
                                 <argument>-sharedDb</argument>
                                 <argument>-inMemory</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>dynamodb_local_data</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                        <configuration>
+                            <name>dynamodb_local_data</name>
+                            <arguments>
+                                <argument>aws</argument>
+                                <argument>dynamodb</argument>
+                                <argument>create-table</argument>
+                                <argument>--endpoint-url</argument>
+                                <argument>http://localhost:${dynamodb.port}</argument>
+                                <argument>--table-name</argument>
+                                <argument>cdstore-Albums</argument>
+                                <argument>--attribute-definitions</argument>
+                                <argument>AttributeName=id,AttributeType=S</argument>
+                                <argument>--key-schema</argument>
+                                <argument>AttributeName=id,KeyType=HASH</argument>
+                                <argument>--provisioned-throughput</argument>
+                                <argument>ReadCapacityUnits=1,WriteCapacityUnits=1</argument>
                             </arguments>
                         </configuration>
                     </execution>
