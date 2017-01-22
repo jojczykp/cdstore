@@ -25,9 +25,9 @@ import static pl.jojczykp.cdstore.albums.Album.anAlbum;
 
 public class AlbumsRepository {
 
-	static final String TABLE_NAME = "cdstore-Albums";
-	static final String ATTR_ID = "id";
-	static final String ATTR_TITLE = "title";
+	private static final String TABLE_NAME = "cdstore-Albums";
+	private static final String ATTR_ID = "id";
+	private static final String ATTR_TITLE = "title";
 
 	private final Table table;
 
