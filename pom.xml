@@ -201,13 +201,15 @@
                             <name>dynamodb_local_data</name>
                             <arguments>
                                 <argument>aws</argument>
-                                <argument>dynamodb</argument>
-                                <argument>create-table</argument>
+								<argument>dynamodb</argument>
+								<argument>create-table</argument>
+								<argument>--profile</argument>
+								<argument>cdstore</argument>
+								<argument>--region</argument>
+								<argument>eu-west-1</argument>
                                 <argument>--endpoint-url</argument>
                                 <argument>http://localhost:${dynamodb.port}</argument>
                                 <argument>--table-name</argument>
-                                <argument>--profile</argument>
-                                <argument>cdstore</argument>
                                 <argument>cdstore-Albums</argument>
                                 <argument>--attribute-definitions</argument>
                                 <argument>AttributeName=id,AttributeType=S</argument>
