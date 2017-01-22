@@ -193,7 +193,7 @@
 						<configuration>
 							<port>${dynamodb.port}</port>
 							<tables>
-								<table>${basedir}/src/it/resources/dynamodb/cdstore-Albums.json</table>
+								<table>${basedir}/src/test/resources/dynamodb/cdstore-Albums.json</table>
 							</tables>
 						</configuration>
 					</execution>
