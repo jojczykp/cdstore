@@ -12,6 +12,9 @@ import pl.jojczykp.cdstore.albums.AlbumsRepository;
 import pl.jojczykp.cdstore.albums.AlbumsResource;
 import pl.jojczykp.cdstore.exceptions.ItemAlreadyExistsExceptionMapper;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundExceptionMapper;
+import pl.jojczykp.cdstore.tracks.TracksManager;
+import pl.jojczykp.cdstore.tracks.TracksRepository;
+import pl.jojczykp.cdstore.tracks.TracksResource;
 
 public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
@@ -27,6 +30,7 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
 		registerAlbums(cdStoreConfiguration.getAlbums(), environment);
+		registerTracks(environment);
 		registerExceptionsMappers(environment);
 	}
 
@@ -42,6 +46,13 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 		AlbumsHealthCheck healthCheck = new AlbumsHealthCheck(repository);
 		environment.healthChecks().register(healthCheck.getName(), healthCheck);
+	}
+
+	private void registerTracks(Environment environment) {
+		TracksRepository repository = new TracksRepository();
+		TracksManager manager = new TracksManager(repository);
+		TracksResource resource = new TracksResource(manager);
+		environment.jersey().register(resource);
 	}
 
 	private void registerExceptionsMappers(Environment environment) {
