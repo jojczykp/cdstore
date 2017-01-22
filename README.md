@@ -4,8 +4,9 @@ Small pet project to play with:
 - Java 8
 - Maven
 - Dropwizard
-- Spock
 - Lombok
+- DynamoDB
+- Spock
 - jGitFlow
 
 - RESTful

@@ -6,15 +6,13 @@ import com.amazonaws.services.dynamodbv2.model.AttributeDefinition
 import com.amazonaws.services.dynamodbv2.model.AttributeValue
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement
-import com.amazonaws.services.dynamodbv2.model.KeyType
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
+import groovy.json.JsonSlurper
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
 
 import static Album.anAlbum
 import static java.util.UUID.randomUUID
-import static pl.jojczykp.cdstore.albums.AlbumsRepository.ATTR_ID
-import static pl.jojczykp.cdstore.albums.AlbumsRepository.TABLE_NAME
 
 class AlbumsRepositoryTest extends Specification {
 
@@ -24,16 +22,8 @@ class AlbumsRepositoryTest extends Specification {
 	def setup() {
 		System.setProperty("sqlite4java.library.path", "target/dynamodb/DynamoDBLocal_lib")
 		dynamoDB = DynamoDBEmbedded.create()
-		createTable(dynamoDB)
+		createTable(dynamoDB, "dynamodb/cdstore-Albums.json")
 		repository = new AlbumsRepository(dynamoDB)
-	}
-
-	def createTable(AmazonDynamoDB dynamoDB) {
-		dynamoDB.createTable(new CreateTableRequest()
-				.withTableName(TABLE_NAME)
-				.withAttributeDefinitions(new AttributeDefinition(ATTR_ID, "S"))
-				.withKeySchema(new KeySchemaElement(ATTR_ID, KeyType.HASH))
-				.withProvisionedThroughput(new ProvisionedThroughput(1L, 1L)))
 	}
 
 	def cleanup() {
@@ -149,6 +139,27 @@ class AlbumsRepositoryTest extends Specification {
 				.id(UUID.fromString(item.get("id").getS()))
 				.title(item.get("title").getS())
 				.build()
+	}
+
+	def createTable(AmazonDynamoDB dynamoDB, String jsonTxt) {
+		def json = Thread.currentThread().getContextClassLoader().getResource(jsonTxt).text
+		def root = new JsonSlurper().parseText(json)
+
+		dynamoDB.createTable(
+				new CreateTableRequest()
+						.withTableName(root.TableName)
+						.withAttributeDefinitions(
+						root.AttributeDefinitions.collect {
+							new AttributeDefinition(it.AttributeName, it.AttributeType as String)
+						})
+						.withKeySchema(
+						root.KeySchema.collect {
+							new KeySchemaElement(it.AttributeName, it.KeyType as String)
+						})
+						.withProvisionedThroughput(
+						new ProvisionedThroughput(
+								root.ProvisionedThroughput.ReadCapacityUnits,
+								root.ProvisionedThroughput.WriteCapacityUnits)))
 	}
 
 }
