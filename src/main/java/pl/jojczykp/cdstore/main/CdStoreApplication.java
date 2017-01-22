@@ -40,7 +40,7 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 		AlbumsResource resource = new AlbumsResource(manager);
 		environment.jersey().register(resource);
 
-		AlbumsHealthCheck healthCheck = new AlbumsHealthCheck(configuration);
+		AlbumsHealthCheck healthCheck = new AlbumsHealthCheck(repository);
 		environment.healthChecks().register(healthCheck.getName(), healthCheck);
 	}
 
