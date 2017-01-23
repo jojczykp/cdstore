@@ -5,7 +5,7 @@ import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
 public class AlbumsHealthCheck extends HealthCheck {
 
-	private AlbumsRepository repository;
+	private final AlbumsRepository repository;
 
 	public AlbumsHealthCheck(AlbumsRepository repository) {
 		this.repository = repository;

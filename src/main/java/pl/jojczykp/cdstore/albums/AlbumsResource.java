@@ -22,7 +22,7 @@ public class AlbumsResource {
 	public static final String ALBUM_MEDIA_TYPE = "application/vnd-cdstore-album.1+json";
 	public static final String ALBUM_LIST_MEDIA_TYPE = "application/vnd-cdstore-album-list.1+json";
 
-	private AlbumsManager manager;
+	private final AlbumsManager manager;
 
 	public AlbumsResource(AlbumsManager manager) {
 		this.manager = manager;

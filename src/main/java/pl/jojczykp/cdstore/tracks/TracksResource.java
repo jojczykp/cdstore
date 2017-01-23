@@ -15,7 +15,7 @@ public class TracksResource {
 
 	public static final String TRACK_MEDIA_TYPE = "application/vnd-cdstore-track.1+json";
 
-	private TracksManager manager;
+	private final TracksManager manager;
 
 	public TracksResource(TracksManager manager) {
 		this.manager = manager;

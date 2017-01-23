@@ -7,7 +7,7 @@ import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId;
 
 public class TracksRepository {
 
-    private Map<TrackId, Track> data = new ConcurrentHashMap<>();
+    private final Map<TrackId, Track> data = new ConcurrentHashMap<>();
 
     public Track createTrack(Track track) {
         TrackId id = randomTrackId();

@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class AlbumsManager {
 
-	private AlbumsRepository repository;
+	private final AlbumsRepository repository;
 
 	public AlbumsManager(AlbumsRepository repository) {
 		this.repository = repository;

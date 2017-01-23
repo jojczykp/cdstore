@@ -2,7 +2,7 @@ package pl.jojczykp.cdstore.tracks;
 
 public class TracksManager {
 
-	private TracksRepository repository;
+	private final TracksRepository repository;
 
 	public TracksManager(TracksRepository repository) {
 		this.repository = repository;
