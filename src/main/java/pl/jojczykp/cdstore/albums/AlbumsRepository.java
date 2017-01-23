@@ -51,15 +51,23 @@ public class AlbumsRepository {
 		}
 	}
 
-	public Album getAlbum(AlbumId id) {
-		Item item = table.getItem(new GetItemSpec()
-				.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString())));
+	public boolean albumExists(AlbumId id) {
+		return (findAlbum(id) != null);
+	}
 
-		if (item == null) {
+	public Album getAlbum(AlbumId id) {
+		Item maybeAlbum = findAlbum(id);
+
+		if (maybeAlbum == null) {
 			throw new ItemNotFoundException("album with given id does not exist");
 		}
 
-		return toAlbum(item);
+		return toAlbum(maybeAlbum);
+	}
+
+	private Item findAlbum(AlbumId id) {
+		return table.getItem(new GetItemSpec()
+                    .withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString())));
 	}
 
 	public Set<Album> getAlbums() {

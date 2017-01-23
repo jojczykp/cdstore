@@ -40,6 +40,25 @@ class AlbumsRepositoryTest extends Specification {
 			createdAlbum == newAlbum.toBuilder().id(createdAlbum.getId()).build()
 	}
 
+	def "should confirm album exists by id"() {
+		given:
+			AlbumId id = randomAlbumId()
+			dbPutAlbum(id, "Some Title")
+		when:
+			boolean exists = repository.albumExists(id)
+		then:
+			exists
+	}
+
+	def "should confirm album does not exist by id"() {
+		given:
+			AlbumId notExistingId = randomAlbumId()
+		when:
+			boolean exists = repository.albumExists(notExistingId)
+		then:
+			!exists
+	}
+
 	def "should get album by id"() {
 		given:
 			AlbumId id = randomAlbumId()

@@ -29,34 +29,29 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
-		registerAlbums(cdStoreConfiguration.getAlbums(), environment);
-		registerTracks(environment);
-		registerExceptionsMappers(environment);
-	}
+		AmazonDynamoDB amazonDynamoDB = amazonDynamoDb(cdStoreConfiguration.getAlbums());
 
-	private void registerAlbums(AlbumsConfiguration configuration, Environment environment) {
-		AmazonDynamoDB amazonDynamoDB = new AmazonDynamoDBClient(
-				new ProfileCredentialsProvider(configuration.getProfile()))
-				.withEndpoint(configuration.getEndpoint());
+		AlbumsRepository albumsRepository = new AlbumsRepository(amazonDynamoDB);
+		AlbumsManager albumsManager = new AlbumsManager(albumsRepository);
+		AlbumsResource albumsResource = new AlbumsResource(albumsManager);
+		environment.jersey().register(albumsResource);
 
-		AlbumsRepository repository = new AlbumsRepository(amazonDynamoDB);
-		AlbumsManager manager = new AlbumsManager(repository);
-		AlbumsResource resource = new AlbumsResource(manager);
-		environment.jersey().register(resource);
+		AlbumsHealthCheck albumsHealthCheck = new AlbumsHealthCheck(albumsRepository);
+		environment.healthChecks().register(albumsHealthCheck.getName(), albumsHealthCheck);
 
-		AlbumsHealthCheck healthCheck = new AlbumsHealthCheck(repository);
-		environment.healthChecks().register(healthCheck.getName(), healthCheck);
-	}
+		TracksRepository tracksRepository = new TracksRepository();
+		TracksManager tracksManager = new TracksManager(albumsRepository, tracksRepository);
+		TracksResource tracksResource = new TracksResource(tracksManager);
+		environment.jersey().register(tracksResource);
 
-	private void registerTracks(Environment environment) {
-		TracksRepository repository = new TracksRepository();
-		TracksManager manager = new TracksManager(repository);
-		TracksResource resource = new TracksResource(manager);
-		environment.jersey().register(resource);
-	}
-
-	private void registerExceptionsMappers(Environment environment) {
 		environment.jersey().register(new ItemNotFoundExceptionMapper());
 		environment.jersey().register(new ItemAlreadyExistsExceptionMapper());
 	}
+
+	private AmazonDynamoDB amazonDynamoDb(AlbumsConfiguration albumsConfiguration) {
+		return new AmazonDynamoDBClient(
+				new ProfileCredentialsProvider(albumsConfiguration.getProfile()))
+				.withEndpoint(albumsConfiguration.getEndpoint());
+	}
+
 }
