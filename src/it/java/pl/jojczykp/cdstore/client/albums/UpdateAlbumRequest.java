@@ -3,9 +3,8 @@ package pl.jojczykp.cdstore.client.albums;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import pl.jojczykp.cdstore.albums.Album;
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
-
-import java.util.UUID;
 
 import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -15,7 +14,7 @@ import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 
 public class UpdateAlbumRequest extends Request {
 
-	private UUID id;
+	private AlbumId id;
 	private String title;
 
 	private UpdateAlbumRequest() {
@@ -25,7 +24,7 @@ public class UpdateAlbumRequest extends Request {
 		return new UpdateAlbumRequest();
 	}
 
-	public UpdateAlbumRequest withId(UUID id) {
+	public UpdateAlbumRequest withId(AlbumId id) {
 		this.id = id;
 		return this;
 	}

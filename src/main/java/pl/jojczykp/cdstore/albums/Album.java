@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-import java.util.UUID;
-
 @RequiredArgsConstructor
 @ToString
 @EqualsAndHashCode
@@ -16,7 +14,7 @@ import java.util.UUID;
 public class Album {
 
 	@JsonProperty
-	private final @Getter UUID id;
+	private final @Getter AlbumId id;
 
 	@JsonProperty
 	private final @Getter String title;

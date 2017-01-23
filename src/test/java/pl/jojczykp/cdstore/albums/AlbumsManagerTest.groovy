@@ -7,7 +7,7 @@ import static Album.anAlbum
 
 class AlbumsManagerTest extends Specification {
 
-	UUID id = new UUID(6, 7)
+	AlbumId id = AlbumId.randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
@@ -42,7 +42,7 @@ class AlbumsManagerTest extends Specification {
 
 	def "should delegate update album to repository"() {
 		given:
-			UUID id = new UUID(3, 4)
+			AlbumId id = AlbumId.randomAlbumId()
 		when:
 			Album result = manager.updateAlbum(id, album1)
 		then:

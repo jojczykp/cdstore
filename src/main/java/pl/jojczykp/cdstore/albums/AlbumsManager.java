@@ -1,7 +1,6 @@
 package pl.jojczykp.cdstore.albums;
 
 import java.util.Set;
-import java.util.UUID;
 
 public class AlbumsManager {
 
@@ -15,7 +14,7 @@ public class AlbumsManager {
 		return repository.createAlbum(album);
 	}
 
-	public Album getAlbum(UUID id) {
+	public Album getAlbum(AlbumId id) {
 		return repository.getAlbum(id);
 	}
 
@@ -23,11 +22,11 @@ public class AlbumsManager {
 		return repository.getAlbums();
 	}
 
-	public Album updateAlbum(UUID id, Album album) {
+	public Album updateAlbum(AlbumId id, Album album) {
 		return repository.updateAlbum(id, album);
 	}
 
-	public void deleteAlbum(UUID id) {
+	public void deleteAlbum(AlbumId id) {
 		repository.deleteAlbum(id);
 	}
 

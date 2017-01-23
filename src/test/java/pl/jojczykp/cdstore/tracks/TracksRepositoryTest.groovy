@@ -2,8 +2,9 @@ package pl.jojczykp.cdstore.tracks
 
 import spock.lang.Specification
 
-import static java.util.UUID.randomUUID
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.tracks.Track.aTrack
+import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class TracksRepositoryTest extends Specification {
 
@@ -11,7 +12,7 @@ class TracksRepositoryTest extends Specification {
 
     def "should create track"() {
         given:
-            Track newTrack = aTrack().id(randomUUID()).albumId(randomUUID()).title("A Title").build()
+            Track newTrack = aTrack().id(randomTrackId()).albumId(randomAlbumId()).title("A Title").build()
         when:
             Track createdTrack = repository.createTrack(newTrack)
         then:
@@ -19,7 +20,7 @@ class TracksRepositoryTest extends Specification {
             createdTrack == newTrack.toBuilder().id(createdTrack.getId()).build()
     }
 
-    Track dbGetTrack(UUID id) {
+    Track dbGetTrack(TrackId id) {
         return repository.getTrack(id)
     }
 

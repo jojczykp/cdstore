@@ -6,8 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-
-import java.util.UUID;
+import pl.jojczykp.cdstore.albums.AlbumId;
 
 @RequiredArgsConstructor
 @ToString
@@ -16,10 +15,10 @@ import java.util.UUID;
 public class Track {
 
 	@JsonProperty
-	private final @Getter UUID id;
+	private final @Getter TrackId id;
 
 	@JsonProperty
-	private final @Getter UUID albumId;
+	private final @Getter AlbumId albumId;
 
 	@JsonProperty
 	private final @Getter String title;

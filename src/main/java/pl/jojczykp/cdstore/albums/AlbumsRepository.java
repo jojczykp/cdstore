@@ -16,12 +16,11 @@ import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.StreamSupport.stream;
 import static pl.jojczykp.cdstore.albums.Album.anAlbum;
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId;
 
 public class AlbumsRepository {
 
@@ -36,7 +35,7 @@ public class AlbumsRepository {
 	}
 
 	public Album createAlbum(Album album) {
-		UUID id = randomUUID();
+		AlbumId id = randomAlbumId();
 
 		try {
 			table.putItem(new PutItemSpec()
@@ -52,7 +51,7 @@ public class AlbumsRepository {
 		}
 	}
 
-	public Album getAlbum(UUID id) {
+	public Album getAlbum(AlbumId id) {
 		Item item = table.getItem(new GetItemSpec()
 				.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString())));
 
@@ -70,7 +69,7 @@ public class AlbumsRepository {
 				.collect(toSet());
 	}
 
-	public Album updateAlbum(UUID id, Album album) {
+	public Album updateAlbum(AlbumId id, Album album) {
 		try {
 			Item item = table.updateItem(new UpdateItemSpec()
 					.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString()))
@@ -87,13 +86,13 @@ public class AlbumsRepository {
 		}
 	}
 
-	public void deleteAlbum(UUID id) {
+	public void deleteAlbum(AlbumId id) {
 		table.deleteItem(new PrimaryKey(ATTR_ID, id.toString()));
 	}
 
 	private Album toAlbum(Item item) {
 		return anAlbum()
-				.id(UUID.fromString(item.getString(ATTR_ID)))
+				.id(AlbumId.fromString(item.getString(ATTR_ID)))
 				.title(item.getString(ATTR_TITLE))
 				.build();
 	}

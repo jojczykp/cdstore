@@ -3,8 +3,6 @@ package pl.jojczykp.cdstore.albums;
 import com.codahale.metrics.health.HealthCheck;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
-import java.util.UUID;
-
 public class AlbumsHealthCheck extends HealthCheck {
 
 	private AlbumsRepository repository;
@@ -20,7 +18,7 @@ public class AlbumsHealthCheck extends HealthCheck {
 	@Override
 	protected Result check() {
 		try {
-			repository.getAlbum(UUID.randomUUID());
+			repository.getAlbum(AlbumId.randomAlbumId());
 		} catch (ItemNotFoundException e) {
 			/* Ignore - healthy */
 		} catch (Exception e) {

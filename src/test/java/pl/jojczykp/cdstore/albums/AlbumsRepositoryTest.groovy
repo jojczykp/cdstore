@@ -12,7 +12,7 @@ import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
 
 import static Album.anAlbum
-import static java.util.UUID.randomUUID
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsRepositoryTest extends Specification {
 
@@ -42,7 +42,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should get album by id"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId id = randomAlbumId()
 			String title = "Some Title"
 			dbPutAlbum(id, title)
 		when:
@@ -54,7 +54,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should fail on get album by non-existing id"() {
 		given:
-			UUID notExistingId = new UUID(9, 9)
+			AlbumId notExistingId = randomAlbumId()
 		when:
 			repository.getAlbum(notExistingId)
 		then:
@@ -65,9 +65,9 @@ class AlbumsRepositoryTest extends Specification {
 	def "should get all albums"() {
 		given:
 			Set<Album> createdAlbums = [
-					new Album(new UUID(1, 1), "Title 1"),
-					new Album(new UUID(2, 2), "Title 2"),
-					new Album(new UUID(3, 3), "Title 3")
+					new Album(randomAlbumId(), "Title 1"),
+					new Album(randomAlbumId(), "Title 2"),
+					new Album(randomAlbumId(), "Title 3")
 			]
 			createdAlbums.each { dbPutAlbum(it.id, it.title) }
 		when:
@@ -78,7 +78,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should update album"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId id = randomAlbumId()
 			Album patch = anAlbum().title("New Title").build()
 			Album expectedAlbum = anAlbum().id(id).title(patch.getTitle()).build()
 			dbPutAlbum(id, "Old Title")
@@ -91,7 +91,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should fail on update album if it does not exists"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId id = randomAlbumId()
 			Album patch = anAlbum().title("New Title").build()
 		when:
 			repository.updateAlbum(id, patch)
@@ -102,7 +102,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should delete album"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId id = randomAlbumId()
 			dbPutAlbum(id, "A Title")
 		when:
 			repository.deleteAlbum(id)
@@ -112,21 +112,21 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should succeed on deleting not existing album"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId id = randomAlbumId()
 		when:
 			repository.deleteAlbum(id)
 		then:
 			true
 	}
 
-	private void dbPutAlbum(UUID id, String title) {
+	private void dbPutAlbum(AlbumId id, String title) {
 		dynamoDB.putItem("cdstore-Albums", [
 				"id"   : new AttributeValue(id.toString()),
 				"title": new AttributeValue(title)
 		])
 	}
 
-	private Album dbGetAlbum(UUID id) {
+	private Album dbGetAlbum(AlbumId id) {
 		def item = dynamoDB.getItem("cdstore-Albums", [
 				"id": new AttributeValue(id.toString())
 		]).item
@@ -136,7 +136,7 @@ class AlbumsRepositoryTest extends Specification {
 
 	private static Album toItem(Map<String, AttributeValue> item) {
 		anAlbum()
-				.id(UUID.fromString(item.get("id").getS()))
+				.id(AlbumId.fromString(item.get("id").getS()))
 				.title(item.get("title").getS())
 				.build()
 	}

@@ -2,10 +2,10 @@ package pl.jojczykp.cdstore.client.tracks;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 import pl.jojczykp.cdstore.tracks.Track;
-
-import java.util.UUID;
+import pl.jojczykp.cdstore.tracks.TrackId;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,8 +14,8 @@ import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 public class CreateTrackRequest extends Request {
 
-	private UUID id;
-	private UUID albumId;
+	private TrackId id;
+	private AlbumId albumId;
 	private String title;
 
 	private CreateTrackRequest() {
@@ -25,12 +25,12 @@ public class CreateTrackRequest extends Request {
 		return new CreateTrackRequest();
 	}
 
-	public CreateTrackRequest withid(UUID id) {
+	public CreateTrackRequest withid(TrackId id) {
 		this.id = id;
 		return this;
 	}
 
-	public CreateTrackRequest withAlbumId(UUID albumId) {
+	public CreateTrackRequest withAlbumId(AlbumId albumId) {
 		this.albumId = albumId;
 		return this;
 	}

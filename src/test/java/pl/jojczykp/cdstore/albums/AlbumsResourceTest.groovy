@@ -5,10 +5,11 @@ import spock.lang.Specification
 import javax.ws.rs.core.Response
 
 import static Album.anAlbum
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsResourceTest extends Specification {
 
-	UUID id = new UUID(6, 7)
+	AlbumId id = randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 

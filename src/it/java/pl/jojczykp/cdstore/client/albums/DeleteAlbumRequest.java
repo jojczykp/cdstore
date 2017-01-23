@@ -2,16 +2,15 @@ package pl.jojczykp.cdstore.client.albums;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
-
-import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAlbumRequest extends Request {
 
-	private UUID id;
+	private AlbumId id;
 
 	private DeleteAlbumRequest() {
 	}
@@ -20,7 +19,7 @@ public class DeleteAlbumRequest extends Request {
 		return new DeleteAlbumRequest();
 	}
 
-	public DeleteAlbumRequest withId(UUID id) {
+	public DeleteAlbumRequest withId(AlbumId id) {
 		this.id = id;
 		return this;
 	}

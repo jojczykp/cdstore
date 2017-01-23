@@ -12,7 +12,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.Set;
-import java.util.UUID;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
@@ -46,7 +45,7 @@ public class AlbumsResource {
 	@Timed
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{id}")
-	public Album getAlbum(@PathParam("id") UUID id) {
+	public Album getAlbum(@PathParam("id") AlbumId id) {
 		return manager.getAlbum(id);
 	}
 
@@ -62,14 +61,14 @@ public class AlbumsResource {
 	@Consumes(ALBUM_MEDIA_TYPE)
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{id}")
-	public Album updateAlbum(@PathParam("id") UUID id, Album album) {
+	public Album updateAlbum(@PathParam("id") AlbumId id, Album album) {
 		return manager.updateAlbum(id, album);
 	}
 
 	@DELETE
 	@Timed
 	@Path("/{id}")
-	public Response deleteAlbum(@PathParam("id") UUID id) {
+	public Response deleteAlbum(@PathParam("id") AlbumId id) {
 		manager.deleteAlbum(id);
 
 		return Response

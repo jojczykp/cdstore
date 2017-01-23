@@ -13,7 +13,7 @@ class DeleteAlbumIT extends Specification {
 
 	def "should delete album"() {
 		given:
-			UUID id = aCreateAlbumRequest()
+			AlbumId id = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
 					.getId()
