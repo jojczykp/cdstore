@@ -1,11 +1,9 @@
 package pl.jojczykp.cdstore.albums
 
-import nl.jqno.equalsverifier.EqualsVerifier
 import spock.lang.Specification
 
 import static java.util.UUID.randomUUID
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
-
 
 class AlbumIdTest extends Specification {
 
@@ -27,28 +25,6 @@ class AlbumIdTest extends Specification {
             def result = AlbumId.fromString(idAsString)
         then:
             result.toString() == idAsString
-    }
-
-    def "should have proper equals"() {
-        EqualsVerifier.forClass(AlbumId.class).verify()
-    }
-
-    def "should have different hashCodes if ids are not equal"() {
-        given:
-            AlbumId id1 = randomAlbumId()
-        when:
-            AlbumId id2 = randomAlbumId()
-        then:
-            id1.hashCode() != id2.hashCode()
-    }
-
-    def "should have same hashCodes if ids are equal"() {
-        given:
-            AlbumId id1 = randomAlbumId()
-        when:
-            AlbumId id2 = AlbumId.fromString(id1.toString())
-        then:
-            id1.hashCode() == id2.hashCode()
     }
 
 }
