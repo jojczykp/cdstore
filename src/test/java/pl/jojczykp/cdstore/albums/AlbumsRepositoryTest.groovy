@@ -78,7 +78,7 @@ class AlbumsRepositoryTest extends Specification {
 			repository.getAlbum(notExistingId)
 		then:
 			ItemNotFoundException ex = thrown()
-			ex.message == "album with given id does not exist"
+			ex.message == "album with given id not found"
 	}
 
 	def "should get all albums"() {

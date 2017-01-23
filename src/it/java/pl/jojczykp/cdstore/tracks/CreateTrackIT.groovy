@@ -1,7 +1,6 @@
 package pl.jojczykp.cdstore.tracks
 
 import com.sun.jersey.api.client.ClientResponse
-import groovy.json.JsonSlurper
 import pl.jojczykp.cdstore.albums.Album
 import pl.jojczykp.cdstore.albums.AlbumId
 import spock.lang.Specification
@@ -10,6 +9,7 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.client.albums.CreateAlbumRequest.aCreateAlbumRequest
 import static pl.jojczykp.cdstore.client.tracks.CreateTrackRequest.aCreateTrackRequest
+import static pl.jojczykp.cdstore.test_utils.JsonUtils.toMap
 
 class CreateTrackIT extends Specification {
 
@@ -31,7 +31,7 @@ class CreateTrackIT extends Specification {
 			track.title == trackTitle
 	}
 
-	def "should fail creating a new track for non existing album"() {
+	def "should fail creating a new track for not existing album"() {
 		given:
 			AlbumId nonExistingAlbumId = randomAlbumId()
 		when:
@@ -41,12 +41,7 @@ class CreateTrackIT extends Specification {
 					.make()
 		then:
 			response.status == NOT_FOUND.statusCode
-			toMap(response) == [code: 101, message: 'album with given id does not exist']
-	}
-
-	def toMap(ClientResponse response) {
-		JsonSlurper jsonSlurper = new JsonSlurper()
-		jsonSlurper.parse(response.getEntityInputStream())
+			toMap(response) == [code: 101, message: 'album with given id not found']
 	}
 
 }

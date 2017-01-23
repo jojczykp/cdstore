@@ -35,7 +35,7 @@ class TracksManagerTest extends Specification {
             1 * albumsRepository.albumExists(album.id) >> false
             0 * tracksRepository.createTrack(track1)
             ItemNotFoundException ex = thrown()
-            ex.message == "album with given id does not exist"
+            ex.message == "album with given id not found"
     }
 
 }

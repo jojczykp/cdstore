@@ -59,7 +59,7 @@ public class AlbumsRepository {
 		Item maybeAlbum = findAlbum(id);
 
 		if (maybeAlbum == null) {
-			throw new ItemNotFoundException("album with given id does not exist");
+			throw new ItemNotFoundException("album with given id not found");
 		}
 
 		return toAlbum(maybeAlbum);
