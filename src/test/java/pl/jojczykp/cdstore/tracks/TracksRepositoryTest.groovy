@@ -12,7 +12,11 @@ class TracksRepositoryTest extends Specification {
 
     def "should create track"() {
         given:
-            Track newTrack = aTrack().id(randomTrackId()).albumId(randomAlbumId()).title("A Title").build()
+            Track newTrack = aTrack()
+                    .id(randomTrackId())
+                    .albumId(randomAlbumId())
+                    .title("A Title")
+                    .build()
         when:
             Track createdTrack = repository.createTrack(newTrack)
         then:

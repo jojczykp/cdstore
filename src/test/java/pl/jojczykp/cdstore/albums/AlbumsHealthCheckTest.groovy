@@ -24,21 +24,20 @@ class AlbumsHealthCheckTest extends Specification {
 	}
 
 	def "should return healthy if random item has not been found"() {
-		given:
-			repository.getAlbum(_) >> { throw new ItemNotFoundException("message") }
 		when:
 			HealthCheck.Result result = healthCheck.check()
 		then:
+			1 * repository.getAlbum((AlbumId)_) >> { throw new ItemNotFoundException("message") }
 			result == HealthCheck.Result.healthy()
 	}
 
 	def "should return unhealthy"() {
 		given:
 			def reason = new RuntimeException("message")
-			repository.getAlbum(_) >> { throw reason }
 		when:
 			HealthCheck.Result result = healthCheck.check()
 		then:
+			1 * repository.getAlbum((AlbumId)_) >> { throw reason }
 			result == HealthCheck.Result.unhealthy(reason)
 	}
 
