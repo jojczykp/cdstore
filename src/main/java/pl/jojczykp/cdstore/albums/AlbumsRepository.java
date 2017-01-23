@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.UpdateItemSpec;
@@ -95,7 +96,15 @@ public class AlbumsRepository {
 	}
 
 	public void deleteAlbum(AlbumId id) {
-		table.deleteItem(new PrimaryKey(ATTR_ID, id.toString()));
+		try {
+			table.deleteItem(new DeleteItemSpec()
+					.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString()))
+					.withConditionExpression("attribute_exists(" + ATTR_ID + ")")
+					.withReturnValues(ReturnValue.NONE));
+		} catch (ConditionalCheckFailedException e) {
+			throw new ItemNotFoundException("album with given id not found");
+		}
+
 	}
 
 	private Album toAlbum(Item item) {

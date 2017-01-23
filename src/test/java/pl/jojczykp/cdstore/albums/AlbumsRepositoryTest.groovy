@@ -129,13 +129,14 @@ class AlbumsRepositoryTest extends Specification {
 			dbGetAlbum(id) == null
 	}
 
-	def "should succeed on deleting not existing album"() {
+	def "should fail on deleting not existing album"() {
 		given:
 			AlbumId id = randomAlbumId()
 		when:
 			repository.deleteAlbum(id)
 		then:
-			true
+			ItemNotFoundException ex = thrown()
+			ex.message == "album with given id not found"
 	}
 
 	private void dbPutAlbum(AlbumId id, String title) {
