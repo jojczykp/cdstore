@@ -7,17 +7,17 @@ import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumTest extends Specification {
 
-	AlbumId id = randomAlbumId()
+	AlbumId albumId = randomAlbumId()
 	String title = "a title"
 
 	def "should return with getters what was set in constructor"() {
 		when:
 			Album album = anAlbum()
-					.id(id)
+					.id(albumId)
 					.title(title)
 					.build()
 		then:
-			album.id == id
+			album.id == albumId
 			album.title == title
 	}
 

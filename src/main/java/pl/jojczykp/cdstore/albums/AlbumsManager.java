@@ -14,20 +14,20 @@ public class AlbumsManager {
 		return repository.createAlbum(album);
 	}
 
-	public Album getAlbum(AlbumId id) {
-		return repository.getAlbum(id);
+	public Album getAlbum(AlbumId albumId) {
+		return repository.getAlbum(albumId);
 	}
 
 	public Set<Album> getAlbums() {
 		return repository.getAlbums();
 	}
 
-	public Album updateAlbum(AlbumId id, Album album) {
-		return repository.updateAlbum(id, album);
+	public Album updateAlbum(AlbumId albumId, Album album) {
+		return repository.updateAlbum(albumId, album);
 	}
 
-	public void deleteAlbum(AlbumId id) {
-		repository.deleteAlbum(id);
+	public void deleteAlbum(AlbumId albumId) {
+		repository.deleteAlbum(albumId);
 	}
 
 }

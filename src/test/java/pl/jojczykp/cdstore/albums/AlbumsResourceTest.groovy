@@ -9,7 +9,7 @@ import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsResourceTest extends Specification {
 
-	AlbumId id = randomAlbumId()
+	AlbumId albumId = randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
@@ -26,9 +26,9 @@ class AlbumsResourceTest extends Specification {
 
 	def "should delegate get album by id to manager"() {
 		when:
-			Album result = resource.getAlbum(id)
+			Album result = resource.getAlbum(albumId)
 		then:
-			1 * manager.getAlbum(id) >> album1
+			1 * manager.getAlbum(albumId) >> album1
 			result == album1
 	}
 
@@ -44,17 +44,17 @@ class AlbumsResourceTest extends Specification {
 
 	def "should delegate update album to manager"() {
 		when:
-			Album result = resource.updateAlbum(id, album1)
+			Album result = resource.updateAlbum(albumId, album1)
 		then:
-			1 * manager.updateAlbum(id, album1) >> album2
+			1 * manager.updateAlbum(albumId, album1) >> album2
 		result == album2
 	}
 
 	def "should delegate delete album to manager"() {
 		when:
-			resource.deleteAlbum(id)
+			resource.deleteAlbum(albumId)
 		then:
-			1 * manager.deleteAlbum(id)
+			1 * manager.deleteAlbum(albumId)
 	}
 
 }

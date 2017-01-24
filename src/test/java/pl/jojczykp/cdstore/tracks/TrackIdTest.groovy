@@ -9,13 +9,13 @@ class TrackIdTest extends Specification {
 
     def "should generate random id"() {
         given:
-            def id1 = randomTrackId()
+            def trackId1 = randomTrackId()
         when:
-            def id2 = randomTrackId()
+            def trackId2 = randomTrackId()
         then:
-            id1 != null
-            id2 != null
-            id1 != id2
+            trackId1 != null
+            trackId2 != null
+            trackId1 != trackId2
     }
 
     def "should generate id from string and have corresponding toString"() {

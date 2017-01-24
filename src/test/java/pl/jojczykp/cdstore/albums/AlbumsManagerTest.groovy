@@ -7,7 +7,7 @@ import static Album.anAlbum
 
 class AlbumsManagerTest extends Specification {
 
-	AlbumId id = AlbumId.randomAlbumId()
+	AlbumId albumId = AlbumId.randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
@@ -24,9 +24,9 @@ class AlbumsManagerTest extends Specification {
 
 	def "should delegate get album by id to repository"() {
 		when:
-			Album result = manager.getAlbum(id)
+			Album result = manager.getAlbum(albumId)
 		then:
-			1 * repository.getAlbum(id) >> album1
+			1 * repository.getAlbum(albumId) >> album1
 			result == album1
 	}
 
@@ -41,20 +41,18 @@ class AlbumsManagerTest extends Specification {
 	}
 
 	def "should delegate update album to repository"() {
-		given:
-			AlbumId id = AlbumId.randomAlbumId()
 		when:
-			Album result = manager.updateAlbum(id, album1)
+			Album result = manager.updateAlbum(albumId, album1)
 		then:
-			1 * repository.updateAlbum(id, album1) >> album2
+			1 * repository.updateAlbum(albumId, album1) >> album2
 			result == album2
 	}
 
 	def "should delegate delete album to repository"() {
 		when:
-			manager.deleteAlbum(id)
+			manager.deleteAlbum(albumId)
 		then:
-			1 * repository.deleteAlbum(id)
+			1 * repository.deleteAlbum(albumId)
 	}
 
 }

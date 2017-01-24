@@ -42,10 +42,10 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should confirm album exists by id"() {
 		given:
-			AlbumId id = randomAlbumId()
-			dbPutAlbum(id, "Some Title")
+			AlbumId albumId = randomAlbumId()
+			dbPutAlbum(albumId, "Some Title")
 		when:
-			boolean exists = repository.albumExists(id)
+			boolean exists = repository.albumExists(albumId)
 		then:
 			exists
 	}
@@ -61,13 +61,13 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should get album by id"() {
 		given:
-			AlbumId id = randomAlbumId()
+			AlbumId albumId = randomAlbumId()
 			String title = "Some Title"
-			dbPutAlbum(id, title)
+			dbPutAlbum(albumId, title)
 		when:
-			Album album = repository.getAlbum(id)
+			Album album = repository.getAlbum(albumId)
 		then:
-			album.id == id
+			album.id == albumId
 			album.title == title
 	}
 
@@ -97,23 +97,23 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should update album"() {
 		given:
-			AlbumId id = randomAlbumId()
+			AlbumId albumId = randomAlbumId()
 			Album patch = anAlbum().title("New Title").build()
-			Album expectedAlbum = anAlbum().id(id).title(patch.getTitle()).build()
-			dbPutAlbum(id, "Old Title")
+			Album expectedAlbum = anAlbum().id(albumId).title(patch.getTitle()).build()
+			dbPutAlbum(albumId, "Old Title")
 		when:
-			Album updatedAlbum = repository.updateAlbum(id, patch)
+			Album updatedAlbum = repository.updateAlbum(albumId, patch)
 		then:
-			dbGetAlbum(id) == expectedAlbum
+			dbGetAlbum(albumId) == expectedAlbum
 			updatedAlbum == expectedAlbum
 	}
 
 	def "should fail on update album if it does not exists"() {
 		given:
-			AlbumId id = randomAlbumId()
+			AlbumId albumId = randomAlbumId()
 			Album patch = anAlbum().title("New Title").build()
 		when:
-			repository.updateAlbum(id, patch)
+			repository.updateAlbum(albumId, patch)
 		then:
 			ItemNotFoundException ex = thrown()
 			ex.message == "album with given id not found"
@@ -121,32 +121,32 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should delete album"() {
 		given:
-			AlbumId id = randomAlbumId()
-			dbPutAlbum(id, "A Title")
+			AlbumId albumId = randomAlbumId()
+			dbPutAlbum(albumId, "A Title")
 		when:
-			repository.deleteAlbum(id)
+			repository.deleteAlbum(albumId)
 		then:
-			dbGetAlbum(id) == null
+			dbGetAlbum(albumId) == null
 	}
 
 	def "should fail on deleting not existing album"() {
 		given:
-			AlbumId id = randomAlbumId()
+			AlbumId albumId = randomAlbumId()
 		when:
-			repository.deleteAlbum(id)
+			repository.deleteAlbum(albumId)
 		then:
 			ItemNotFoundException ex = thrown()
 			ex.message == "album with given id not found"
 	}
 
-	private void dbPutAlbum(AlbumId id, String title) {
+	def dbPutAlbum(AlbumId albumId, String title) {
 		dynamoDB.putItem("cdstore-Albums", [
-				"id"   : new AttributeValue(id.toString()),
+				"id"   : new AttributeValue(albumId.toString()),
 				"title": new AttributeValue(title)
 		])
 	}
 
-	private Album dbGetAlbum(AlbumId id) {
+	def dbGetAlbum(AlbumId id) {
 		def item = dynamoDB.getItem("cdstore-Albums", [
 				"id": new AttributeValue(id.toString())
 		]).item

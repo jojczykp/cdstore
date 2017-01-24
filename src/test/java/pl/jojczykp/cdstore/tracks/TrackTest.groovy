@@ -9,19 +9,19 @@ import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class TrackTest extends Specification {
 
-	TrackId id = randomTrackId()
+	TrackId trackId = randomTrackId()
 	AlbumId albumId = randomAlbumId()
 	String title = "a title"
 
 	def "should return with getters what was set in constructor"() {
 		when:
 			Track track = aTrack()
-					.id(id)
+					.id(trackId)
 					.albumId(albumId)
 					.title(title)
 					.build()
 		then:
-			track.id == id
+			track.id == trackId
 			track.albumId == albumId
 			track.title == title
 	}

@@ -16,17 +16,17 @@ class DeleteAlbumIT extends Specification {
 
 	def "should delete album"() {
 		given:
-			AlbumId id = aCreateAlbumRequest()
+			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
 					.getId()
 		when:
 			aDeleteAlbumRequest()
-					.withId(id)
+					.withId(albumId)
 					.makeSuccessfully()
 		then:
 			aGetAlbumRequest()
-					.withAlbumId(id)
+					.withAlbumId(albumId)
 					.make()
 					.getStatus() == NOT_FOUND.statusCode
 	}

@@ -10,13 +10,16 @@ import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class TracksRepositoryTest extends Specification {
 
+    TrackId trackId = randomTrackId()
+    AlbumId albumId = randomAlbumId()
+
     TracksRepository repository = new TracksRepository()
 
     def "should create track"() {
         given:
             Track newTrack = aTrack()
-                    .id(randomTrackId())
-                    .albumId(randomAlbumId())
+                    .id(trackId)
+                    .albumId(albumId)
                     .title("A Title")
                     .build()
         when:
@@ -28,8 +31,6 @@ class TracksRepositoryTest extends Specification {
 
     def "should get track"() {
         given:
-            TrackId trackId = randomTrackId()
-            AlbumId albumId = randomAlbumId()
             String title = "Track Title"
             trackId = dbPutTrack(trackId, albumId, title).getId() //TODO simplify once repository implemented
         when:
@@ -41,8 +42,6 @@ class TracksRepositoryTest extends Specification {
     }
 
     def "should fail getting not existing track"() {
-        given:
-            TrackId trackId = randomTrackId()
         when:
             repository.getTrack(trackId)
         then:
@@ -52,8 +51,6 @@ class TracksRepositoryTest extends Specification {
 
     def "should delete track"() {
         given:
-            TrackId trackId = randomTrackId()
-            AlbumId albumId = randomAlbumId()
             trackId = dbPutTrack(trackId, albumId, "Track Title").getId() //TODO simplify once repository implemented
         when:
             repository.deleteTrack(trackId)
@@ -62,20 +59,18 @@ class TracksRepositoryTest extends Specification {
     }
 
     def "should fail deleting not existing track"() {
-        given:
-            TrackId id = randomTrackId()
         when:
-            repository.deleteTrack(id)
+            repository.deleteTrack(trackId)
         then:
             ItemNotFoundException ex = thrown()
             ex.message == "track with given id not found"
     }
 
-    Track dbPutTrack(TrackId trackId, AlbumId albumId, String title) {
+    def dbPutTrack(TrackId trackId, AlbumId albumId, String title) {
         repository.createTrack(aTrack().albumId(albumId).title(title).build())
     }
 
-    Track dbGetTrack(TrackId trackId) {
+    def dbGetTrack(TrackId trackId) {
         try {
             repository.getTrack(trackId)
         } catch (ItemNotFoundException e) {
