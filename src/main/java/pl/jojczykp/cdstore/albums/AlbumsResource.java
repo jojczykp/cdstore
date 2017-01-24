@@ -44,9 +44,9 @@ public class AlbumsResource {
 	@GET
 	@Timed
 	@Produces(ALBUM_MEDIA_TYPE)
-	@Path("/{id}")
-	public Album getAlbum(@PathParam("id") AlbumId id) {
-		return manager.getAlbum(id);
+	@Path("/{album_id}")
+	public Album getAlbum(@PathParam("album_id") AlbumId albumId) {
+		return manager.getAlbum(albumId);
 	}
 
 	@GET
@@ -60,16 +60,16 @@ public class AlbumsResource {
 	@Timed
 	@Consumes(ALBUM_MEDIA_TYPE)
 	@Produces(ALBUM_MEDIA_TYPE)
-	@Path("/{id}")
-	public Album updateAlbum(@PathParam("id") AlbumId id, Album album) {
-		return manager.updateAlbum(id, album);
+	@Path("/{album_id}")
+	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album album) {
+		return manager.updateAlbum(albumId, album);
 	}
 
 	@DELETE
 	@Timed
-	@Path("/{id}")
-	public Response deleteAlbum(@PathParam("id") AlbumId id) {
-		manager.deleteAlbum(id);
+	@Path("/{album_id}")
+	public Response deleteAlbum(@PathParam("album_id") AlbumId albumId) {
+		manager.deleteAlbum(albumId);
 
 		return Response
 				.status(NO_CONTENT)
