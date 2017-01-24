@@ -5,11 +5,11 @@ import groovy.json.JsonSlurper
 
 class JsonUtils {
 
-    private JsonUtils() {
-    }
+	private JsonUtils() {
+	}
 
-    static toMap(ClientResponse response) {
-        JsonSlurper jsonSlurper = new JsonSlurper()
-        jsonSlurper.parse(response.getEntityInputStream())
-    }
+	static toMap(ClientResponse response) {
+		JsonSlurper jsonSlurper = new JsonSlurper()
+		jsonSlurper.parse(response.getEntityInputStream())
+	}
 }
