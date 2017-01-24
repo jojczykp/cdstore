@@ -26,11 +26,6 @@ public class CreateAlbumRequest extends Request {
 		return this;
 	}
 
-	public CreateAlbumRequest withAlbum(Album album) {
-		this.title = album.getTitle();
-		return this;
-	}
-
 	public Album makeSuccessfully() {
 		ClientResponse response = make();
 		assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());

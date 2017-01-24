@@ -71,7 +71,7 @@ class AlbumsRepositoryTest extends Specification {
 			album.title == title
 	}
 
-	def "should fail on get album by non-existing id"() {
+	def "should fail on get album by not existing id"() {
 		given:
 			AlbumId notExistingId = randomAlbumId()
 		when:

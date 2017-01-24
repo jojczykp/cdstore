@@ -4,6 +4,8 @@ import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.albums.AlbumsRepository;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
+import java.util.Set;
+
 public class TracksManager {
 
 	private final AlbumsRepository albumsRepository;
@@ -24,6 +26,11 @@ public class TracksManager {
 		return tracksRepository.getTrack(trackId);
 	}
 
+	public Set<Track> getTracks(AlbumId albumId) {
+		confirmAlbumExistsOrThrow(albumId);
+		return tracksRepository.getTracks(albumId);
+	}
+
 	public void deleteTrack(AlbumId albumId, TrackId trackId) {
 		confirmAlbumExistsOrThrow(albumId);
 		tracksRepository.deleteTrack(trackId);
@@ -34,5 +41,4 @@ public class TracksManager {
 			throw new ItemNotFoundException("album with given id not found");
 		}
 	}
-
 }

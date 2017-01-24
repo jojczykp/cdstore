@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import java.util.Set;
+
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 
@@ -19,6 +21,7 @@ import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 public class TracksResource {
 
 	public static final String TRACK_MEDIA_TYPE = "application/vnd-cdstore-track.1+json";
+	public static final String TRACK_LIST_MEDIA_TYPE = "application/vnd-cdstore-track-list.1+json";
 
 	private final TracksManager manager;
 
@@ -48,6 +51,13 @@ public class TracksResource {
 			@PathParam("track_id") TrackId trackId
 	) {
 		return manager.getTrack(albumId, trackId);
+	}
+
+	@GET
+	@Timed
+	@Produces(TRACK_LIST_MEDIA_TYPE)
+	public Set<Track> getTracks(@PathParam("album_id") AlbumId albumId) {
+		return manager.getTracks(albumId);
 	}
 
 	@DELETE

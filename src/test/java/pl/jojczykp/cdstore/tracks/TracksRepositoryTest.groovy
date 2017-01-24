@@ -1,5 +1,6 @@
 package pl.jojczykp.cdstore.tracks
 
+import pl.jojczykp.cdstore.albums.Album
 import pl.jojczykp.cdstore.albums.AlbumId
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
@@ -39,6 +40,22 @@ class TracksRepositoryTest extends Specification {
             track.id == trackId
             track.albumId == albumId
             track.title == title
+    }
+
+    def "should get all tracks from album"() {
+        given:
+            Album album = new Album(randomAlbumId(), "Album Title 1")
+            Set<Track> createdTracks = [
+                new Track(randomTrackId(), album.id, "Track Title 1"),
+                new Track(randomTrackId(), album.id, "Track Title 2"),
+                new Track(randomTrackId(), album.id, "Track Title 3")
+        ]
+//            createdTracks.each { dbPutTrack(it.id, it.albumId, it.title) } //TODO simplify once real repository in place
+            createdTracks = createdTracks.collect { dbPutTrack(it.id, it.albumId, it.title) }
+        when:
+            Set<Track> returnedTracks = repository.getTracks(album.id)
+        then:
+            returnedTracks == createdTracks
     }
 
     def "should fail getting not existing track"() {

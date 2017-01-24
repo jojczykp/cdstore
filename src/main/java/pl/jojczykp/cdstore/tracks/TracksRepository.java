@@ -1,10 +1,13 @@
 package pl.jojczykp.cdstore.tracks;
 
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.stream.Collectors.toSet;
 import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId;
 
 public class TracksRepository {
@@ -26,6 +29,12 @@ public class TracksRepository {
         }
 
         return result;
+    }
+
+    public Set<Track> getTracks(AlbumId albumId) {
+        return data.values().stream()
+                .filter(t -> t.getAlbumId().equals(albumId))
+                .collect(toSet());
     }
 
     public void deleteTrack(TrackId trackId) {
