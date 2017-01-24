@@ -22,7 +22,7 @@ class DeleteAlbumIT extends Specification {
 					.id
 		when:
 			aDeleteAlbumRequest()
-					.withId(albumId)
+					.withAlbumId(albumId)
 					.makeSuccessfully()
 		then:
 			aGetAlbumRequest()
@@ -36,7 +36,7 @@ class DeleteAlbumIT extends Specification {
 			AlbumId notExistingAlbumId = randomAlbumId()
 		when:
 			ClientResponse response = aDeleteAlbumRequest()
-					.withId(notExistingAlbumId)
+					.withAlbumId(notExistingAlbumId)
 					.make()
 		then:
 			response.status == NOT_FOUND.statusCode

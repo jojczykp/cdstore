@@ -2,35 +2,26 @@ package pl.jojczykp.cdstore.client.tracks;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 import pl.jojczykp.cdstore.tracks.Track;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
+import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static pl.jojczykp.cdstore.tracks.Track.aTrack;
 import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
+@AllArgsConstructor(access = PRIVATE)
 public class CreateTrackRequest extends Request {
 
-	private AlbumId albumId;
-	private String title;
-
-	private CreateTrackRequest() {
-	}
+	@Wither private AlbumId albumId;
+	@Wither private String title;
 
 	public static CreateTrackRequest aCreateTrackRequest() {
-		return new CreateTrackRequest();
-	}
-
-	public CreateTrackRequest withAlbumId(AlbumId albumId) {
-		this.albumId = albumId;
-		return this;
-	}
-
-	public CreateTrackRequest withTitle(String title) {
-		this.title = title;
-		return this;
+		return new CreateTrackRequest(null, null);
 	}
 
 	public Track makeSuccessfully() {

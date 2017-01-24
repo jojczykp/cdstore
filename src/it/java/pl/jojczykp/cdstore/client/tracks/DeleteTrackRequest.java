@@ -2,33 +2,24 @@ package pl.jojczykp.cdstore.client.tracks;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 import pl.jojczykp.cdstore.tracks.TrackId;
 
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
+import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@AllArgsConstructor(access = PRIVATE)
 public class DeleteTrackRequest extends Request {
 
-	private AlbumId albumId;
-	private TrackId trackId;
-
-	private DeleteTrackRequest() {
-	}
+	@Wither private AlbumId albumId;
+	@Wither private TrackId trackId;
 
 	public static DeleteTrackRequest aDeleteTrackRequest() {
-		return new DeleteTrackRequest();
-	}
-
-	public DeleteTrackRequest withAlbumId(AlbumId albumId) {
-		this.albumId = albumId;
-		return this;
-	}
-
-	public DeleteTrackRequest withTrackId(TrackId trackId) {
-		this.trackId = trackId;
-		return this;
+		return new DeleteTrackRequest(null, null);
 	}
 
 	public void makeSuccessfully() {
