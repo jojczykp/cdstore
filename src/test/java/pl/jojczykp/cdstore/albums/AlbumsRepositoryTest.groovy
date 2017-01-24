@@ -36,8 +36,8 @@ class AlbumsRepositoryTest extends Specification {
 		when:
 			Album createdAlbum = repository.createAlbum(newAlbum)
 		then:
-			createdAlbum == dbGetAlbum(createdAlbum.getId())
-			createdAlbum == newAlbum.toBuilder().id(createdAlbum.getId()).build()
+			createdAlbum == dbGetAlbum(createdAlbum.id)
+			createdAlbum == newAlbum.toBuilder().id(createdAlbum.id).build()
 	}
 
 	def "should confirm album exists by id"() {
@@ -99,7 +99,7 @@ class AlbumsRepositoryTest extends Specification {
 		given:
 			AlbumId albumId = randomAlbumId()
 			Album patch = anAlbum().title("New Title").build()
-			Album expectedAlbum = anAlbum().id(albumId).title(patch.getTitle()).build()
+			Album expectedAlbum = anAlbum().id(albumId).title(patch.title).build()
 			dbPutAlbum(albumId, "Old Title")
 		when:
 			Album updatedAlbum = repository.updateAlbum(albumId, patch)
@@ -156,8 +156,8 @@ class AlbumsRepositoryTest extends Specification {
 
 	private static Album toItem(Map<String, AttributeValue> item) {
 		anAlbum()
-				.id(AlbumId.fromString(item.get("id").getS()))
-				.title(item.get("title").getS())
+				.id(AlbumId.fromString(item.id.s))
+				.title(item.title.s)
 				.build()
 	}
 

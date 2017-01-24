@@ -23,11 +23,11 @@ class CreateTrackIT extends Specification {
 					.makeSuccessfully()
 		when:
 			Track track = aCreateTrackRequest()
-					.withAlbumId(album.getId())
+					.withAlbumId(album.id)
 					.withTitle(trackTitle)
 					.makeSuccessfully()
 		then:
-			track.albumId == album.getId()
+			track.albumId == album.id
 			track.title == trackTitle
 	}
 

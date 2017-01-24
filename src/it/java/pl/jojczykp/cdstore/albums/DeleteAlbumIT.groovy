@@ -19,7 +19,7 @@ class DeleteAlbumIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-					.getId()
+					.id
 		when:
 			aDeleteAlbumRequest()
 					.withId(albumId)
@@ -28,7 +28,7 @@ class DeleteAlbumIT extends Specification {
 			aGetAlbumRequest()
 					.withAlbumId(albumId)
 					.make()
-					.getStatus() == NOT_FOUND.statusCode
+					.status == NOT_FOUND.statusCode
 	}
 
 	def "should fail deleting not existing album"() {

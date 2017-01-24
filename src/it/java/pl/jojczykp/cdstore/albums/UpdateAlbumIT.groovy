@@ -21,7 +21,7 @@ class UpdateAlbumIT extends Specification {
 					.makeSuccessfully()
 		when:
 			Album result = anUpdateAlbumRequest()
-					.withAlbumId(album.getId())
+					.withAlbumId(album.id)
 					.withTitle(newTitle)
 					.makeSuccessfully()
 		then:

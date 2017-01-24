@@ -10,25 +10,25 @@ import static java.util.UUID.randomUUID;
 @EqualsAndHashCode(of = "uuid")
 public class TrackId {
 
-    private final UUID uuid;
+	private final UUID uuid;
 
-    private TrackId(UUID uuid) {
-        this.uuid = uuid;
-    }
+	private TrackId(UUID uuid) {
+		this.uuid = uuid;
+	}
 
-    public static TrackId randomTrackId() {
-        return new TrackId(randomUUID());
-    }
+	public static TrackId randomTrackId() {
+		return new TrackId(randomUUID());
+	}
 
-    public static TrackId fromString(String uuidString) {
-        return new TrackId(UUID.fromString(uuidString));
-    }
+	public static TrackId fromString(String uuidString) {
+		return new TrackId(UUID.fromString(uuidString));
+	}
 
-    @Override
-    @JsonValue
-    public String toString() {
-        return uuid.toString();
-    }
+	@Override
+	@JsonValue
+	public String toString() {
+		return uuid.toString();
+	}
 
 }
 

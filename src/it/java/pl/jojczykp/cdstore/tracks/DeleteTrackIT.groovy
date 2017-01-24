@@ -22,12 +22,12 @@ class DeleteTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-					.getId()
+					.id
 			TrackId trackId = aCreateTrackRequest()
 					.withTitle(title)
 					.withAlbumId(albumId)
 					.makeSuccessfully()
-					.getId()
+					.id
 		when:
 			aDeleteTrackRequest()
 					.withAlbumId(albumId)
@@ -38,7 +38,7 @@ class DeleteTrackIT extends Specification {
 					.withAlbumId(albumId)
 					.withTrackId(trackId)
 					.make()
-					.getStatus() == NOT_FOUND.statusCode
+					.status == NOT_FOUND.statusCode
 	}
 
 	def "should fail deleting not existing track from existing album"() {
@@ -46,7 +46,7 @@ class DeleteTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-					.getId()
+					.id
 			TrackId notExistingTrackId = randomTrackId()
 		when:
 			ClientResponse response = aDeleteTrackRequest()

@@ -21,7 +21,7 @@ class GetAlbumIT extends Specification {
 					.makeSuccessfully()
 		when:
 			Album result = aGetAlbumRequest()
-					.withAlbumId(album.getId())
+					.withAlbumId(album.id)
 					.makeSuccessfully()
 		then:
 			result == album

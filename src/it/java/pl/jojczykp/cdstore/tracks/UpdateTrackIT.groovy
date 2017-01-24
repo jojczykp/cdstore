@@ -23,7 +23,7 @@ class UpdateTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.getId()
+					.id
 			Track track = aCreateTrackRequest()
 					.withAlbumId(albumId)
 					.withTitle(oldTrackTitle)
@@ -45,7 +45,7 @@ class UpdateTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.getId()
+					.id
 			TrackId notExistingTrackId = randomTrackId()
 		when:
 			ClientResponse response = anUpdateTrackRequest()

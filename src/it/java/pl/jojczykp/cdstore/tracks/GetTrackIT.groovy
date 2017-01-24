@@ -23,15 +23,15 @@ class GetTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.getId()
+					.id
 			Track track = aCreateTrackRequest()
 					.withAlbumId(albumId)
 					.withTitle(trackTitle)
 					.makeSuccessfully()
 		when:
 			Track result = aGetTrackRequest()
-					.withAlbumId(track.getAlbumId())
-					.withTrackId(track.getId())
+					.withAlbumId(track.albumId)
+					.withTrackId(track.id)
 					.makeSuccessfully()
 		then:
 			result == track
@@ -42,7 +42,7 @@ class GetTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.getId()
+					.id
 			TrackId trackId = randomTrackId()
 		when:
 			ClientResponse response = aGetTrackRequest()
@@ -59,7 +59,7 @@ class GetTrackIT extends Specification {
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.getId()
+					.id
 			Track track1 = aCreateTrackRequest()
 					.withAlbumId(albumId)
 					.withTitle("Title 1")
