@@ -72,14 +72,14 @@ class TracksRepositoryTest extends Specification {
     }
 
     Track dbPutTrack(TrackId trackId, AlbumId albumId, String title) {
-        return repository.createTrack(aTrack().albumId(albumId).title(title).build())
+        repository.createTrack(aTrack().albumId(albumId).title(title).build())
     }
 
     Track dbGetTrack(TrackId trackId) {
         try {
-            return repository.getTrack(trackId)
+            repository.getTrack(trackId)
         } catch (ItemNotFoundException e) {
-            return null
+            null
         }
     }
 

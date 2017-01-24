@@ -151,7 +151,7 @@ class AlbumsRepositoryTest extends Specification {
 				"id": new AttributeValue(id.toString())
 		]).item
 
-		return (item == null) ? null : toItem(item)
+		item == null ? null : toItem(item)
 	}
 
 	private static Album toItem(Map<String, AttributeValue> item) {
