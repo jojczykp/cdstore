@@ -5,6 +5,7 @@ import pl.jojczykp.cdstore.albums.AlbumId
 import spock.lang.Specification
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.client.albums.CreateAlbumRequest.aCreateAlbumRequest
 import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 import static pl.jojczykp.cdstore.client.tracks.CreateTrackRequest.aCreateTrackRequest
@@ -73,6 +74,18 @@ class GetTrackIT extends Specification {
 					.makeSuccessfully()
 		then:
 			result.containsAll(track1, track2)
+	}
+
+	def "should fail getting all tracks from not existing album"() {
+		given:
+			AlbumId albumId = randomAlbumId()
+		when:
+			ClientResponse response = aGetTracksRequest()
+					.withAlbumId(albumId)
+					.make()
+		then:
+			response.status == NOT_FOUND.statusCode
+			toMap(response) == [code: 101, message: 'album with given id not found']
 	}
 
 }

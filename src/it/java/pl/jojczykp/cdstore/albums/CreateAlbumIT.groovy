@@ -17,4 +17,5 @@ class CreateAlbumIT extends Specification {
 			result.title == title
 
 	}
+
 }
