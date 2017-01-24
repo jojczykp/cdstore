@@ -1,5 +1,7 @@
 package pl.jojczykp.cdstore.tracks;
 
+import pl.jojczykp.cdstore.exceptions.ItemNotFoundException;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +21,13 @@ public class TracksRepository {
 
     public Track getTrack(TrackId id) {
         return data.get(id);
+    }
+
+    public void deleteTrack(TrackId trackId) {
+        boolean notExisted = (data.remove(trackId) == null);
+        if (notExisted) {
+            throw new ItemNotFoundException("track with given id not found");
+        }
     }
 
 }

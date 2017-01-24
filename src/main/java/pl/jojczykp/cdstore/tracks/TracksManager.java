@@ -19,6 +19,11 @@ public class TracksManager {
 		return tracksRepository.createTrack(track);
 	}
 
+	public void deleteTrack(AlbumId albumId, TrackId trackId) {
+		confirmAlbumExistsOrThrow(albumId);
+		tracksRepository.deleteTrack(trackId);
+	}
+
 	private void confirmAlbumExistsOrThrow(AlbumId albumId) {
 		if (!albumsRepository.albumExists(albumId)) {
 			throw new ItemNotFoundException("album with given id not found");
