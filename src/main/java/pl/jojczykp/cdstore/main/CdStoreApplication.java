@@ -32,17 +32,19 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 		AmazonDynamoDB amazonDynamoDB = amazonDynamoDb(cdStoreConfiguration.getAlbums());
 
 		AlbumsRepository albumsRepository = new AlbumsRepository(amazonDynamoDB);
-		AlbumsManager albumsManager = new AlbumsManager(albumsRepository);
+		TracksRepository tracksRepository = new TracksRepository();
+
+		AlbumsManager albumsManager = new AlbumsManager(albumsRepository, tracksRepository);
+		TracksManager tracksManager = new TracksManager(albumsRepository, tracksRepository);
+
 		AlbumsResource albumsResource = new AlbumsResource(albumsManager);
+		TracksResource tracksResource = new TracksResource(tracksManager);
+
 		environment.jersey().register(albumsResource);
+		environment.jersey().register(tracksResource);
 
 		AlbumsHealthCheck albumsHealthCheck = new AlbumsHealthCheck(albumsRepository);
 		environment.healthChecks().register(albumsHealthCheck.getName(), albumsHealthCheck);
-
-		TracksRepository tracksRepository = new TracksRepository();
-		TracksManager tracksManager = new TracksManager(albumsRepository, tracksRepository);
-		TracksResource tracksResource = new TracksResource(tracksManager);
-		environment.jersey().register(tracksResource);
 
 		environment.jersey().register(new ItemNotFoundExceptionMapper());
 		environment.jersey().register(new ItemAlreadyExistsExceptionMapper());

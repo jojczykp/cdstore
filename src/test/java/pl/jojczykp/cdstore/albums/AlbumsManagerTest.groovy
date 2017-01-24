@@ -1,5 +1,6 @@
 package pl.jojczykp.cdstore.albums
 
+import pl.jojczykp.cdstore.tracks.TracksRepository
 import spock.lang.Specification
 
 import static Album.anAlbum
@@ -11,14 +12,15 @@ class AlbumsManagerTest extends Specification {
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
-	AlbumsRepository repository = Mock(AlbumsRepository)
-	AlbumsManager manager = new AlbumsManager(repository)
+	AlbumsRepository albumsRepository = Mock(AlbumsRepository)
+	TracksRepository tracksRepository = Mock(TracksRepository)
+	AlbumsManager manager = new AlbumsManager(albumsRepository, tracksRepository)
 
 	def "should delegate create album to repository"() {
 		when:
 			Album result = manager.createAlbum(album1)
 		then:
-			1 * repository.createAlbum(album1) >> album2
+			1 * albumsRepository.createAlbum(album1) >> album2
 			result == album2
 	}
 
@@ -26,7 +28,7 @@ class AlbumsManagerTest extends Specification {
 		when:
 			Album result = manager.getAlbum(albumId)
 		then:
-			1 * repository.getAlbum(albumId) >> album1
+			1 * albumsRepository.getAlbum(albumId) >> album1
 			result == album1
 	}
 
@@ -36,7 +38,7 @@ class AlbumsManagerTest extends Specification {
 		when:
 			Set<Album> result = manager.getAlbums()
 		then:
-			1 * repository.getAlbums() >> expectedResult
+			1 * albumsRepository.getAlbums() >> expectedResult
 			result == expectedResult
 	}
 
@@ -44,7 +46,7 @@ class AlbumsManagerTest extends Specification {
 		when:
 			Album result = manager.updateAlbum(albumId, album1)
 		then:
-			1 * repository.updateAlbum(albumId, album1) >> album2
+			1 * albumsRepository.updateAlbum(albumId, album1) >> album2
 			result == album2
 	}
 
@@ -52,7 +54,8 @@ class AlbumsManagerTest extends Specification {
 		when:
 			manager.deleteAlbum(albumId)
 		then:
-			1 * repository.deleteAlbum(albumId)
+			1 * albumsRepository.deleteAlbum(albumId)
+			1 * tracksRepository.deleteAlbumTracks(albumId)
 	}
 
 }

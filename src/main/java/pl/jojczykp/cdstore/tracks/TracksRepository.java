@@ -53,4 +53,12 @@ public class TracksRepository {
 			throw new ItemNotFoundException("track with given id not found");
 		}
 	}
+
+	public void deleteAlbumTracks(AlbumId albumId) {
+		data.forEach((trackId, track) -> {
+			if (track.getAlbumId().equals(albumId)) {
+				data.remove(trackId);
+			}
+		});
+	}
 }
