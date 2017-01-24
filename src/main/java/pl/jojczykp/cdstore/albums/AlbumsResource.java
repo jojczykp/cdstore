@@ -61,8 +61,8 @@ public class AlbumsResource {
 	@Consumes(ALBUM_MEDIA_TYPE)
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{album_id}")
-	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album album) {
-		return manager.updateAlbum(albumId, album);
+	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album patch) {
+		return manager.updateAlbum(albumId, patch);
 	}
 
 	@DELETE

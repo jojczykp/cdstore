@@ -37,11 +37,20 @@ public class TracksRepository {
                 .collect(toSet());
     }
 
+    public Track updateTrack(TrackId trackId, Track patch) {
+        return data.compute(trackId, (id, oldTrack) -> {
+            if (oldTrack == null) {
+                throw new ItemNotFoundException("track with given id not found");
+            } else {
+                return oldTrack.toBuilder().title(patch.getTitle()).build();
+            }
+        });
+    }
+
     public void deleteTrack(TrackId trackId) {
         boolean notExisted = (data.remove(trackId) == null);
         if (notExisted) {
             throw new ItemNotFoundException("track with given id not found");
         }
     }
-
 }

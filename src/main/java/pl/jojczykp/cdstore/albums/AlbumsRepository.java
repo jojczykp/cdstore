@@ -78,14 +78,14 @@ public class AlbumsRepository {
 				.collect(toSet());
 	}
 
-	public Album updateAlbum(AlbumId id, Album album) {
+	public Album updateAlbum(AlbumId id, Album patch) {
 		try {
 			Item item = table.updateItem(new UpdateItemSpec()
 					.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString()))
 					.withConditionExpression("attribute_exists(" + ATTR_ID + ")")
 					.withUpdateExpression("set " + ATTR_TITLE + " = :" + ATTR_TITLE)
 					.withValueMap(new ValueMap()
-							.withString(":" + ATTR_TITLE, album.getTitle()))
+							.withString(":" + ATTR_TITLE, patch.getTitle()))
 					.withReturnValues(ReturnValue.ALL_NEW))
 					.getItem();
 

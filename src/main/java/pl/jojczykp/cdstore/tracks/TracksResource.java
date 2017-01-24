@@ -1,6 +1,7 @@
 package pl.jojczykp.cdstore.tracks;
 
 import com.codahale.metrics.annotation.Timed;
+import io.dropwizard.jersey.PATCH;
 import pl.jojczykp.cdstore.albums.AlbumId;
 
 import javax.ws.rs.Consumes;
@@ -11,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-
 import java.util.Set;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
@@ -58,6 +58,18 @@ public class TracksResource {
 	@Produces(TRACK_LIST_MEDIA_TYPE)
 	public Set<Track> getTracks(@PathParam("album_id") AlbumId albumId) {
 		return manager.getTracks(albumId);
+	}
+
+	@PATCH
+	@Timed
+	@Consumes(TRACK_MEDIA_TYPE)
+	@Produces(TRACK_MEDIA_TYPE)
+	@Path("/{track_id}")
+	public Track updateTrack(
+			@PathParam("album_id") AlbumId albumId,
+			@PathParam("track_id") TrackId trackId,
+			Track patch) {
+		return manager.updateTrack(albumId, trackId, patch);
 	}
 
 	@DELETE

@@ -42,6 +42,14 @@ class TracksRepositoryTest extends Specification {
             track.title == title
     }
 
+    def "should fail getting not existing track"() {
+        when:
+            repository.getTrack(trackId)
+        then:
+            ItemNotFoundException ex = thrown()
+            ex.message == "track with given id not found"
+    }
+
     def "should get all tracks from album"() {
         given:
             Album album = new Album(randomAlbumId(), "Album Title 1")
@@ -58,9 +66,25 @@ class TracksRepositoryTest extends Specification {
             returnedTracks == createdTracks
     }
 
-    def "should fail getting not existing track"() {
+    def "should update track"() {
+        given:
+            TrackId trackId = randomTrackId()
+            Track patch = aTrack().title("New Title").build()
+            trackId = dbPutTrack(trackId, albumId, "Old Title").id //TODO simplify once repository properly implememted
+            Track expectedTrack = aTrack().id(trackId).albumId(albumId).title(patch.getTitle()).build()
         when:
-            repository.getTrack(trackId)
+            Track updatedTrack = repository.updateTrack(trackId, patch)
+        then:
+            dbGetTrack(trackId) == expectedTrack
+            updatedTrack == expectedTrack
+    }
+
+    def "should fail updating not existing track"() {
+        given:
+            TrackId trackId = randomTrackId()
+            Track patch = aTrack().title("New Title").build()
+        when:
+            repository.updateTrack(trackId, patch)
         then:
             ItemNotFoundException ex = thrown()
             ex.message == "track with given id not found"

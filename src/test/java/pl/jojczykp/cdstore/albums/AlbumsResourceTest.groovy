@@ -47,7 +47,7 @@ class AlbumsResourceTest extends Specification {
 			Album result = resource.updateAlbum(albumId, album1)
 		then:
 			1 * manager.updateAlbum(albumId, album1) >> album2
-		result == album2
+			result == album2
 	}
 
 	def "should delegate delete album to manager"() {

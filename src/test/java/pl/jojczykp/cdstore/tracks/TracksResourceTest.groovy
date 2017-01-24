@@ -35,6 +35,14 @@ class TracksResourceTest extends Specification {
             result == track1
     }
 
+    def "should delegate update album to manager"() {
+        when:
+           Track result = resource.updateTrack(albumId, trackId, track1)
+        then:
+            1 * manager.updateTrack(albumId, trackId, track1) >> track2
+            result == track2
+    }
+
     def "should delegate delete track to manager"() {
         when:
             resource.deleteTrack(albumId, trackId)
