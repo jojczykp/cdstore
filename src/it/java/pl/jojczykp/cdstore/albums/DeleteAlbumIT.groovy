@@ -26,7 +26,7 @@ class DeleteAlbumIT extends Specification {
 					.makeSuccessfully()
 		then:
 			aGetAlbumRequest()
-					.withId(id)
+					.withAlbumId(id)
 					.make()
 					.getStatus() == NOT_FOUND.statusCode
 	}

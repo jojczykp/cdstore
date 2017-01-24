@@ -21,7 +21,7 @@ class UpdateAlbumIT extends Specification {
 					.makeSuccessfully()
 		when:
 			Album result = anUpdateAlbumRequest()
-					.withId(album.getId())
+					.withAlbumId(album.getId())
 					.withTitle(newTitle)
 					.makeSuccessfully()
 		then:
@@ -35,7 +35,7 @@ class UpdateAlbumIT extends Specification {
 			AlbumId notExistingAlbumId = randomAlbumId()
 		when:
 			ClientResponse response = anUpdateAlbumRequest()
-					.withId(notExistingAlbumId)
+					.withAlbumId(notExistingAlbumId)
 					.withTitle(newTitle)
 					.make()
 		then:

@@ -9,7 +9,7 @@ import pl.jojczykp.cdstore.tracks.TrackId;
 
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
+import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 public class GetTrackRequest extends Request {
 
@@ -45,7 +45,7 @@ public class GetTrackRequest extends Request {
 
 		ClientResponse response = client
 				.resource(String.format("%s/albums/%s/tracks/%s", serverUrl, albumId, trackId))
-				.accept(ALBUM_MEDIA_TYPE)
+				.accept(TRACK_MEDIA_TYPE)
 				.get(ClientResponse.class);
 
 		response.bufferEntity();

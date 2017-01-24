@@ -22,7 +22,7 @@ class GetAlbumIT extends Specification {
 					.makeSuccessfully()
 		when:
 			Album result = aGetAlbumRequest()
-					.withId(album.getId())
+					.withAlbumId(album.getId())
 					.makeSuccessfully()
 		then:
 			result == album
@@ -33,7 +33,7 @@ class GetAlbumIT extends Specification {
 			AlbumId albumId = randomAlbumId()
 		when:
 			ClientResponse response = aGetAlbumRequest()
-					.withId(albumId)
+					.withAlbumId(albumId)
 					.make()
 		then:
 			response.status == NOT_FOUND.statusCode

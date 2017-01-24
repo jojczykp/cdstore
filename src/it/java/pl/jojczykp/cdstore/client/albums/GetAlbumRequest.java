@@ -12,7 +12,7 @@ import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 
 public class GetAlbumRequest extends Request {
 
-	private AlbumId id;
+	private AlbumId albumId;
 
 	private GetAlbumRequest() {
 	}
@@ -21,8 +21,8 @@ public class GetAlbumRequest extends Request {
 		return new GetAlbumRequest();
 	}
 
-	public GetAlbumRequest withId(AlbumId id) {
-		this.id = id;
+	public GetAlbumRequest withAlbumId(AlbumId albumId) {
+		this.albumId = albumId;
 		return this;
 	}
 
@@ -37,7 +37,7 @@ public class GetAlbumRequest extends Request {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("albums").path(id.toString())
+				.resource(serverUrl).path("albums").path(albumId.toString())
 				.accept(ALBUM_MEDIA_TYPE)
 				.get(ClientResponse.class);
 

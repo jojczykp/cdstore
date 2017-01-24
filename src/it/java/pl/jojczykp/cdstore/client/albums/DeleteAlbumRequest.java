@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteAlbumRequest extends Request {
 
-	private AlbumId id;
+	private AlbumId albumId;
 
 	private DeleteAlbumRequest() {
 	}
@@ -19,8 +19,8 @@ public class DeleteAlbumRequest extends Request {
 		return new DeleteAlbumRequest();
 	}
 
-	public DeleteAlbumRequest withId(AlbumId id) {
-		this.id = id;
+	public DeleteAlbumRequest withId(AlbumId albumId) {
+		this.albumId = albumId;
 		return this;
 	}
 
@@ -34,7 +34,7 @@ public class DeleteAlbumRequest extends Request {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("albums").path(id.toString())
+				.resource(serverUrl).path("albums").path(albumId.toString())
 				.delete(ClientResponse.class);
 
 		response.bufferEntity();
