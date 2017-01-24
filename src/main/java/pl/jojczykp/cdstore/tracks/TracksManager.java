@@ -19,6 +19,11 @@ public class TracksManager {
 		return tracksRepository.createTrack(track);
 	}
 
+	public Track getTrack(AlbumId albumId, TrackId trackId) {
+		confirmAlbumExistsOrThrow(albumId);
+		return tracksRepository.getTrack(trackId);
+	}
+
 	public void deleteTrack(AlbumId albumId, TrackId trackId) {
 		confirmAlbumExistsOrThrow(albumId);
 		tracksRepository.deleteTrack(trackId);

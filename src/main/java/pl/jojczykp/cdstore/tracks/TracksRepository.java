@@ -19,8 +19,13 @@ public class TracksRepository {
         return createdTrack;
     }
 
-    public Track getTrack(TrackId id) {
-        return data.get(id);
+    public Track getTrack(TrackId trackId) {
+        Track result = data.get(trackId);
+        if (result == null) {
+            throw new ItemNotFoundException("track with given id not found");
+        }
+
+        return result;
     }
 
     public void deleteTrack(TrackId trackId) {

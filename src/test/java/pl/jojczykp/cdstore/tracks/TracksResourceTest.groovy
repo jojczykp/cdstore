@@ -27,6 +27,14 @@ class TracksResourceTest extends Specification {
             result.entity == track2
     }
 
+    def "should delegate get track by id to manager"() {
+        when:
+            Track result = resource.getTrack(albumId, trackId)
+        then:
+            1 * manager.getTrack(albumId, trackId) >> track1
+            result == track1
+    }
+
     def "should delegate delete track to manager"() {
         when:
             resource.deleteTrack(albumId, trackId)

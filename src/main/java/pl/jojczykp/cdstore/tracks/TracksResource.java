@@ -5,6 +5,7 @@ import pl.jojczykp.cdstore.albums.AlbumId;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -36,6 +37,17 @@ public class TracksResource {
 				.status(CREATED)
 				.entity(created)
 				.build();
+	}
+
+	@GET
+	@Timed
+	@Produces(TRACK_MEDIA_TYPE)
+	@Path("/{track_id}")
+	public Track getTrack(
+			@PathParam("album_id") AlbumId albumId,
+			@PathParam("track_id") TrackId trackId
+	) {
+		return manager.getTrack(albumId, trackId);
 	}
 
 	@DELETE

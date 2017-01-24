@@ -38,7 +38,26 @@ class TracksManagerTest extends Specification {
             ex.message == "album with given id not found"
     }
 
-    def "should delegate delete album to repository"() {
+    def "should delegate get track to repository"() {
+        when:
+            Track result = manager.getTrack(album.id, track1.id)
+        then:
+            1 * albumsRepository.albumExists(album.id) >> true
+            1 * tracksRepository.getTrack(track1.id) >> track1
+            result == track1
+    }
+
+    def "should throw exception getting track from not existing album"() {
+        when:
+            manager.getTrack(album.id, track1.id)
+        then:
+            1 * albumsRepository.albumExists(album.id) >> false
+            0 * tracksRepository.getTrack(track1.id)
+            ItemNotFoundException ex = thrown()
+            ex.message == "album with given id not found"
+    }
+
+    def "should delegate delete track to repository"() {
         when:
             manager.deleteTrack(album.id, track1.id)
         then:
