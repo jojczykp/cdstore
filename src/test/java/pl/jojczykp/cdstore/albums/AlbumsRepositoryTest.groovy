@@ -81,7 +81,7 @@ class AlbumsRepositoryTest extends Specification {
 			ex.message == "album with given id not found"
 	}
 
-	def "should get all albums"() {
+	def "should get albums unfiltered"() {
 		given:
 			Set<Album> createdAlbums = [
 					new Album(randomAlbumId(), "Title 1"),
@@ -90,9 +90,24 @@ class AlbumsRepositoryTest extends Specification {
 			]
 			createdAlbums.each { dbPutAlbum(it.id, it.title) }
 		when:
-			Set<Album> returnedAlbums = repository.getAlbums()
+			Set<Album> returnedAlbums = repository.getAlbums(null)
 		then:
 			returnedAlbums == createdAlbums
+	}
+
+	def "should get albums filtered by substring in title"() {
+		given:
+			String desiredSubstring = "Find Me"
+			Set<Album> createdAlbums = [
+					new Album(randomAlbumId(), "Title 1"),
+					new Album(randomAlbumId(), "Title ${desiredSubstring} 2"),
+					new Album(randomAlbumId(), "Title ${desiredSubstring} 3")
+			]
+			createdAlbums.each { dbPutAlbum(it.id, it.title) }
+		when:
+			Set<Album> returnedAlbums = repository.getAlbums(desiredSubstring)
+		then:
+			returnedAlbums == createdAlbums.findAll { it.title.contains(desiredSubstring)} as Set
 	}
 
 	def "should update album"() {

@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
+import com.amazonaws.services.dynamodbv2.document.ScanFilter;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
@@ -68,11 +69,15 @@ public class AlbumsRepository {
 
 	private Item findAlbum(AlbumId id) {
 		return table.getItem(new GetItemSpec()
-                    .withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString())));
+				.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString())));
 	}
 
-	public Set<Album> getAlbums() {
-		Spliterator<Item> items = table.scan().spliterator();
+	public Set<Album> getAlbums(String maybeTitleSubstring) {
+		ScanFilter[] filters = (maybeTitleSubstring == null)
+			? new ScanFilter[0]
+			: new ScanFilter[] {new ScanFilter(ATTR_TITLE).contains(maybeTitleSubstring)};
+
+		Spliterator<Item> items = table.scan(filters).spliterator();
 		return stream(items, true)
 				.map(this::toAlbum)
 				.collect(toSet());

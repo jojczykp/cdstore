@@ -57,7 +57,7 @@ class TracksManagerTest extends Specification {
 			ex.message == "album with given id not found"
 	}
 
-	def "should delegate get all tracks from album to repository"() {
+	def "should delegate get tracks from album to repository"() {
 		given:
 			Set<Track> expectedResult = [track1, track2] as Set
 		when:

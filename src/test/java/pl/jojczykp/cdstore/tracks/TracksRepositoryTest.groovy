@@ -51,7 +51,7 @@ class TracksRepositoryTest extends Specification {
 			ex.message == "track with given id not found"
 	}
 
-	def "should get all tracks from album"() {
+	def "should get tracks from album"() {
 		given:
 			Album album = new Album(randomAlbumId(), "Album Title 1")
 			Set<Track> createdTracks = [

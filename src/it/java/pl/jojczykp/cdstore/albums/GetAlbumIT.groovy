@@ -39,7 +39,7 @@ class GetAlbumIT extends Specification {
 			toMap(response) == [code: 101, message: 'album with given id not found']
 	}
 
-	def "should get all albums"() {
+	def "should get albums"() {
 		given:
 			Album album1 = aCreateAlbumRequest()
 					.withTitle("Title 1")
@@ -53,6 +53,24 @@ class GetAlbumIT extends Specification {
 					.makeSuccessfully()
 		then:
 			result.containsAll(album1, album2)
+	}
+
+	def "should get albums filtered by substring in title"() {
+		given:
+			String desiredSubstring = "Find Me ${System.currentTimeMillis()}"
+			Album album1 = aCreateAlbumRequest()
+					.withTitle("Title ${desiredSubstring} 1")
+					.makeSuccessfully()
+
+			aCreateAlbumRequest()
+					.withTitle("Title SkipMe 2")
+					.makeSuccessfully()
+		when:
+			Set<Album> result = aGetAlbumsRequest()
+					.withTitleSubstring(desiredSubstring)
+					.makeSuccessfully()
+		then:
+			result == [album1] as Set
 	}
 
 }

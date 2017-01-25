@@ -54,7 +54,7 @@ class GetTrackIT extends Specification {
 			toMap(response) == [code: 101, message: 'track with given id not found']
 	}
 
-	def "should get all tracks from album"() {
+	def "should get tracks from album"() {
 		given:
 			AlbumId albumId = aCreateAlbumRequest()
 					.withTitle(albumTitle)

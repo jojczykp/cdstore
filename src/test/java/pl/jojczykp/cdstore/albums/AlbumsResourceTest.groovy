@@ -32,13 +32,14 @@ class AlbumsResourceTest extends Specification {
 			result == album1
 	}
 
-	def "should delegate get all albums to manager"() {
+	def "should delegate get albums to manager"() {
 		given:
+			String maybeTitleSubstring = "in title on null"
 			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			Set<Album> result = resource.getAlbums()
+			Set<Album> result = resource.getAlbums(maybeTitleSubstring)
 		then:
-			1 * manager.getAlbums() >> expectedResult
+			1 * manager.getAlbums(maybeTitleSubstring) >> expectedResult
 			result == expectedResult
 	}
 

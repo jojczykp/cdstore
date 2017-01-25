@@ -32,13 +32,14 @@ class AlbumsManagerTest extends Specification {
 			result == album1
 	}
 
-	def "should delegate get all albums to repository"() {
+	def "should delegate get albums to repository"() {
 		given:
+			String maybeTitleSubstring = "in title or null"
 			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			Set<Album> result = manager.getAlbums()
+			Set<Album> result = manager.getAlbums(maybeTitleSubstring)
 		then:
-			1 * albumsRepository.getAlbums() >> expectedResult
+			1 * albumsRepository.getAlbums(maybeTitleSubstring) >> expectedResult
 			result == expectedResult
 	}
 

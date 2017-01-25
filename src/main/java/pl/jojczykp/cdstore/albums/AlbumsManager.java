@@ -22,8 +22,8 @@ public class AlbumsManager {
 		return albumsRepository.getAlbum(albumId);
 	}
 
-	public Set<Album> getAlbums() {
-		return albumsRepository.getAlbums();
+	public Set<Album> getAlbums(String maybeTitleSubstring) {
+		return albumsRepository.getAlbums(maybeTitleSubstring);
 	}
 
 	public Album updateAlbum(AlbumId albumId, Album patch) {
