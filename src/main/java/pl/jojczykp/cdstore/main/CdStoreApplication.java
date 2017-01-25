@@ -1,11 +1,7 @@
 package pl.jojczykp.cdstore.main;
 
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import pl.jojczykp.cdstore.albums.AlbumsConfiguration;
 import pl.jojczykp.cdstore.albums.AlbumsHealthCheck;
 import pl.jojczykp.cdstore.albums.AlbumsManager;
 import pl.jojczykp.cdstore.albums.AlbumsRepository;
@@ -29,9 +25,7 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
-		AmazonDynamoDB amazonDynamoDB = amazonDynamoDb(cdStoreConfiguration.getAlbums());
-
-		AlbumsRepository albumsRepository = new AlbumsRepository(amazonDynamoDB);
+		AlbumsRepository albumsRepository = new AlbumsRepository(cdStoreConfiguration.getAlbums());
 		TracksRepository tracksRepository = new TracksRepository();
 
 		AlbumsManager albumsManager = new AlbumsManager(albumsRepository, tracksRepository);
@@ -48,12 +42,6 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 		environment.jersey().register(new ItemNotFoundExceptionMapper());
 		environment.jersey().register(new ItemAlreadyExistsExceptionMapper());
-	}
-
-	private AmazonDynamoDB amazonDynamoDb(AlbumsConfiguration albumsConfiguration) {
-		return new AmazonDynamoDBClient(
-				new ProfileCredentialsProvider(albumsConfiguration.getProfile()))
-				.withEndpoint(albumsConfiguration.getEndpoint());
 	}
 
 }

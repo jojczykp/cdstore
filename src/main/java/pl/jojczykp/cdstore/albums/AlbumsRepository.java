@@ -1,6 +1,8 @@
 package pl.jojczykp.cdstore.albums;
 
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.PrimaryKey;
@@ -32,7 +34,14 @@ public class AlbumsRepository {
 
 	private final Table table;
 
-	public AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
+	public AlbumsRepository(AlbumsConfiguration albums) {
+		AmazonDynamoDB amazonDynamoDB =
+				new AmazonDynamoDBClient(new ProfileCredentialsProvider(albums.getProfile()))
+						.withEndpoint(albums.getEndpoint());
+		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
+	}
+
+	AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
 		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
 	}
 
