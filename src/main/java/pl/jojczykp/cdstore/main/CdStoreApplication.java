@@ -26,7 +26,8 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 	@Override
 	public void run(CdStoreConfiguration cdStoreConfiguration, Environment environment) {
 		AlbumsRepository albumsRepository = new AlbumsRepository(cdStoreConfiguration.getAlbums());
-		TracksRepository tracksRepository = new TracksRepository();
+		TracksRepository tracksRepository = new TracksRepository(cdStoreConfiguration.getTracks());
+		environment.lifecycle().manage(tracksRepository);
 
 		AlbumsManager albumsManager = new AlbumsManager(albumsRepository, tracksRepository);
 		TracksManager tracksManager = new TracksManager(albumsRepository, tracksRepository);

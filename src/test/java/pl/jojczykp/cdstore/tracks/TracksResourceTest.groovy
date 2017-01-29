@@ -37,10 +37,9 @@ class TracksResourceTest extends Specification {
 
 	def "should delegate update album to manager"() {
 		when:
-		   Track result = resource.updateTrack(albumId, trackId, track1)
+			resource.updateTrack(albumId, trackId, track1)
 		then:
-			1 * manager.updateTrack(albumId, trackId, track1) >> track2
-			result == track2
+			1 * manager.updateTrack(albumId, trackId, track1)
 	}
 
 	def "should delegate delete track to manager"() {
@@ -48,6 +47,13 @@ class TracksResourceTest extends Specification {
 			resource.deleteTrack(albumId, trackId)
 		then:
 			1 * manager.deleteTrack(albumId, trackId)
+	}
+
+	def "should delegate delete all album tracks to manager"() {
+		when:
+			resource.deleteAllAlbumTracks(albumId)
+		then:
+			1 * manager.deleteAllAlbumTracks(albumId)
 	}
 
 }

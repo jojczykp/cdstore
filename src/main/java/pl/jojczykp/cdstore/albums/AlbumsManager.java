@@ -32,7 +32,7 @@ public class AlbumsManager {
 
 	public void deleteAlbum(AlbumId albumId) {
 		albumsRepository.deleteAlbum(albumId);
-		tracksRepository.deleteAlbumTracks(albumId);
+		tracksRepository.deleteAllAlbumTracks(albumId);
 	}
 
 }

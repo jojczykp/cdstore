@@ -15,7 +15,8 @@ class TracksRepositoryTest extends Specification {
 	TrackId trackId1 = randomTrackId()
 	TrackId trackId2 = randomTrackId()
 
-	TracksRepository repository = new TracksRepository()
+	TracksConfiguration configuration = new TracksConfiguration("", 0, "")
+	TracksRepository repository = new TracksRepository(configuration)
 
 	def "should create track"() {
 		given:
@@ -100,20 +101,28 @@ class TracksRepositoryTest extends Specification {
 			dbGetTrack(trackId1) == null
 	}
 
-	def "should delete album tracks"() {
+	def "should fail deleting not existing track"() {
+		when:
+			repository.deleteTrack(trackId1)
+		then:
+			ItemNotFoundException ex = thrown()
+			ex.message == "track with given id not found"
+	}
+
+	def "should delete all album tracks"() {
 		given:
 			trackId1 = dbPutTrack(trackId1, albumId, "Track Title 1").id //TODO simplify once repository implemented
 			trackId2 = dbPutTrack(trackId2, albumId, "Track Title 2").id
 		when:
-			repository.deleteAlbumTracks(albumId)
+			repository.deleteAllAlbumTracks(albumId)
 		then:
 			dbGetTrack(trackId1) == null
 			dbGetTrack(trackId2) == null
 	}
 
-	def "should fail deleting not existing track"() {
+	def "should fail deleting all tracks from not existing album"() {
 		when:
-			repository.deleteTrack(trackId1)
+			repository.deleteAllAlbumTracks(trackId1)
 		then:
 			ItemNotFoundException ex = thrown()
 			ex.message == "track with given id not found"

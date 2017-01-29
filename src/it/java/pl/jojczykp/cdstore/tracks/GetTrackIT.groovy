@@ -1,17 +1,18 @@
 package pl.jojczykp.cdstore.tracks
 
 import com.sun.jersey.api.client.ClientResponse
+import pl.jojczykp.cdstore.albums.Album
 import pl.jojczykp.cdstore.albums.AlbumId
 import spock.lang.Specification
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.client.albums.CreateAlbumRequest.aCreateAlbumRequest
-import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 import static pl.jojczykp.cdstore.client.tracks.CreateTrackRequest.aCreateTrackRequest
 import static pl.jojczykp.cdstore.client.tracks.GetTrackRequest.aGetTrackRequest
 import static pl.jojczykp.cdstore.client.tracks.GetTracksRequest.aGetTracksRequest
 import static pl.jojczykp.cdstore.test_utils.JsonUtils.toMap
+import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class GetTrackIT extends Specification {
 
@@ -20,12 +21,11 @@ class GetTrackIT extends Specification {
 
 	def "should get track by ids"() {
 		given:
-			AlbumId albumId = aCreateAlbumRequest()
+			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.id
 			Track track = aCreateTrackRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.withTitle(trackTitle)
 					.makeSuccessfully()
 		when:
@@ -39,14 +39,13 @@ class GetTrackIT extends Specification {
 
 	def "should fail getting not existing track"() {
 		given:
-			AlbumId albumId = aCreateAlbumRequest()
+			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.id
 			TrackId trackId = randomTrackId()
 		when:
 			ClientResponse response = aGetTrackRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.withTrackId(trackId)
 					.make()
 		then:
@@ -56,21 +55,20 @@ class GetTrackIT extends Specification {
 
 	def "should get tracks from album"() {
 		given:
-			AlbumId albumId = aCreateAlbumRequest()
+			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.id
 			Track track1 = aCreateTrackRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.withTitle("Title 1")
 					.makeSuccessfully()
 			Track track2 = aCreateTrackRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.withTitle("Title 2")
 					.makeSuccessfully()
 		when:
 			List<Track> result = aGetTracksRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.makeSuccessfully()
 		then:
 			result.containsAll(track1, track2)

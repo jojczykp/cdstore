@@ -56,7 +56,7 @@ class AlbumsManagerTest extends Specification {
 			manager.deleteAlbum(albumId)
 		then:
 			1 * albumsRepository.deleteAlbum(albumId)
-			1 * tracksRepository.deleteAlbumTracks(albumId)
+			1 * tracksRepository.deleteAllAlbumTracks(albumId)
 	}
 
 }

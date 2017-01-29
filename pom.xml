@@ -40,18 +40,23 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<groovy.version>2.4.7</groovy.version>
 		<spock.version>1.1-groovy-2.4-rc-3</spock.version>
-        <aws.s3.region>us-west-2</aws.s3.region>
-        <dynamodb.port>8182</dynamodb.port>
-        <lombok.version>1.16.12</lombok.version>
+		<aws.s3.region>us-west-2</aws.s3.region>
+		<dynamodb.port>8182</dynamodb.port>
+		<lombok.version>1.16.12</lombok.version>
 	</properties>
 
-    <repositories>
-        <repository>
-            <id>dynamodb-local</id>
-            <name>DynamoDB Local Release Repository</name>
-            <url>http://dynamodb-local.s3-website-us-west-2.amazonaws.com/release</url>
-        </repository>
-    </repositories>
+	<repositories>
+		<repository>
+			<id>dynamodb-local</id>
+			<name>DynamoDB Local Release Repository</name>
+			<url>http://dynamodb-local.s3-website-us-west-2.amazonaws.com/release</url>
+		</repository>
+		<repository>
+			<id>mapr</id>
+			<name>Mapr releases repository</name>
+			<url>http://repository.mapr.com/nexus/content/groups/mapr-public/releases</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -147,25 +152,25 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
 			</plugin>
-            <plugin>
-                <groupId>com.googlecode.maven-download-plugin</groupId>
-                <artifactId>download-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <id>install-dynamodb_local</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>wget</goal>
-                        </goals>
-                        <configuration>
-                            <url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>
-                            <unpack>true</unpack>
-                            <outputDirectory>${project.build.directory}/dynamodb</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+			<plugin>
+				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<artifactId>download-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+					<execution>
+						<id>install-dynamodb_local</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>wget</goal>
+						</goals>
+						<configuration>
+							<url>http://dynamodb-local.s3-website-${aws.s3.region}.amazonaws.com/dynamodb_local_latest.zip</url>
+							<unpack>true</unpack>
+							<outputDirectory>${project.build.directory}/dynamodb</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>com.jcabi</groupId>
 				<artifactId>jcabi-dynamodb-maven-plugin</artifactId>
@@ -308,16 +313,28 @@
 			</exclusions>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-shaded-client</artifactId>
+			<version>1.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-winutils</artifactId>
+			<version>2.7.1</version>
+			<type>zip</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>DynamoDBLocal</artifactId>
 			<version>1.10.5.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-server</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-server</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.spockframework</groupId>
@@ -349,12 +366,12 @@
 			<version>1.8</version>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 </project>

@@ -1,6 +1,7 @@
 package pl.jojczykp.cdstore.tracks
 
 import com.sun.jersey.api.client.ClientResponse
+import pl.jojczykp.cdstore.albums.Album
 import pl.jojczykp.cdstore.albums.AlbumId
 import spock.lang.Specification
 
@@ -8,8 +9,10 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.client.albums.CreateAlbumRequest.aCreateAlbumRequest
 import static pl.jojczykp.cdstore.client.tracks.CreateTrackRequest.aCreateTrackRequest
+import static pl.jojczykp.cdstore.client.tracks.GetTrackRequest.aGetTrackRequest
 import static pl.jojczykp.cdstore.client.tracks.UpdateTrackRequest.anUpdateTrackRequest
 import static pl.jojczykp.cdstore.test_utils.JsonUtils.toMap
+import static pl.jojczykp.cdstore.tracks.Track.aTrack
 import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class UpdateTrackIT extends Specification {
@@ -20,36 +23,41 @@ class UpdateTrackIT extends Specification {
 
 	def "should update track"() {
 		given:
-			AlbumId albumId = aCreateAlbumRequest()
+			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.id
-			Track track = aCreateTrackRequest()
-					.withAlbumId(albumId)
+			Track created = aCreateTrackRequest()
+					.withAlbumId(album.id)
 					.withTitle(oldTrackTitle)
 					.makeSuccessfully()
 		when:
-			Track result = anUpdateTrackRequest()
-					.withAlbumId(albumId)
-					.withTrackId(track.id)
+			anUpdateTrackRequest()
+					.withAlbumId(album.id)
+					.withTrackId(created.id)
 					.withTitle(newTrackTitle)
 					.makeSuccessfully()
 		then:
-			result == track.toBuilder()
+			Track updated = aGetTrackRequest()
+					.withAlbumId(created.albumId)
+					.withTrackId(created.id)
+					.makeSuccessfully()
+			Track expected = aTrack()
+					.albumId(album.id)
+					.id(created.id)
 					.title(newTrackTitle)
 					.build()
+			updated == expected
 	}
 
 	def "should fail updating not existing track"() {
 		given:
-			AlbumId albumId = aCreateAlbumRequest()
+			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-					.id
 			TrackId notExistingTrackId = randomTrackId()
 		when:
 			ClientResponse response = anUpdateTrackRequest()
-					.withAlbumId(albumId)
+					.withAlbumId(album.id)
 					.withTrackId(notExistingTrackId)
 					.withTitle(newTrackTitle)
 					.make()

@@ -9,3 +9,8 @@ server:
 albums:
   profile: cdstore
   endpoint: https://dynamodb.eu-west-1.amazonaws.com
+
+tracks:
+  zookeeperQuorum: ec2-54-154-242-96.eu-west-1.compute.amazonaws.com
+  zookeeperClientPort: 2181
+  hbaseMaster: ec2-54-154-178-185.eu-west-1.compute.amazonaws.com:16010

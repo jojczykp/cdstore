@@ -65,11 +65,11 @@ public class TracksResource {
 	@Consumes(TRACK_MEDIA_TYPE)
 	@Produces(TRACK_MEDIA_TYPE)
 	@Path("/{track_id}")
-	public Track updateTrack(
+	public void updateTrack(
 			@PathParam("album_id") AlbumId albumId,
 			@PathParam("track_id") TrackId trackId,
 			Track patch) {
-		return manager.updateTrack(albumId, trackId, patch);
+		manager.updateTrack(albumId, trackId, patch);
 	}
 
 	@DELETE
@@ -80,6 +80,16 @@ public class TracksResource {
 			@PathParam("track_id") TrackId trackId
 	) {
 		manager.deleteTrack(albumId, trackId);
+
+		return Response
+				.status(NO_CONTENT)
+				.build();
+	}
+
+	@DELETE
+	@Timed
+	public Response deleteAllAlbumTracks(@PathParam("album_id") AlbumId albumId) {
+		manager.deleteAllAlbumTracks(albumId);
 
 		return Response
 				.status(NO_CONTENT)

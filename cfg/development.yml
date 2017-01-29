@@ -9,3 +9,8 @@ server:
 albums:
   profile: cdstore
   endpoint: http://localhost:8182
+
+tracks:
+  zookeeperQuorum: localhost
+  zookeeperClientPort: 2181
+  hbaseMaster: localhost:16010
