@@ -65,7 +65,8 @@ public class AlbumsResource {
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{album_id}")
 	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album patch) {
-		return manager.updateAlbum(albumId, patch);
+		Album enrichedPatch = patch.toBuilder().id(albumId).build();
+		return manager.updateAlbum(enrichedPatch);
 	}
 
 	@DELETE

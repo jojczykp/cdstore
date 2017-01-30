@@ -34,14 +34,14 @@ public class AlbumsRepository {
 
 	private final Table table;
 
+	AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
+		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
+	}
+
 	public AlbumsRepository(AlbumsConfiguration albums) {
 		AmazonDynamoDB amazonDynamoDB =
 				new AmazonDynamoDBClient(new ProfileCredentialsProvider(albums.getProfile()))
 						.withEndpoint(albums.getEndpoint());
-		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
-	}
-
-	AlbumsRepository(AmazonDynamoDB amazonDynamoDB) {
 		table = new DynamoDB(amazonDynamoDB).getTable(TABLE_NAME);
 	}
 
@@ -92,10 +92,10 @@ public class AlbumsRepository {
 				.collect(toSet());
 	}
 
-	public Album updateAlbum(AlbumId id, Album patch) {
+	public Album updateAlbum(Album patch) {
 		try {
 			Item item = table.updateItem(new UpdateItemSpec()
-					.withPrimaryKey(new PrimaryKey(ATTR_ID, id.toString()))
+					.withPrimaryKey(new PrimaryKey(ATTR_ID, patch.getId().toString()))
 					.withConditionExpression("attribute_exists(" + ATTR_ID + ")")
 					.withUpdateExpression("set " + ATTR_TITLE + " = :" + ATTR_TITLE)
 					.withValueMap(new ValueMap()

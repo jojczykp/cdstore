@@ -35,11 +35,13 @@ class TracksResourceTest extends Specification {
 			result == track1
 	}
 
-	def "should delegate update album to manager"() {
+	def "should delegate update track to manager"() {
+		given:
+			Track expectedPatch = track1.toBuilder().id(trackId).albumId(albumId).build()
 		when:
 			resource.updateTrack(albumId, trackId, track1)
 		then:
-			1 * manager.updateTrack(albumId, trackId, track1)
+			1 * manager.updateTrack(expectedPatch)
 	}
 
 	def "should delegate delete track to manager"() {

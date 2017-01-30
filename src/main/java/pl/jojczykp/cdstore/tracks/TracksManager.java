@@ -31,9 +31,9 @@ public class TracksManager {
 		return tracksRepository.getTracks(albumId);
 	}
 
-	public void updateTrack(AlbumId albumId, TrackId trackId, Track patch) {
-		confirmAlbumExistsOrThrow(albumId);
-		tracksRepository.updateTrack(trackId, patch);
+	public void updateTrack(Track patch) {
+		confirmAlbumExistsOrThrow(patch.getAlbumId());
+		tracksRepository.updateTrack(patch);
 	}
 
 	public void deleteTrack(AlbumId albumId, TrackId trackId) {

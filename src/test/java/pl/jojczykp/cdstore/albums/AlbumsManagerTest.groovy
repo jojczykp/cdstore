@@ -45,9 +45,9 @@ class AlbumsManagerTest extends Specification {
 
 	def "should delegate update album to repository"() {
 		when:
-			Album result = manager.updateAlbum(albumId, album1)
+			Album result = manager.updateAlbum(album1)
 		then:
-			1 * albumsRepository.updateAlbum(albumId, album1) >> album2
+			1 * albumsRepository.updateAlbum(album1) >> album2
 			result == album2
 	}
 

@@ -48,7 +48,7 @@ public class TracksRepository implements Managed {
 	private Connection connection;
 	private Table table;
 
-	public TracksRepository(Table table) {
+	TracksRepository(Table table) {
 		this.configuration = null;
 		this.table = table;
 	}
@@ -112,22 +112,15 @@ public class TracksRepository implements Managed {
 		}
 	}
 
-	public void updateTrack(TrackId trackId, Track patch) {
-		Track track = patch.toBuilder().id(trackId).build();
-
+	public void updateTrack(Track patch) {
 		try {
-			Put p = new Put(toBytes(trackId));
-			if (patch.getAlbumId() != null) {
-				//TODO never update this - fail if different!
-				p.addColumn(F_DATA, C_ALBUM_ID, toBytes(track.getAlbumId()));
-			}
+			Put p = new Put(toBytes(patch.getId()));
 
 			if (patch.getTitle() != null) {
-				p.addColumn(F_DATA, C_TITLE, toBytes(track.getTitle()));
+				p.addColumn(F_DATA, C_TITLE, toBytes(patch.getTitle()));
 			}
 
-			//TODO don't call if no changes
-			boolean existedBefore = table.checkAndPut(toBytes(trackId), F_DATA, C_ALBUM_ID, NOT_EQUAL, toBytes("not existing"), p);
+			boolean existedBefore = table.checkAndPut(toBytes(patch.getId()), F_DATA, C_ALBUM_ID, NOT_EQUAL, toBytes("not existing"), p);
 			if (!existedBefore) {
 				throw new ItemNotFoundException("track with given id not found");
 			}

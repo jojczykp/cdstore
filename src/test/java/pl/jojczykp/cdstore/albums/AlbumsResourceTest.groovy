@@ -44,10 +44,12 @@ class AlbumsResourceTest extends Specification {
 	}
 
 	def "should delegate update album to manager"() {
+		given:
+			Album expectedPatch = album1.toBuilder().id(albumId).build()
 		when:
 			Album result = resource.updateAlbum(albumId, album1)
 		then:
-			1 * manager.updateAlbum(albumId, album1) >> album2
+			1 * manager.updateAlbum(expectedPatch) >> album2
 			result == album2
 	}
 

@@ -102,27 +102,33 @@ class TracksRepositoryTest extends Specification {
 
 	def "should update track"() {
 		given:
-			Track patch = aTrack().albumId(albumId).title("New Title").build()
+			Track patch = aTrack()
+					.id(trackId)
+					.albumId(albumId)
+					.title("New Title")
+					.build()
 		when:
-			repository.updateTrack(trackId, patch)
+			repository.updateTrack(patch)
 		then:
 			1 * table.checkAndPut(toBytes(trackId), F_DATA, C_ALBUM_ID, NOT_EQUAL, toBytes("not existing"), _) >>
 					{ arguments -> p = arguments[5]; true }
 			p.row == toBytes(trackId)
-			p.has(F_DATA, C_ALBUM_ID, toBytes(patch.albumId))
 			p.has(F_DATA, C_TITLE, toBytes(patch.title))
 	}
 
 	def "should fail updating not existing track"() {
 		given:
-			Track patch = aTrack().albumId(albumId).title("New Title").build()
+			Track patch = aTrack()
+					.id(trackId)
+					.albumId(albumId)
+					.title("New Title")
+					.build()
 		when:
-			repository.updateTrack(trackId, patch)
+			repository.updateTrack(patch)
 		then:
 			1 * table.checkAndPut(toBytes(trackId), F_DATA, C_ALBUM_ID, NOT_EQUAL, toBytes("not existing"), _) >>
 					{ arguments -> p = arguments[5]; false }
 			p.row == toBytes(trackId)
-			p.has(F_DATA, C_ALBUM_ID, toBytes(patch.albumId))
 			p.has(F_DATA, C_TITLE, toBytes(patch.title))
 			ItemNotFoundException ex = thrown()
 			ex.message == "track with given id not found"

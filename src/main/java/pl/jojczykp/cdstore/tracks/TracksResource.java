@@ -69,7 +69,8 @@ public class TracksResource {
 			@PathParam("album_id") AlbumId albumId,
 			@PathParam("track_id") TrackId trackId,
 			Track patch) {
-		manager.updateTrack(albumId, trackId, patch);
+		Track enrichedPatch = patch.toBuilder().id(trackId).albumId(albumId).build();
+		manager.updateTrack(enrichedPatch);
 	}
 
 	@DELETE

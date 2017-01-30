@@ -26,8 +26,8 @@ public class AlbumsManager {
 		return albumsRepository.getAlbums(maybeTitleSubstring);
 	}
 
-	public Album updateAlbum(AlbumId albumId, Album patch) {
-		return albumsRepository.updateAlbum(albumId, patch);
+	public Album updateAlbum(Album patch) {
+		return albumsRepository.updateAlbum(patch);
 	}
 
 	public void deleteAlbum(AlbumId albumId) {

@@ -113,11 +113,11 @@ class AlbumsRepositoryTest extends Specification {
 	def "should update album"() {
 		given:
 			AlbumId albumId = randomAlbumId()
-			Album patch = anAlbum().title("New Title").build()
+			Album patch = anAlbum().id(albumId).title("New Title").build()
 			Album expectedAlbum = anAlbum().id(albumId).title(patch.title).build()
 			dbPutAlbum(albumId, "Old Title")
 		when:
-			Album updatedAlbum = repository.updateAlbum(albumId, patch)
+			Album updatedAlbum = repository.updateAlbum(patch)
 		then:
 			dbGetAlbum(albumId) == expectedAlbum
 			updatedAlbum == expectedAlbum
@@ -125,10 +125,9 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should fail on update album if it does not exists"() {
 		given:
-			AlbumId albumId = randomAlbumId()
-			Album patch = anAlbum().title("New Title").build()
+			Album patch = anAlbum().id(randomAlbumId()).title("New Title").build()
 		when:
-			repository.updateAlbum(albumId, patch)
+			repository.updateAlbum(patch)
 		then:
 			ItemNotFoundException ex = thrown()
 			ex.message == "album with given id not found"
