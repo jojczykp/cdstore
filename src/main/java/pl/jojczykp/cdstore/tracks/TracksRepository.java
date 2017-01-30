@@ -48,6 +48,11 @@ public class TracksRepository implements Managed {
 	private Connection connection;
 	private Table table;
 
+	public TracksRepository(Table table) {
+		this.configuration = null;
+		this.table = table;
+	}
+
 	public TracksRepository(TracksConfiguration tracksConfiguration) {
 		this.configuration = HBaseConfiguration.create();
 		configuration.set("hbase.zookeeper.quorum", tracksConfiguration.getZookeeperQuorum());
@@ -82,7 +87,7 @@ public class TracksRepository implements Managed {
 
 			return aTrack()
 					.id(trackId)
-					.albumId(getAlbumId(r)) //TODO what if wrong album id?
+					.albumId(getAlbumId(r))
 					.title(getTitle(r))
 					.build();
 		} catch (IOException e) {
@@ -114,7 +119,7 @@ public class TracksRepository implements Managed {
 			Put p = new Put(toBytes(trackId));
 			if (patch.getAlbumId() != null) {
 				//TODO never update this - fail if different!
-				p.addColumn(F_DATA, C_ALBUM_ID, toBytes(track.getAlbumId().toString()));
+				p.addColumn(F_DATA, C_ALBUM_ID, toBytes(track.getAlbumId()));
 			}
 
 			if (patch.getTitle() != null) {
