@@ -161,20 +161,26 @@ public class TracksRepository implements Managed {
 	@Override
 	public void start() throws Exception {
 		if (IS_OS_WINDOWS) {
-			Path tempDirectory = Files.createTempDirectory("cdstore-");
-			Path winUtils = tempDirectory.resolve("winutils");
-			Path winUtilsBin = winUtils.resolve("bin");
-			Files.createDirectories(winUtilsBin);
-			for (String fileName: asList("hadoop.dll", "hadoop.exp", "hadoop.lib", "hadoop.pdb", "libwinutils.lib", "winutils.exe", "winutils.pdb")) {
-				FileUtils.copyURLToFile(
-						getClass().getResource("/" + fileName),
-						winUtilsBin.resolve(fileName).toFile());
-			}
-			System.setProperty("hadoop.home.dir", winUtils.toAbsolutePath().toString());
+			configureWindowsNatives();
 		}
 
 		connection = ConnectionFactory.createConnection(configuration);
 		table = connection.getTable(TableName.valueOf(TABLE_NAME));
+	}
+
+	private void configureWindowsNatives() throws IOException {
+		Path tempDirectory = Files.createTempDirectory("cdstore-");
+		Path winUtils = tempDirectory.resolve("winutils");
+		Path winUtilsBin = winUtils.resolve("bin");
+		Files.createDirectories(winUtilsBin);
+		System.setProperty("hadoop.home.dir", winUtils.toAbsolutePath().toString());
+
+		for (String fileName: asList(
+				"hadoop.dll", "hadoop.exp", "hadoop.lib", "hadoop.pdb",
+				"libwinutils.lib", "winutils.exe", "winutils.pdb"))
+			FileUtils.copyURLToFile(
+				getClass().getResource("/" + fileName),
+				winUtilsBin.resolve(fileName).toFile());
 	}
 
 	@Override
