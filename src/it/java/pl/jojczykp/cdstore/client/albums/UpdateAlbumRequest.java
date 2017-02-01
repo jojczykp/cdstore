@@ -18,11 +18,11 @@ import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class UpdateAlbumRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 	@Wither private String title;
 
-	public static UpdateAlbumRequest anUpdateAlbumRequest() {
-		return new UpdateAlbumRequest(null, null);
+	public static UpdateAlbumRequest anUpdateAlbumRequest(AlbumId albumId) {
+		return new UpdateAlbumRequest(albumId, null);
 	}
 
 	public Album makeSuccessfully() {

@@ -18,12 +18,12 @@ import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class UpdateTrackRequest extends Request {
 
-	@Wither private AlbumId albumId;
-	@Wither private TrackId trackId;
+	private AlbumId albumId;
+	private TrackId trackId;
 	@Wither private String title;
 
-	public static UpdateTrackRequest anUpdateTrackRequest() {
-		return new UpdateTrackRequest(null, null, null);
+	public static UpdateTrackRequest anUpdateTrackRequest(AlbumId albumId, TrackId trackId) {
+		return new UpdateTrackRequest(albumId, trackId, null);
 	}
 
 	public void makeSuccessfully() {

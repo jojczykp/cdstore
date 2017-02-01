@@ -22,8 +22,7 @@ class CreateTrackIT extends Specification {
 					.withTitle(albumTitle)
 					.makeSuccessfully()
 		when:
-			Track track = aCreateTrackRequest()
-					.withAlbumId(album.id)
+			Track track = aCreateTrackRequest(album.id)
 					.withTitle(trackTitle)
 					.makeSuccessfully()
 		then:
@@ -35,8 +34,7 @@ class CreateTrackIT extends Specification {
 		given:
 			AlbumId nonExistingAlbumId = randomAlbumId()
 		when:
-			ClientResponse response = aCreateTrackRequest()
-					.withAlbumId(nonExistingAlbumId)
+			ClientResponse response = aCreateTrackRequest(nonExistingAlbumId)
 					.withTitle(trackTitle)
 					.make()
 		then:

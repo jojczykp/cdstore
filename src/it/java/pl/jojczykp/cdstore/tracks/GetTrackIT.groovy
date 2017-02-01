@@ -24,15 +24,11 @@ class GetTrackIT extends Specification {
 			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-			Track track = aCreateTrackRequest()
-					.withAlbumId(album.id)
+			Track track = aCreateTrackRequest(album.id)
 					.withTitle(trackTitle)
 					.makeSuccessfully()
 		when:
-			Track result = aGetTrackRequest()
-					.withAlbumId(track.albumId)
-					.withTrackId(track.id)
-					.makeSuccessfully()
+			Track result = aGetTrackRequest(track.albumId, track.id).makeSuccessfully()
 		then:
 			result == track
 	}
@@ -44,10 +40,7 @@ class GetTrackIT extends Specification {
 					.makeSuccessfully()
 			TrackId trackId = randomTrackId()
 		when:
-			ClientResponse response = aGetTrackRequest()
-					.withAlbumId(album.id)
-					.withTrackId(trackId)
-					.make()
+			ClientResponse response = aGetTrackRequest(album.id, trackId).make()
 		then:
 			response.status == NOT_FOUND.statusCode
 			toMap(response) == [code: 101, message: 'track with given id not found']
@@ -58,17 +51,14 @@ class GetTrackIT extends Specification {
 			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-			Track track1 = aCreateTrackRequest()
-					.withAlbumId(album.id)
+			Track track1 = aCreateTrackRequest(album.id)
 					.withTitle("Title 1")
 					.makeSuccessfully()
-			Track track2 = aCreateTrackRequest()
-					.withAlbumId(album.id)
+			Track track2 = aCreateTrackRequest(album.id)
 					.withTitle("Title 2")
 					.makeSuccessfully()
 		when:
-			List<Track> result = aGetTracksRequest()
-					.withAlbumId(album.id)
+			List<Track> result = aGetTracksRequest(album.id)
 					.makeSuccessfully()
 		then:
 			result.containsAll(track1, track2)
@@ -78,9 +68,7 @@ class GetTrackIT extends Specification {
 		given:
 			AlbumId albumId = randomAlbumId()
 		when:
-			ClientResponse response = aGetTracksRequest()
-					.withAlbumId(albumId)
-					.make()
+			ClientResponse response = aGetTracksRequest(albumId).make()
 		then:
 			response.status == NOT_FOUND.statusCode
 			toMap(response) == [code: 101, message: 'album with given id not found']

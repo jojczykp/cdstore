@@ -3,7 +3,6 @@ package pl.jojczykp.cdstore.client.tracks;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 import pl.jojczykp.cdstore.tracks.Track;
@@ -17,11 +16,11 @@ import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class GetTrackRequest extends Request {
 
-	@Wither private AlbumId albumId;
-	@Wither private TrackId trackId;
+	private AlbumId albumId;
+	private TrackId trackId;
 
-	public static GetTrackRequest aGetTrackRequest() {
-		return new GetTrackRequest(null, null);
+	public static GetTrackRequest aGetTrackRequest(AlbumId albumId, TrackId trackId) {
+		return new GetTrackRequest(albumId, trackId);
 	}
 
 	public Track makeSuccessfully() {

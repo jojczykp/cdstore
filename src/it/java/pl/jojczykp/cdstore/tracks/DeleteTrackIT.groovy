@@ -25,19 +25,15 @@ class DeleteTrackIT extends Specification {
 			Album album = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-			Track track = aCreateTrackRequest()
+			Track track = aCreateTrackRequest(album.id)
 					.withTitle(title)
-					.withAlbumId(album.id)
 					.makeSuccessfully()
 		when:
-			aDeleteTrackRequest()
-					.withAlbumId(album.id)
+			aDeleteTrackRequest(album.id)
 					.withTrackId(track.id)
 					.makeSuccessfully()
 		then:
-			aGetTrackRequest()
-					.withAlbumId(album.id)
-					.withTrackId(track.id)
+			aGetTrackRequest(album.id, track.id)
 					.make()
 					.status == NOT_FOUND.statusCode
 	}
@@ -49,8 +45,7 @@ class DeleteTrackIT extends Specification {
 					.makeSuccessfully()
 			TrackId notExistingTrackId = randomTrackId()
 		when:
-			ClientResponse response = aDeleteTrackRequest()
-					.withAlbumId(album.id)
+			ClientResponse response = aDeleteTrackRequest(album.id)
 					.withTrackId(notExistingTrackId)
 					.make()
 		then:
@@ -63,8 +58,7 @@ class DeleteTrackIT extends Specification {
 			AlbumId notExistingAlbumId = randomAlbumId()
 			TrackId notExistingTrackId = randomTrackId()
 		when:
-			ClientResponse response = aDeleteTrackRequest()
-					.withAlbumId(notExistingAlbumId)
+			ClientResponse response = aDeleteTrackRequest(notExistingAlbumId)
 					.withTrackId(notExistingTrackId)
 					.make()
 		then:
@@ -77,21 +71,17 @@ class DeleteTrackIT extends Specification {
 			Album album = aCreateAlbumRequest()
 					.withTitle(title)
 					.makeSuccessfully()
-			aCreateTrackRequest()
+			aCreateTrackRequest(album.id)
 					.withTitle(title + " 1")
-					.withAlbumId(album.id)
 					.makeSuccessfully()
-			aCreateTrackRequest()
+			aCreateTrackRequest(album.id)
 					.withTitle(title + " 2")
-					.withAlbumId(album.id)
 					.makeSuccessfully()
 		when:
-			aDeleteTracksRequest()
-					.withAlbumId(album.id)
+			aDeleteTracksRequest(album.id)
 					.makeSuccessfully()
 		then:
-			aGetTracksRequest()
-					.withAlbumId(album.id)
+			aGetTracksRequest(album.id)
 					.makeSuccessfully()
 					.isEmpty()
 	}
@@ -100,9 +90,7 @@ class DeleteTrackIT extends Specification {
 		given:
 			AlbumId notExistingAlbumId = randomAlbumId()
 		when:
-			ClientResponse response = aDeleteTracksRequest()
-					.withAlbumId(notExistingAlbumId)
-					.make()
+			ClientResponse response = aDeleteTracksRequest(notExistingAlbumId).make()
 		then:
 			response.status == NOT_FOUND.statusCode
 			toMap(response) == [code: 101, message: 'album with given id not found']

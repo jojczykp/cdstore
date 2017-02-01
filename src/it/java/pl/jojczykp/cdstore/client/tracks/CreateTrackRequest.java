@@ -17,11 +17,11 @@ import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class CreateTrackRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 	@Wither private String title;
 
-	public static CreateTrackRequest aCreateTrackRequest() {
-		return new CreateTrackRequest(null, null);
+	public static CreateTrackRequest aCreateTrackRequest(AlbumId albumId) {
+		return new CreateTrackRequest(albumId, null);
 	}
 
 	public Track makeSuccessfully() {
