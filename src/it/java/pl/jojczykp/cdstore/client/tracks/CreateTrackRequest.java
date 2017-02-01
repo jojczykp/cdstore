@@ -1,42 +1,45 @@
-package pl.jojczykp.cdstore.client.albums;
+package pl.jojczykp.cdstore.client.tracks;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
-import pl.jojczykp.cdstore.albums.Album;
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
+import pl.jojczykp.cdstore.tracks.Track;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.albums.Album.anAlbum;
-import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
+import static pl.jojczykp.cdstore.tracks.Track.aTrack;
+import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 @AllArgsConstructor(access = PRIVATE)
-public class CreateAlbumRequest extends Request {
+public class CreateTrackRequest extends Request {
 
+	@Wither private AlbumId albumId;
 	@Wither private String title;
 
-	public static CreateAlbumRequest aCreateAlbumRequest() {
-		return new CreateAlbumRequest(null);
+	public static CreateTrackRequest aCreateTrackRequest() {
+		return new CreateTrackRequest(null, null);
 	}
 
-	public Album makeSuccessfully() {
+	public Track makeSuccessfully() {
 		ClientResponse response = make();
 		assertThat(response.getStatus()).isEqualTo(CREATED.getStatusCode());
 
-		return response.getEntity(Album.class);
+		return response.getEntity(Track.class);
 	}
 
 	public ClientResponse make() {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("albums")
-				.accept(ALBUM_MEDIA_TYPE)
-				.type(ALBUM_MEDIA_TYPE)
-				.entity(anAlbum()
+				.resource(String.format("%s/albums/%s/tracks", serverUrl, albumId))
+				.accept(TRACK_MEDIA_TYPE)
+				.type(TRACK_MEDIA_TYPE)
+				.entity(aTrack()
+						.albumId(albumId)
 						.title(title)
 						.build())
 				.post(ClientResponse.class);

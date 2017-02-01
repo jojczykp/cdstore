@@ -1,34 +1,38 @@
 package pl.jojczykp.cdstore.albums;
 
+import pl.jojczykp.cdstore.tracks.TracksRepository;
+
 import java.util.Set;
-import java.util.UUID;
 
 public class AlbumsManager {
 
-	private AlbumsRepository repository;
+	private final AlbumsRepository albumsRepository;
+	private final TracksRepository tracksRepository;
 
-	public AlbumsManager(AlbumsRepository repository) {
-		this.repository = repository;
+	public AlbumsManager(AlbumsRepository albumsRepository, TracksRepository tracksRepository) {
+		this.albumsRepository = albumsRepository;
+		this.tracksRepository = tracksRepository;
 	}
 
 	public Album createAlbum(Album album) {
-		return repository.createAlbum(album);
+		return albumsRepository.createAlbum(album);
 	}
 
-	public Album getAlbum(UUID id) {
-		return repository.getAlbum(id);
+	public Album getAlbum(AlbumId albumId) {
+		return albumsRepository.getAlbum(albumId);
 	}
 
-	public Set<Album> getAlbums() {
-		return repository.getAlbums();
+	public Set<Album> getAlbums(String maybeTitleSubstring) {
+		return albumsRepository.getAlbums(maybeTitleSubstring);
 	}
 
-	public Album updateAlbum(UUID id, Album album) {
-		return repository.updateAlbum(id, album);
+	public Album updateAlbum(Album patch) {
+		return albumsRepository.updateAlbum(patch);
 	}
 
-	public void deleteAlbum(UUID id) {
-		repository.deleteAlbum(id);
+	public void deleteAlbum(AlbumId albumId) {
+		albumsRepository.deleteAlbum(albumId);
+		tracksRepository.deleteAllAlbumTracks(albumId);
 	}
 
 }

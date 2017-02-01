@@ -2,27 +2,22 @@ package pl.jojczykp.cdstore.client.albums;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Wither;
+import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 
-import java.util.UUID;
-
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
+import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@AllArgsConstructor(access = PRIVATE)
 public class DeleteAlbumRequest extends Request {
 
-	private UUID id;
-
-	private DeleteAlbumRequest() {
-	}
+	@Wither private AlbumId albumId;
 
 	public static DeleteAlbumRequest aDeleteAlbumRequest() {
-		return new DeleteAlbumRequest();
-	}
-
-	public DeleteAlbumRequest withId(UUID id) {
-		this.id = id;
-		return this;
+		return new DeleteAlbumRequest(null);
 	}
 
 	public void makeSuccessfully() {
@@ -35,7 +30,7 @@ public class DeleteAlbumRequest extends Request {
 		Client client = Client.create();
 
 		ClientResponse response = client
-				.resource(serverUrl).path("albums").path(id.toString())
+				.resource(serverUrl).path("albums").path(albumId.toString())
 				.delete(ClientResponse.class);
 
 		response.bufferEntity();

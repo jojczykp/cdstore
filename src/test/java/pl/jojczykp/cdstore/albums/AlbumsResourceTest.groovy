@@ -5,10 +5,11 @@ import spock.lang.Specification
 import javax.ws.rs.core.Response
 
 import static Album.anAlbum
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsResourceTest extends Specification {
 
-	UUID id = new UUID(6, 7)
+	AlbumId albumId = randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
@@ -25,35 +26,38 @@ class AlbumsResourceTest extends Specification {
 
 	def "should delegate get album by id to manager"() {
 		when:
-			Album result = resource.getAlbum(id)
+			Album result = resource.getAlbum(albumId)
 		then:
-			1 * manager.getAlbum(id) >> album1
+			1 * manager.getAlbum(albumId) >> album1
 			result == album1
 	}
 
-	def "should delegate get all albums to manager"() {
+	def "should delegate get albums to manager"() {
 		given:
+			String maybeTitleSubstring = "in title on null"
 			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			Set<Album> result = resource.getAlbums()
+			Set<Album> result = resource.getAlbums(maybeTitleSubstring)
 		then:
-			1 * manager.getAlbums() >> expectedResult
+			1 * manager.getAlbums(maybeTitleSubstring) >> expectedResult
 			result == expectedResult
 	}
 
 	def "should delegate update album to manager"() {
+		given:
+			Album expectedPatch = album1.toBuilder().id(albumId).build()
 		when:
-			Album result = resource.updateAlbum(id, album1)
+			Album result = resource.updateAlbum(albumId, album1)
 		then:
-			1 * manager.updateAlbum(id, album1) >> album2
-		result == album2
+			1 * manager.updateAlbum(expectedPatch) >> album2
+			result == album2
 	}
 
 	def "should delegate delete album to manager"() {
 		when:
-			resource.deleteAlbum(id)
+			resource.deleteAlbum(albumId)
 		then:
-			1 * manager.deleteAlbum(id)
+			1 * manager.deleteAlbum(albumId)
 	}
 
 }

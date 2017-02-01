@@ -1,11 +1,13 @@
 CD Store
+========
 
-Small pet project to play with:
+A pet project to play with:
 - Java 8
 - Maven
 - Dropwizard
 - Lombok
 - DynamoDB
+- HBase
 - Spock
 - jGitFlow
 

@@ -1,35 +1,34 @@
-package pl.jojczykp.cdstore.client.albums;
+package pl.jojczykp.cdstore.client.tracks;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Wither;
-import pl.jojczykp.cdstore.albums.Album;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
+import pl.jojczykp.cdstore.tracks.TrackId;
 
 import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND;
-import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.albums.Album.anAlbum;
-import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
+import static pl.jojczykp.cdstore.tracks.Track.aTrack;
+import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 @AllArgsConstructor(access = PRIVATE)
-public class UpdateAlbumRequest extends Request {
+public class UpdateTrackRequest extends Request {
 
 	@Wither private AlbumId albumId;
+	@Wither private TrackId trackId;
 	@Wither private String title;
 
-	public static UpdateAlbumRequest anUpdateAlbumRequest() {
-		return new UpdateAlbumRequest(null, null);
+	public static UpdateTrackRequest anUpdateTrackRequest() {
+		return new UpdateTrackRequest(null, null, null);
 	}
 
-	public Album makeSuccessfully() {
+	public void makeSuccessfully() {
 		ClientResponse response = make();
-		assertThat(response.getStatus()).isEqualTo(OK.getStatusCode());
-
-		return response.getEntity(Album.class);
+		assertThat(response.getStatus()).isEqualTo(NO_CONTENT.getStatusCode());
 	}
 
 	public ClientResponse make() {
@@ -37,10 +36,10 @@ public class UpdateAlbumRequest extends Request {
 		client.getProperties().put(PROPERTY_HTTP_URL_CONNECTION_SET_METHOD_WORKAROUND, true);
 
 		ClientResponse response = client
-				.resource(serverUrl).path("albums").path(albumId.toString())
-				.accept(ALBUM_MEDIA_TYPE)
-				.type(ALBUM_MEDIA_TYPE)
-				.entity(anAlbum()
+				.resource(String.format("%s/albums/%s/tracks/%s", serverUrl, albumId, trackId))
+				.accept(TRACK_MEDIA_TYPE)
+				.type(TRACK_MEDIA_TYPE)
+				.entity(aTrack()
 						.title(title)
 						.build())
 				.method("PATCH", ClientResponse.class);

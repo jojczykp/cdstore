@@ -12,7 +12,7 @@ import pl.jojczykp.cdstore.exceptions.ItemNotFoundException
 import spock.lang.Specification
 
 import static Album.anAlbum
-import static java.util.UUID.randomUUID
+import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsRepositoryTest extends Specification {
 
@@ -36,65 +36,98 @@ class AlbumsRepositoryTest extends Specification {
 		when:
 			Album createdAlbum = repository.createAlbum(newAlbum)
 		then:
-			createdAlbum == dbGetAlbum(createdAlbum.getId())
-			createdAlbum == newAlbum.toBuilder().id(createdAlbum.getId()).build()
+			createdAlbum == dbGetAlbum(createdAlbum.id)
+			createdAlbum == newAlbum.toBuilder().id(createdAlbum.id).build()
+	}
+
+	def "should confirm album exists by id"() {
+		given:
+			AlbumId albumId = randomAlbumId()
+			dbPutAlbum(albumId, "Some Title")
+		when:
+			boolean exists = repository.albumExists(albumId)
+		then:
+			exists
+	}
+
+	def "should confirm album does not exist by id"() {
+		given:
+			AlbumId notExistingId = randomAlbumId()
+		when:
+			boolean exists = repository.albumExists(notExistingId)
+		then:
+			!exists
 	}
 
 	def "should get album by id"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId albumId = randomAlbumId()
 			String title = "Some Title"
-			dbPutAlbum(id, title)
+			dbPutAlbum(albumId, title)
 		when:
-			Album album = repository.getAlbum(id)
+			Album album = repository.getAlbum(albumId)
 		then:
-			album.id == id
+			album.id == albumId
 			album.title == title
 	}
 
-	def "should fail on get album by non-existing id"() {
+	def "should fail on get album by not existing id"() {
 		given:
-			UUID notExistingId = new UUID(9, 9)
+			AlbumId notExistingId = randomAlbumId()
 		when:
 			repository.getAlbum(notExistingId)
 		then:
 			ItemNotFoundException ex = thrown()
-			ex.message == "album with given id does not exist"
+			ex.message == "album with given id not found"
 	}
 
-	def "should get all albums"() {
+	def "should get albums unfiltered"() {
 		given:
 			Set<Album> createdAlbums = [
-					new Album(new UUID(1, 1), "Title 1"),
-					new Album(new UUID(2, 2), "Title 2"),
-					new Album(new UUID(3, 3), "Title 3")
+					new Album(randomAlbumId(), "Title 1"),
+					new Album(randomAlbumId(), "Title 2"),
+					new Album(randomAlbumId(), "Title 3")
 			]
 			createdAlbums.each { dbPutAlbum(it.id, it.title) }
 		when:
-			Set<Album> returnedAlbums = repository.getAlbums()
+			Set<Album> returnedAlbums = repository.getAlbums(null)
 		then:
 			returnedAlbums == createdAlbums
 	}
 
+	def "should get albums filtered by substring in title"() {
+		given:
+			String desiredSubstring = "Find Me"
+			Set<Album> createdAlbums = [
+					new Album(randomAlbumId(), "Title 1"),
+					new Album(randomAlbumId(), "Title ${desiredSubstring} 2"),
+					new Album(randomAlbumId(), "Title ${desiredSubstring} 3")
+			]
+			createdAlbums.each { dbPutAlbum(it.id, it.title) }
+		when:
+			Set<Album> returnedAlbums = repository.getAlbums(desiredSubstring)
+		then:
+			returnedAlbums == createdAlbums.findAll { it.title.contains(desiredSubstring)} as Set
+	}
+
 	def "should update album"() {
 		given:
-			UUID id = randomUUID()
-			Album patch = anAlbum().title("New Title").build()
-			Album expectedAlbum = anAlbum().id(id).title(patch.getTitle()).build()
-			dbPutAlbum(id, "Old Title")
+			AlbumId albumId = randomAlbumId()
+			Album patch = anAlbum().id(albumId).title("New Title").build()
+			Album expectedAlbum = anAlbum().id(albumId).title(patch.title).build()
+			dbPutAlbum(albumId, "Old Title")
 		when:
-			Album updatedAlbum = repository.updateAlbum(id, patch)
+			Album updatedAlbum = repository.updateAlbum(patch)
 		then:
-			dbGetAlbum(id) == expectedAlbum
+			dbGetAlbum(albumId) == expectedAlbum
 			updatedAlbum == expectedAlbum
 	}
 
 	def "should fail on update album if it does not exists"() {
 		given:
-			UUID id = randomUUID()
-			Album patch = anAlbum().title("New Title").build()
+			Album patch = anAlbum().id(randomAlbumId()).title("New Title").build()
 		when:
-			repository.updateAlbum(id, patch)
+			repository.updateAlbum(patch)
 		then:
 			ItemNotFoundException ex = thrown()
 			ex.message == "album with given id not found"
@@ -102,42 +135,43 @@ class AlbumsRepositoryTest extends Specification {
 
 	def "should delete album"() {
 		given:
-			UUID id = randomUUID()
-			dbPutAlbum(id, "A Title")
+			AlbumId albumId = randomAlbumId()
+			dbPutAlbum(albumId, "A Title")
 		when:
-			repository.deleteAlbum(id)
+			repository.deleteAlbum(albumId)
 		then:
-			dbGetAlbum(id) == null
+			dbGetAlbum(albumId) == null
 	}
 
-	def "should succeed on deleting not existing album"() {
+	def "should fail on deleting not existing album"() {
 		given:
-			UUID id = randomUUID()
+			AlbumId albumId = randomAlbumId()
 		when:
-			repository.deleteAlbum(id)
+			repository.deleteAlbum(albumId)
 		then:
-			true
+			ItemNotFoundException ex = thrown()
+			ex.message == "album with given id not found"
 	}
 
-	private void dbPutAlbum(UUID id, String title) {
+	def dbPutAlbum(AlbumId albumId, String title) {
 		dynamoDB.putItem("cdstore-Albums", [
-				"id"   : new AttributeValue(id.toString()),
+				"id"   : new AttributeValue(albumId.toString()),
 				"title": new AttributeValue(title)
 		])
 	}
 
-	private Album dbGetAlbum(UUID id) {
+	def dbGetAlbum(AlbumId id) {
 		def item = dynamoDB.getItem("cdstore-Albums", [
 				"id": new AttributeValue(id.toString())
 		]).item
 
-		return (item == null) ? null : toItem(item)
+		item == null ? null : toItem(item)
 	}
 
 	private static Album toItem(Map<String, AttributeValue> item) {
 		anAlbum()
-				.id(UUID.fromString(item.get("id").getS()))
-				.title(item.get("title").getS())
+				.id(AlbumId.fromString(item.id.s))
+				.title(item.title.s)
 				.build()
 	}
 

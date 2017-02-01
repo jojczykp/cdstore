@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import lombok.Getter;
 import pl.jojczykp.cdstore.albums.AlbumsConfiguration;
+import pl.jojczykp.cdstore.tracks.TracksConfiguration;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,5 +15,10 @@ public class CdStoreConfiguration extends Configuration {
 	@JsonProperty
 	@Getter
 	private AlbumsConfiguration albums;
+
+	@NotNull
+	@JsonProperty
+	@Getter
+	private TracksConfiguration tracks;
 
 }

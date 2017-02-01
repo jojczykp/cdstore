@@ -1,5 +1,6 @@
 package pl.jojczykp.cdstore.albums
 
+import pl.jojczykp.cdstore.tracks.TracksRepository
 import spock.lang.Specification
 
 import static Album.anAlbum
@@ -7,54 +8,55 @@ import static Album.anAlbum
 
 class AlbumsManagerTest extends Specification {
 
-	UUID id = new UUID(6, 7)
+	AlbumId albumId = AlbumId.randomAlbumId()
 	Album album1 = anAlbum().build()
 	Album album2 = anAlbum().build()
 
-	AlbumsRepository repository = Mock(AlbumsRepository)
-	AlbumsManager manager = new AlbumsManager(repository)
+	AlbumsRepository albumsRepository = Mock(AlbumsRepository)
+	TracksRepository tracksRepository = Mock(TracksRepository)
+	AlbumsManager manager = new AlbumsManager(albumsRepository, tracksRepository)
 
 	def "should delegate create album to repository"() {
 		when:
 			Album result = manager.createAlbum(album1)
 		then:
-			1 * repository.createAlbum(album1) >> album2
+			1 * albumsRepository.createAlbum(album1) >> album2
 			result == album2
 	}
 
 	def "should delegate get album by id to repository"() {
 		when:
-			Album result = manager.getAlbum(id)
+			Album result = manager.getAlbum(albumId)
 		then:
-			1 * repository.getAlbum(id) >> album1
+			1 * albumsRepository.getAlbum(albumId) >> album1
 			result == album1
 	}
 
-	def "should delegate get all albums to repository"() {
+	def "should delegate get albums to repository"() {
 		given:
+			String maybeTitleSubstring = "in title or null"
 			Set<Album> expectedResult = [album1, album2] as Set
 		when:
-			Set<Album> result = manager.getAlbums()
+			Set<Album> result = manager.getAlbums(maybeTitleSubstring)
 		then:
-			1 * repository.getAlbums() >> expectedResult
+			1 * albumsRepository.getAlbums(maybeTitleSubstring) >> expectedResult
 			result == expectedResult
 	}
 
 	def "should delegate update album to repository"() {
-		given:
-			UUID id = new UUID(3, 4)
 		when:
-			Album result = manager.updateAlbum(id, album1)
+			Album result = manager.updateAlbum(album1)
 		then:
-			1 * repository.updateAlbum(id, album1) >> album2
+			1 * albumsRepository.updateAlbum(album1) >> album2
 			result == album2
 	}
 
 	def "should delegate delete album to repository"() {
 		when:
-			manager.deleteAlbum(id)
+			manager.deleteAlbum(albumId)
 		then:
-			1 * repository.deleteAlbum(id)
+			1 * albumsRepository.deleteAlbum(albumId)
+			1 * tracksRepository.deleteAllAlbumTracks(albumId)
 	}
 
 }
