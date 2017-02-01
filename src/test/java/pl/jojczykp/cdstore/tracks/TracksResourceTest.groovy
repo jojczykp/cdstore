@@ -20,10 +20,12 @@ class TracksResourceTest extends Specification {
 	TracksResource resource = new TracksResource(manager)
 
 	def "should delegate create track to manager"() {
+		given:
+			Track expectedTrack = track1.toBuilder().albumId(albumId).build()
 		when:
-			Response result = resource.createTrack(track1)
+			Response result = resource.createTrack(albumId, track1)
 		then:
-			1 * manager.createTrack(track1) >> track2
+			1 * manager.createTrack(expectedTrack) >> track2
 			result.entity == track2
 	}
 

@@ -33,8 +33,12 @@ public class TracksResource {
 	@Timed
 	@Produces(TRACK_MEDIA_TYPE)
 	@Consumes(TRACK_MEDIA_TYPE)
-	public Response createTrack(Track track) {
-		Track created = manager.createTrack(track);
+	public Response createTrack(
+			@PathParam("album_id") AlbumId albumId,
+			Track track
+	) {
+		Track enrichedTrack = track.toBuilder().albumId(albumId).build();
+		Track created = manager.createTrack(enrichedTrack);
 
 		return Response
 				.status(CREATED)

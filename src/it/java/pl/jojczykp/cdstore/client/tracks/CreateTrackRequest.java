@@ -39,7 +39,6 @@ public class CreateTrackRequest extends Request {
 				.accept(TRACK_MEDIA_TYPE)
 				.type(TRACK_MEDIA_TYPE)
 				.entity(aTrack()
-						.albumId(albumId)
 						.title(title)
 						.build())
 				.post(ClientResponse.class);

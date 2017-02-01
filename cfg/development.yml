@@ -8,7 +8,7 @@ server:
 
 albums:
   profile: cdstore
-  endpoint: https://dynamodb.eu-west-1.amazonaws.com
+  endpoint: http://localhost:8182
 
 tracks:
   zookeeperQuorum: ec2-54-154-242-96.eu-west-1.compute.amazonaws.com
