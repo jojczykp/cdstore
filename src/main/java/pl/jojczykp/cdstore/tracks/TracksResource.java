@@ -35,10 +35,9 @@ public class TracksResource {
 	@Consumes(TRACK_MEDIA_TYPE)
 	public Response createTrack(
 			@PathParam("album_id") AlbumId albumId,
-			Track track
+			TrackDetails trackDetails
 	) {
-		Track enrichedTrack = track.toBuilder().albumId(albumId).build();
-		Track created = manager.createTrack(enrichedTrack);
+		Track created = manager.createTrack(Track.from(albumId, trackDetails));
 
 		return Response
 				.status(CREATED)
@@ -72,9 +71,8 @@ public class TracksResource {
 	public void updateTrack(
 			@PathParam("album_id") AlbumId albumId,
 			@PathParam("track_id") TrackId trackId,
-			Track patch) {
-		Track enrichedPatch = patch.toBuilder().id(trackId).albumId(albumId).build();
-		manager.updateTrack(enrichedPatch);
+			TrackDetails trackDetails) {
+		manager.updateTrack(Track.from(albumId, trackId, trackDetails));
 	}
 
 	@DELETE

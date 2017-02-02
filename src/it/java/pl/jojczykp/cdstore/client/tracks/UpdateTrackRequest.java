@@ -12,7 +12,7 @@ import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PRO
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.tracks.Track.aTrack;
+import static pl.jojczykp.cdstore.tracks.TrackDetails.aTrackDetails;
 import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 @AllArgsConstructor(access = PRIVATE)
@@ -39,7 +39,7 @@ public class UpdateTrackRequest extends Request {
 				.resource(String.format("%s/albums/%s/tracks/%s", serverUrl, albumId, trackId))
 				.accept(TRACK_MEDIA_TYPE)
 				.type(TRACK_MEDIA_TYPE)
-				.entity(aTrack()
+				.entity(aTrackDetails()
 						.title(title)
 						.build())
 				.method("PATCH", ClientResponse.class);

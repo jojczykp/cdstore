@@ -7,43 +7,40 @@ import javax.ws.rs.core.Response
 
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 import static pl.jojczykp.cdstore.tracks.Track.aTrack
+import static pl.jojczykp.cdstore.tracks.TrackDetails.aTrackDetails
 import static pl.jojczykp.cdstore.tracks.TrackId.randomTrackId
 
 class TracksResourceTest extends Specification {
 
 	AlbumId albumId = randomAlbumId()
 	TrackId trackId = randomTrackId()
-	Track track1 = aTrack().build()
-	Track track2 = aTrack().build()
+	TrackDetails trackDetails = aTrackDetails().build()
+	Track track = aTrack().build()
 
 	TracksManager manager = Mock(TracksManager)
 	TracksResource resource = new TracksResource(manager)
 
 	def "should delegate create track to manager"() {
-		given:
-			Track expectedTrack = track1.toBuilder().albumId(albumId).build()
 		when:
-			Response result = resource.createTrack(albumId, track1)
+			Response result = resource.createTrack(albumId, trackDetails)
 		then:
-			1 * manager.createTrack(expectedTrack) >> track2
-			result.entity == track2
+			1 * manager.createTrack(Track.from(albumId, trackDetails)) >> track
+			result.entity == track
 	}
 
 	def "should delegate get track by id to manager"() {
 		when:
 			Track result = resource.getTrack(albumId, trackId)
 		then:
-			1 * manager.getTrack(albumId, trackId) >> track1
-			result == track1
+			1 * manager.getTrack(albumId, trackId) >> track
+			result == track
 	}
 
 	def "should delegate update track to manager"() {
-		given:
-			Track expectedPatch = track1.toBuilder().id(trackId).albumId(albumId).build()
 		when:
-			resource.updateTrack(albumId, trackId, track1)
+			resource.updateTrack(albumId, trackId, trackDetails)
 		then:
-			1 * manager.updateTrack(expectedPatch)
+			1 * manager.updateTrack(Track.from(albumId, trackId, trackDetails))
 	}
 
 	def "should delegate delete track to manager"() {

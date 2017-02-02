@@ -5,12 +5,13 @@ import spock.lang.Specification
 import javax.ws.rs.core.Response
 
 import static Album.anAlbum
+import static pl.jojczykp.cdstore.albums.AlbumDetails.anAlbumDetails
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsResourceTest extends Specification {
 
 	AlbumId albumId = randomAlbumId()
-	AlbumDetails albumDetails = new AlbumDetails(null) //anAlbumDetails().build()
+	AlbumDetails albumDetails = anAlbumDetails().build()
 	Album album = anAlbum().build()
 
 	AlbumsManager manager = Mock(AlbumsManager)
