@@ -33,8 +33,8 @@ public class AlbumsResource {
 	@Timed
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Consumes(ALBUM_MEDIA_TYPE)
-	public Response createAlbum(Album album) {
-		Album created = manager.createAlbum(album);
+	public Response createAlbum(AlbumDetails albumDetails) {
+		Album created = manager.createAlbum(Album.from(albumDetails));
 
 		return Response
 				.status(CREATED)
@@ -64,9 +64,11 @@ public class AlbumsResource {
 	@Consumes(ALBUM_MEDIA_TYPE)
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{album_id}")
-	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album patch) {
-		Album enrichedPatch = patch.toBuilder().id(albumId).build();
-		return manager.updateAlbum(enrichedPatch);
+	public Album updateAlbum(
+			@PathParam("album_id") AlbumId albumId,
+			AlbumDetails albumDetails
+	) {
+		return manager.updateAlbum(Album.from(albumId, albumDetails));
 	}
 
 	@DELETE
