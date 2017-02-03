@@ -306,11 +306,24 @@
 	</build>
 
 	<dependencies>
+		<!-- dropwizard -->
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>
 			<version>1.0.5</version>
 		</dependency>
+		<!-- swagger -->
+		<dependency>
+			<groupId>com.smoketurner</groupId>
+			<artifactId>dropwizard-swagger</artifactId>
+			<version>1.0.5-4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet-core</artifactId>
+			<version>2.26-b01</version>
+		</dependency>
+		<!-- dynamodb -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
@@ -322,6 +335,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- hbase -->
 		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-shaded-client</artifactId>
@@ -348,6 +362,7 @@
 			<type>zip</type>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- test -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>DynamoDBLocal</artifactId>
@@ -390,6 +405,7 @@
 			<version>1.8</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- code generation -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>

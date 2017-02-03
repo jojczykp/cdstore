@@ -6,6 +6,9 @@ server:
   - type: http
     port: 8181
 
+swagger:
+  resourcePackage: pl.jojczykp.cdstore
+
 albums:
   profile: cdstore
   endpoint: http://localhost:8182

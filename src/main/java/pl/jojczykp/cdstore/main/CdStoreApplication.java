@@ -1,7 +1,10 @@
 package pl.jojczykp.cdstore.main;
 
 import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.federecio.dropwizard.swagger.SwaggerBundle;
+import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import pl.jojczykp.cdstore.albums.AlbumsHealthCheck;
 import pl.jojczykp.cdstore.albums.AlbumsManager;
 import pl.jojczykp.cdstore.albums.AlbumsRepository;
@@ -21,6 +24,16 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 	@Override
 	public String getName() {
 		return "cdstore";
+	}
+
+	@Override
+	public void initialize(Bootstrap<CdStoreConfiguration> bootstrap) {
+		bootstrap.addBundle(new SwaggerBundle<CdStoreConfiguration>() {
+			@Override
+			protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(CdStoreConfiguration configuration) {
+				return configuration.getSwagger();
+			}
+		});
 	}
 
 	@Override
