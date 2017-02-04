@@ -317,6 +317,12 @@
 			<groupId>com.smoketurner</groupId>
 			<artifactId>dropwizard-swagger</artifactId>
 			<version>1.0.5-4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.code.findbugs</groupId>
+					<artifactId>annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
