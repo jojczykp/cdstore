@@ -14,6 +14,6 @@ albums:
   endpoint: http://localhost:8182
 
 tracks:
-  zookeeperQuorum: ec2-54-154-242-96.eu-west-1.compute.amazonaws.com
-  zookeeperClientPort: 2181
-  hbaseMaster: ec2-54-154-178-185.eu-west-1.compute.amazonaws.com:16010
+  zookeeperQuorum: to_be_overriden_by_system_property:_dw.tracks.zookeeperQuorum
+  zookeeperClientPort: to_be_overriden_by_system_property:_dw.tracks.zookeeperClientPort
+  hbaseMaster: to_be_overriden_by_system_property:_dw.tracks.hbaseMaster
