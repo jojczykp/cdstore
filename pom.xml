@@ -161,6 +161,7 @@
 				<version>0.19.0</version>
 				<configuration>
 					<machine/>
+					<startParallel/>
 					<images>
 						<image>
 							<name>xjodoin/hbase:1.2.3</name>
