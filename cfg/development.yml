@@ -11,7 +11,7 @@ swagger:
 
 albums:
   profile: cdstore
-  endpoint: http://localhost:8182
+  endpoint: to_be_overriden_by_system_property:_dw.albums.endpoint
 
 tracks:
   zookeeperQuorum: to_be_overriden_by_system_property:_dw.tracks.zookeeperQuorum

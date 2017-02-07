@@ -41,7 +41,6 @@
 		<groovy.version>2.4.7</groovy.version>
 		<spock.version>1.1-groovy-2.4-rc-3</spock.version>
 		<aws.s3.region>us-west-2</aws.s3.region>
-		<dynamodb.port>8182</dynamodb.port>
 		<lombok.version>1.16.12</lombok.version>
 	</properties>
 
@@ -191,6 +190,38 @@
 								<mode>none</mode>
 							</watch>
 						</image>
+						<image>
+							<name>peopleperhour/dynamodb:latest</name>
+							<alias>dynamodb</alias>
+							<run>
+								<ports>
+									<port>docker.dynamodb.port:8000/tcp</port>
+								</ports>
+								<volumes>
+									<bind>
+										<volume>${project.basedir}/src/test/resources/dynamodb:/migration:ro</volume>
+									</bind>
+								</volumes>
+								<wait>
+									<http>
+										<url>http://${docker.host.address}:${docker.dynamodb.port}/shell</url>
+										<method>HEAD</method>
+										<status>302</status>
+									</http>
+									<time>30000</time>
+									<exec>
+										<postStart>/migration/migrate.sh</postStart>
+									</exec>
+								</wait>
+								<log>
+									<color>green</color>
+									<prefix>DYNAMODB</prefix>
+								</log>
+							</run>
+							<watch>
+								<mode>none</mode>
+							</watch>
+						</image>
 					</images>
 				</configuration>
 				<executions>
@@ -230,40 +261,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.jcabi</groupId>
-				<artifactId>jcabi-dynamodb-maven-plugin</artifactId>
-				<version>0.8</version>
-				<executions>
-					<execution>
-						<id>dynamodb_local</id>
-						<goals>
-							<goal>start</goal>
-							<goal>stop</goal>
-						</goals>
-						<configuration>
-							<port>${dynamodb.port}</port>
-							<dist>${project.build.directory}/dynamodb</dist>
-							<arguments>
-								<argument>-sharedDb</argument>
-								<argument>-inMemory</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>dynamodb_local_schema</id>
-						<goals>
-							<goal>create-tables</goal>
-						</goals>
-						<configuration>
-							<port>${dynamodb.port}</port>
-							<tables>
-								<table>${basedir}/src/test/resources/dynamodb/cdstore-Albums.json</table>
-							</tables>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>com.bazaarvoice.maven.plugins</groupId>
 				<artifactId>process-exec-maven-plugin</artifactId>
 				<version>0.8</version>
@@ -275,12 +272,13 @@
 							<goal>start</goal>
 						</goals>
 						<configuration>
-							<name>TestedApplication</name>
-							<workingDir>TestedApplication</workingDir>
+							<name>tested-application</name>
+							<workingDir>tested-application</workingDir>
 							<healthcheckUrl>http://localhost:8181/healthcheck</healthcheckUrl>
 							<waitAfterLaunch>30</waitAfterLaunch>
 							<arguments>
 								<argument>java</argument>
+								<argument>-Ddw.albums.endpoint=http://${docker.host.address}:${docker.dynamodb.port}</argument>
 								<argument>-Ddw.tracks.zookeeperQuorum=${docker.host.address}</argument>
 								<argument>-Ddw.tracks.zookeeperClientPort=2181</argument>
 								<argument>-Ddw.tracks.hbaseMaster=${docker.host.address}:60000</argument>
