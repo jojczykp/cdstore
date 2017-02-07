@@ -160,8 +160,8 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.19.0</version>
 				<configuration>
-					<machine />
-					<startParallel />
+					<machine/>
+					<startParallel/>
 					<images>
 						<image>
 							<name>xjodoin/hbase:1.2.3</name>
@@ -179,7 +179,7 @@
 									<log>Master has completed initialization</log>
 									<time>60000</time>
 									<exec>
-										<postStart>/migration/cdstore-Tracks.sh</postStart>
+										<postStart>bash /migration/migrate.sh</postStart>
 									</exec>
 								</wait>
 								<log>
@@ -211,7 +211,7 @@
 									</http>
 									<time>30000</time>
 									<exec>
-										<postStart>/migration/migrate.sh</postStart>
+										<postStart>bash /migration/migrate.sh</postStart>
 									</exec>
 								</wait>
 								<log>
