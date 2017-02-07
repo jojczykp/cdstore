@@ -11,6 +11,7 @@ A pet project to play with:
 - Lombok
 - Spock
 - jGitFlow
+- Docker
 
 - RESTful
 - BDD
