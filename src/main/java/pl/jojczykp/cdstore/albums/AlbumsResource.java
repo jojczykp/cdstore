@@ -2,6 +2,11 @@ package pl.jojczykp.cdstore.albums;
 
 import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.jersey.PATCH;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -15,9 +20,9 @@ import javax.ws.rs.core.Response;
 import java.util.Set;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 
 @Path("/albums")
+@Api(value = "albums", description = "Albums related operations")
 public class AlbumsResource {
 
 	public static final String ALBUM_MEDIA_TYPE = "application/vnd-cdstore-album.1+json";
@@ -33,8 +38,12 @@ public class AlbumsResource {
 	@Timed
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Consumes(ALBUM_MEDIA_TYPE)
-	public Response createAlbum(Album album) {
-		Album created = manager.createAlbum(album);
+	@ApiOperation("Creates a new album")
+	@ApiResponse(code = 201, message = "Album created")
+	public Response createAlbum(
+			@ApiParam("Album details") AlbumDetails albumDetails
+	) {
+		Album created = manager.createAlbum(Album.from(albumDetails));
 
 		return Response
 				.status(CREATED)
@@ -46,15 +55,24 @@ public class AlbumsResource {
 	@Timed
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{album_id}")
-	public Album getAlbum(@PathParam("album_id") AlbumId albumId) {
+	@ApiOperation("Returns single album details")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Album returned"),
+			@ApiResponse(code = 404, message = "Album with given id not found")
+	})
+	public Album getAlbum(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId
+	) {
 		return manager.getAlbum(albumId);
 	}
 
 	@GET
 	@Timed
 	@Produces(ALBUM_LIST_MEDIA_TYPE)
+	@ApiOperation("Returns details of multiple albums")
+	@ApiResponse(code = 200, responseContainer = "Set", message = "Albums returned")
 	public Set<Album> getAlbums(
-			@QueryParam("titleSubstring") String maybeTitleSubstring
+			@ApiParam("Substring present in filtered title") @QueryParam("titleSubstring") String maybeTitleSubstring
 	) {
 		return manager.getAlbums(maybeTitleSubstring);
 	}
@@ -64,20 +82,30 @@ public class AlbumsResource {
 	@Consumes(ALBUM_MEDIA_TYPE)
 	@Produces(ALBUM_MEDIA_TYPE)
 	@Path("/{album_id}")
-	public Album updateAlbum(@PathParam("album_id") AlbumId albumId, Album patch) {
-		Album enrichedPatch = patch.toBuilder().id(albumId).build();
-		return manager.updateAlbum(enrichedPatch);
+	@ApiOperation("Updates details of a given albums")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Album after update"),
+			@ApiResponse(code = 404, message = "Album with given id not found")
+	})
+	public Album updateAlbum(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId,
+			@ApiParam("Album Details") AlbumDetails albumDetails
+	) {
+		return manager.updateAlbum(Album.from(albumId, albumDetails));
 	}
 
 	@DELETE
 	@Timed
 	@Path("/{album_id}")
-	public Response deleteAlbum(@PathParam("album_id") AlbumId albumId) {
+	@ApiOperation("Deletes a single album")
+	@ApiResponses({
+			@ApiResponse(code = 204, message = "Album and all its tracks deleted"),
+			@ApiResponse(code = 404, message = "Album with given id not found")
+	})
+	public void deleteAlbum(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId
+	) {
 		manager.deleteAlbum(albumId);
-
-		return Response
-				.status(NO_CONTENT)
-				.build();
 	}
 
 }

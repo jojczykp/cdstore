@@ -20,8 +20,7 @@ class UpdateAlbumIT extends Specification {
 					.withTitle(title)
 					.makeSuccessfully()
 		when:
-			Album result = anUpdateAlbumRequest()
-					.withAlbumId(album.id)
+			Album result = anUpdateAlbumRequest(album.id)
 					.withTitle(newTitle)
 					.makeSuccessfully()
 		then:
@@ -34,8 +33,7 @@ class UpdateAlbumIT extends Specification {
 		given:
 			AlbumId notExistingAlbumId = randomAlbumId()
 		when:
-			ClientResponse response = anUpdateAlbumRequest()
-					.withAlbumId(notExistingAlbumId)
+			ClientResponse response = anUpdateAlbumRequest(notExistingAlbumId)
 					.withTitle(newTitle)
 					.make()
 		then:

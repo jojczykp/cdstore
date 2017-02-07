@@ -5,11 +5,13 @@ A pet project to play with:
 - Java 8
 - Maven
 - Dropwizard
-- Lombok
+- Swagger
 - DynamoDB
 - HBase
+- Lombok
 - Spock
 - jGitFlow
+- Docker
 
 - RESTful
 - BDD

@@ -26,20 +26,15 @@ class UpdateTrackIT extends Specification {
 			Album album = aCreateAlbumRequest()
 					.withTitle(albumTitle)
 					.makeSuccessfully()
-			Track created = aCreateTrackRequest()
-					.withAlbumId(album.id)
+			Track created = aCreateTrackRequest(album.id)
 					.withTitle(oldTrackTitle)
 					.makeSuccessfully()
 		when:
-			anUpdateTrackRequest()
-					.withAlbumId(album.id)
-					.withTrackId(created.id)
+			anUpdateTrackRequest(album.id, created.id)
 					.withTitle(newTrackTitle)
 					.makeSuccessfully()
 		then:
-			Track updated = aGetTrackRequest()
-					.withAlbumId(created.albumId)
-					.withTrackId(created.id)
+			Track updated = aGetTrackRequest(created.albumId, created.id)
 					.makeSuccessfully()
 			Track expected = aTrack()
 					.albumId(album.id)
@@ -56,9 +51,7 @@ class UpdateTrackIT extends Specification {
 					.makeSuccessfully()
 			TrackId notExistingTrackId = randomTrackId()
 		when:
-			ClientResponse response = anUpdateTrackRequest()
-					.withAlbumId(album.id)
-					.withTrackId(notExistingTrackId)
+			ClientResponse response = anUpdateTrackRequest(album.id, notExistingTrackId)
 					.withTitle(newTrackTitle)
 					.make()
 		then:
@@ -71,9 +64,7 @@ class UpdateTrackIT extends Specification {
 			AlbumId notExistingAlbumId = randomAlbumId()
 			TrackId notExistingTrackId = randomTrackId()
 		when:
-			ClientResponse response = anUpdateTrackRequest()
-					.withAlbumId(notExistingAlbumId)
-					.withTrackId(notExistingTrackId)
+			ClientResponse response = anUpdateTrackRequest(notExistingAlbumId, notExistingTrackId)
 					.withTitle(newTrackTitle)
 					.make()
 		then:

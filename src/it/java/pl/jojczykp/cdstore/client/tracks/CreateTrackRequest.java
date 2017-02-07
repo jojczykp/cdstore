@@ -11,17 +11,17 @@ import pl.jojczykp.cdstore.tracks.Track;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.tracks.Track.aTrack;
+import static pl.jojczykp.cdstore.tracks.TrackDetails.aTrackDetails;
 import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_MEDIA_TYPE;
 
 @AllArgsConstructor(access = PRIVATE)
 public class CreateTrackRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 	@Wither private String title;
 
-	public static CreateTrackRequest aCreateTrackRequest() {
-		return new CreateTrackRequest(null, null);
+	public static CreateTrackRequest aCreateTrackRequest(AlbumId albumId) {
+		return new CreateTrackRequest(albumId, null);
 	}
 
 	public Track makeSuccessfully() {
@@ -38,8 +38,7 @@ public class CreateTrackRequest extends Request {
 				.resource(String.format("%s/albums/%s/tracks", serverUrl, albumId))
 				.accept(TRACK_MEDIA_TYPE)
 				.type(TRACK_MEDIA_TYPE)
-				.entity(aTrack()
-						.albumId(albumId)
+				.entity(aTrackDetails()
 						.title(title)
 						.build())
 				.post(ClientResponse.class);

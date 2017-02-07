@@ -6,6 +6,9 @@ server:
   - type: http
     port: 8081
 
+swagger:
+  resourcePackage: pl.jojczykp.cdstore
+
 albums:
   profile: cdstore
   endpoint: https://dynamodb.eu-west-1.amazonaws.com

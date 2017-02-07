@@ -5,37 +5,38 @@ import spock.lang.Specification
 import javax.ws.rs.core.Response
 
 import static Album.anAlbum
+import static pl.jojczykp.cdstore.albums.AlbumDetails.anAlbumDetails
 import static pl.jojczykp.cdstore.albums.AlbumId.randomAlbumId
 
 class AlbumsResourceTest extends Specification {
 
 	AlbumId albumId = randomAlbumId()
-	Album album1 = anAlbum().build()
-	Album album2 = anAlbum().build()
+	AlbumDetails albumDetails = anAlbumDetails().build()
+	Album album = anAlbum().build()
 
 	AlbumsManager manager = Mock(AlbumsManager)
 	AlbumsResource resource = new AlbumsResource(manager)
 
 	def "should delegate create album to manager"() {
 		when:
-			Response result = resource.createAlbum(album1)
+			Response result = resource.createAlbum(albumDetails)
 		then:
-			1 * manager.createAlbum(album1) >> album2
-			result.entity == album2
+			1 * manager.createAlbum(Album.from(albumDetails)) >> album
+			result.entity == album
 	}
 
 	def "should delegate get album by id to manager"() {
 		when:
 			Album result = resource.getAlbum(albumId)
 		then:
-			1 * manager.getAlbum(albumId) >> album1
-			result == album1
+			1 * manager.getAlbum(albumId) >> album
+			result == album
 	}
 
 	def "should delegate get albums to manager"() {
 		given:
 			String maybeTitleSubstring = "in title on null"
-			Set<Album> expectedResult = [album1, album2] as Set
+			Set<Album> expectedResult = [album] as Set
 		when:
 			Set<Album> result = resource.getAlbums(maybeTitleSubstring)
 		then:
@@ -44,13 +45,11 @@ class AlbumsResourceTest extends Specification {
 	}
 
 	def "should delegate update album to manager"() {
-		given:
-			Album expectedPatch = album1.toBuilder().id(albumId).build()
 		when:
-			Album result = resource.updateAlbum(albumId, album1)
+			Album result = resource.updateAlbum(albumId, albumDetails)
 		then:
-			1 * manager.updateAlbum(expectedPatch) >> album2
-			result == album2
+			1 * manager.updateAlbum(Album.from(albumId, albumDetails)) >> album
+			result == album
 	}
 
 	def "should delegate delete album to manager"() {

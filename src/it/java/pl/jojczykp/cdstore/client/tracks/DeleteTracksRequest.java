@@ -3,7 +3,6 @@ package pl.jojczykp.cdstore.client.tracks;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 
@@ -14,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AllArgsConstructor(access = PRIVATE)
 public class DeleteTracksRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 
-	public static DeleteTracksRequest aDeleteTracksRequest() {
-		return new DeleteTracksRequest(null);
+	public static DeleteTracksRequest aDeleteTracksRequest(AlbumId albumId) {
+		return new DeleteTracksRequest(albumId);
 	}
 
 	public void makeSuccessfully() {

@@ -20,8 +20,7 @@ class GetAlbumIT extends Specification {
 					.withTitle(title)
 					.makeSuccessfully()
 		when:
-			Album result = aGetAlbumRequest()
-					.withAlbumId(album.id)
+			Album result = aGetAlbumRequest(album.id)
 					.makeSuccessfully()
 		then:
 			result == album
@@ -31,9 +30,7 @@ class GetAlbumIT extends Specification {
 		given:
 			AlbumId albumId = randomAlbumId()
 		when:
-			ClientResponse response = aGetAlbumRequest()
-					.withAlbumId(albumId)
-					.make()
+			ClientResponse response = aGetAlbumRequest(albumId).make()
 		then:
 			response.status == NOT_FOUND.statusCode
 			toMap(response) == [code: 101, message: 'album with given id not found']

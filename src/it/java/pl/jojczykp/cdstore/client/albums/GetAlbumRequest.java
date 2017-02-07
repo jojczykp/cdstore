@@ -3,7 +3,6 @@ package pl.jojczykp.cdstore.client.albums;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.Album;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
@@ -16,10 +15,10 @@ import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class GetAlbumRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 
-	public static GetAlbumRequest aGetAlbumRequest() {
-		return new GetAlbumRequest(null);
+	public static GetAlbumRequest aGetAlbumRequest(AlbumId albumId) {
+		return new GetAlbumRequest(albumId);
 	}
 
 	public Album makeSuccessfully() {

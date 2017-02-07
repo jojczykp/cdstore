@@ -2,6 +2,11 @@ package pl.jojczykp.cdstore.tracks;
 
 import com.codahale.metrics.annotation.Timed;
 import io.dropwizard.jersey.PATCH;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import pl.jojczykp.cdstore.albums.AlbumId;
 
 import javax.ws.rs.Consumes;
@@ -15,9 +20,9 @@ import javax.ws.rs.core.Response;
 import java.util.Set;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 
 @Path("/albums/{album_id}/tracks")
+@Api(value = "tracks", description = "Tracks related operations")
 public class TracksResource {
 
 	public static final String TRACK_MEDIA_TYPE = "application/vnd-cdstore-track.1+json";
@@ -33,8 +38,13 @@ public class TracksResource {
 	@Timed
 	@Produces(TRACK_MEDIA_TYPE)
 	@Consumes(TRACK_MEDIA_TYPE)
-	public Response createTrack(Track track) {
-		Track created = manager.createTrack(track);
+	@ApiOperation("Creates a new track in a given album")
+	@ApiResponse(code = 201, message = "Track created")
+	public Response createTrack(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId,
+			@ApiParam("Track Details") TrackDetails trackDetails
+	) {
+		Track created = manager.createTrack(Track.from(albumId, trackDetails));
 
 		return Response
 				.status(CREATED)
@@ -46,9 +56,14 @@ public class TracksResource {
 	@Timed
 	@Produces(TRACK_MEDIA_TYPE)
 	@Path("/{track_id}")
+	@ApiOperation("Returns single track details")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "Track returned"),
+			@ApiResponse(code = 404, message = "Track with given id not found")
+	})
 	public Track getTrack(
-			@PathParam("album_id") AlbumId albumId,
-			@PathParam("track_id") TrackId trackId
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId,
+			@ApiParam("Track Id") @PathParam("track_id") TrackId trackId
 	) {
 		return manager.getTrack(albumId, trackId);
 	}
@@ -56,7 +71,11 @@ public class TracksResource {
 	@GET
 	@Timed
 	@Produces(TRACK_LIST_MEDIA_TYPE)
-	public Set<Track> getTracks(@PathParam("album_id") AlbumId albumId) {
+	@ApiOperation("Returns details of multiple tracks")
+	@ApiResponse(code = 200, responseContainer = "Set", message = "Tracks returned")
+	public Set<Track> getTracks(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId
+	) {
 		return manager.getTracks(albumId);
 	}
 
@@ -65,36 +84,45 @@ public class TracksResource {
 	@Consumes(TRACK_MEDIA_TYPE)
 	@Produces(TRACK_MEDIA_TYPE)
 	@Path("/{track_id}")
+	@ApiOperation("Updates details of a given track")
+	@ApiResponses({
+			@ApiResponse(code = 204, message = "Track updated"),
+			@ApiResponse(code = 404, message = "Track with given id not found")
+	})
 	public void updateTrack(
-			@PathParam("album_id") AlbumId albumId,
-			@PathParam("track_id") TrackId trackId,
-			Track patch) {
-		Track enrichedPatch = patch.toBuilder().id(trackId).albumId(albumId).build();
-		manager.updateTrack(enrichedPatch);
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId,
+			@ApiParam("Track Id") @PathParam("track_id") TrackId trackId,
+			@ApiParam("Track Details") TrackDetails trackDetails
+	) {
+		manager.updateTrack(Track.from(albumId, trackId, trackDetails));
 	}
 
 	@DELETE
 	@Timed
 	@Path("/{track_id}")
-	public Response deleteTrack(
-			@PathParam("album_id") AlbumId albumId,
-			@PathParam("track_id") TrackId trackId
+	@ApiOperation("Deletes a single track")
+	@ApiResponses({
+			@ApiResponse(code = 204, message = "Track deleted"),
+			@ApiResponse(code = 404, message = "Track with given id not found")
+	})
+	public void deleteTrack(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId,
+			@ApiParam("Track Id") @PathParam("track_id") TrackId trackId
 	) {
 		manager.deleteTrack(albumId, trackId);
-
-		return Response
-				.status(NO_CONTENT)
-				.build();
 	}
 
 	@DELETE
 	@Timed
-	public Response deleteAllAlbumTracks(@PathParam("album_id") AlbumId albumId) {
+	@ApiOperation("Deletes all tracks from a given album")
+	@ApiResponses({
+			@ApiResponse(code = 204, message = "All tracks from album deleted"),
+			@ApiResponse(code = 404, message = "Album with given id not found")
+	})
+	public void deleteAllAlbumTracks(
+			@ApiParam("Album Id") @PathParam("album_id") AlbumId albumId
+	) {
 		manager.deleteAllAlbumTracks(albumId);
-
-		return Response
-				.status(NO_CONTENT)
-				.build();
 	}
 
 }

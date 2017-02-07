@@ -21,12 +21,10 @@ class DeleteAlbumIT extends Specification {
 					.makeSuccessfully()
 					.id
 		when:
-			aDeleteAlbumRequest()
-					.withAlbumId(albumId)
+			aDeleteAlbumRequest(albumId)
 					.makeSuccessfully()
 		then:
-			aGetAlbumRequest()
-					.withAlbumId(albumId)
+			aGetAlbumRequest(albumId)
 					.make()
 					.status == NOT_FOUND.statusCode
 	}
@@ -35,8 +33,7 @@ class DeleteAlbumIT extends Specification {
 		given:
 			AlbumId notExistingAlbumId = randomAlbumId()
 		when:
-			ClientResponse response = aDeleteAlbumRequest()
-					.withAlbumId(notExistingAlbumId)
+			ClientResponse response = aDeleteAlbumRequest(notExistingAlbumId)
 					.make()
 		then:
 			response.status == NOT_FOUND.statusCode

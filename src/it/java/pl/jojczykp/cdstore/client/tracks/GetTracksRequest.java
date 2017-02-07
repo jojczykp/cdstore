@@ -4,7 +4,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import lombok.AllArgsConstructor;
-import lombok.experimental.Wither;
 import pl.jojczykp.cdstore.albums.AlbumId;
 import pl.jojczykp.cdstore.client.Request;
 import pl.jojczykp.cdstore.tracks.Track;
@@ -19,10 +18,10 @@ import static pl.jojczykp.cdstore.tracks.TracksResource.TRACK_LIST_MEDIA_TYPE;
 @AllArgsConstructor(access = PRIVATE)
 public class GetTracksRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 
-	public static GetTracksRequest aGetTracksRequest() {
-		return new GetTracksRequest(null);
+	public static GetTracksRequest aGetTracksRequest(AlbumId albumId) {
+		return new GetTracksRequest(albumId);
 	}
 
 	public List<Track> makeSuccessfully() {

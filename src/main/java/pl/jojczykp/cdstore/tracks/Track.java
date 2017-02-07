@@ -23,4 +23,19 @@ public class Track {
 	@JsonProperty
 	private final @Getter String title;
 
+	public static Track from(TrackDetails trackDetails) {
+		return from(null, null, trackDetails);
+	}
+
+	public static Track from(AlbumId albumId, TrackDetails trackDetails) {
+		return from(albumId, null, trackDetails);
+	}
+
+	public static Track from(AlbumId albumId, TrackId trackId, TrackDetails trackDetails) {
+		return aTrack()
+				.id(trackId)
+				.albumId(albumId)
+				.title(trackDetails.getTitle())
+				.build();
+	}
 }

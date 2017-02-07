@@ -15,11 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AllArgsConstructor(access = PRIVATE)
 public class DeleteTrackRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 	@Wither private TrackId trackId;
 
-	public static DeleteTrackRequest aDeleteTrackRequest() {
-		return new DeleteTrackRequest(null, null);
+	public static DeleteTrackRequest aDeleteTrackRequest(AlbumId albumId) {
+		return new DeleteTrackRequest(albumId, null);
 	}
 
 	public void makeSuccessfully() {

@@ -12,17 +12,17 @@ import static com.sun.jersey.client.urlconnection.URLConnectionClientHandler.PRO
 import static javax.ws.rs.core.Response.Status.OK;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static pl.jojczykp.cdstore.albums.Album.anAlbum;
+import static pl.jojczykp.cdstore.albums.AlbumDetails.anAlbumDetails;
 import static pl.jojczykp.cdstore.albums.AlbumsResource.ALBUM_MEDIA_TYPE;
 
 @AllArgsConstructor(access = PRIVATE)
 public class UpdateAlbumRequest extends Request {
 
-	@Wither private AlbumId albumId;
+	private AlbumId albumId;
 	@Wither private String title;
 
-	public static UpdateAlbumRequest anUpdateAlbumRequest() {
-		return new UpdateAlbumRequest(null, null);
+	public static UpdateAlbumRequest anUpdateAlbumRequest(AlbumId albumId) {
+		return new UpdateAlbumRequest(albumId, null);
 	}
 
 	public Album makeSuccessfully() {
@@ -40,7 +40,7 @@ public class UpdateAlbumRequest extends Request {
 				.resource(serverUrl).path("albums").path(albumId.toString())
 				.accept(ALBUM_MEDIA_TYPE)
 				.type(ALBUM_MEDIA_TYPE)
-				.entity(anAlbum()
+				.entity(anAlbumDetails()
 						.title(title)
 						.build())
 				.method("PATCH", ClientResponse.class);

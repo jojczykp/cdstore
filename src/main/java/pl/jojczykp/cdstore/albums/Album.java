@@ -19,4 +19,15 @@ public class Album {
 	@JsonProperty
 	private final @Getter String title;
 
+	public static Album from(AlbumDetails albumDetails) {
+		return from(null, albumDetails);
+	}
+
+	public static Album from(AlbumId albumId, AlbumDetails albumDetails) {
+		return anAlbum()
+				.id(albumId)
+				.title(albumDetails.getTitle())
+				.build();
+	}
+
 }
