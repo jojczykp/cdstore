@@ -4,7 +4,7 @@
 
 	<groupId>pl.jojczykp</groupId>
 	<artifactId>cdstore</artifactId>
-	<version>1.0.123</version>
+	<version>1.0.127</version>
 	<name>cdstore</name>
 	<url>https://github.com/jojczykp/cdstore</url>
 
@@ -160,7 +160,6 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.19.0</version>
 				<configuration>
-					<machine />
 					<startParallel />
 					<images>
 						<image>
@@ -177,7 +176,7 @@
 								</volumes>
 								<wait>
 									<log>Master has completed initialization</log>
-									<time>60000</time>
+									<time>120000</time>
 									<exec>
 										<postStart>bash /migration/migrate.sh</postStart>
 									</exec>
@@ -209,7 +208,7 @@
 										<method>HEAD</method>
 										<status>302</status>
 									</http>
-									<time>30000</time>
+									<time>60000</time>
 									<exec>
 										<postStart>bash /migration/migrate.sh</postStart>
 									</exec>
