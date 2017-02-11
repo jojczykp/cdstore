@@ -186,11 +186,6 @@
 							<name>xjodoin/hbase:1.2.3</name>
 							<alias>hbase</alias>
 							<run>
-								<ports>
-									<port>docker.hbase.zookeeperClientPort:2181/tcp</port>
-									<port>docker.hbase.hbaseMaster:60000/tcp</port>
-									<port>docker.hbase.hbaseRegion:60020/tcp</port>
-								</ports>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/src/test/resources/hbase:/migration:ro</volume>
@@ -216,9 +211,6 @@
 							<name>peopleperhour/dynamodb:latest</name>
 							<alias>dynamodb</alias>
 							<run>
-								<ports>
-									<port>docker.dynamodb.port:8000/tcp</port>
-								</ports>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/src/test/resources/dynamodb:/migration:ro</volume>
@@ -226,7 +218,7 @@
 								</volumes>
 								<wait>
 									<http>
-										<url>http://${docker.host.address}:${docker.dynamodb.port}/shell</url>
+										<url>http://${docker.container.dynamodb.ip}:8000/shell</url>
 										<method>HEAD</method>
 										<status>302</status>
 									</http>
@@ -300,10 +292,10 @@
 							<waitAfterLaunch>30</waitAfterLaunch>
 							<arguments>
 								<argument>java</argument>
-								<argument>-Ddw.albums.endpoint=http://${docker.host.address}:${docker.dynamodb.port}</argument>
-								<argument>-Ddw.tracks.zookeeperQuorum=${docker.host.address}</argument>
-								<argument>-Ddw.tracks.zookeeperClientPort=${docker.hbase.zookeeperClientPort}</argument>
-								<argument>-Ddw.tracks.hbaseMaster=${docker.host.address}:${docker.hbase.hbaseMaster}</argument>
+								<argument>-Ddw.albums.endpoint=http://${docker.container.dynamodb.ip}:8000</argument>
+								<argument>-Ddw.tracks.zookeeperQuorum=${docker.container.hbase.ip}</argument>
+								<argument>-Ddw.tracks.zookeeperClientPort=2181</argument>
+								<argument>-Ddw.tracks.hbaseMaster=${docker.container.hbase.ip}:60000</argument>
 								<argument>-jar</argument>
 								<argument>${basedir}/target/${project.artifactId}-${project.version}.jar</argument>
 								<argument>server</argument>
