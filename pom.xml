@@ -162,42 +162,29 @@
 				<configuration>
 					<images>
 						<image>
-							<name>andyshinn/dnsmasq:2.76</name>
-							<alias>dns</alias>
-							<run>
-								<entrypoint>dnsmasq -k --log-facility=-</entrypoint>
-								<capAdd>NET_ADMIN</capAdd>
-								<ports>
-									<port>53:53/udp</port>
-								</ports>
-								<links>
-									<link>hbase</link>
-								</links>
-								<log>
-									<color>yellow</color>
-									<prefix>DNS</prefix>
-								</log>
-							</run>
-							<watch>
-								<mode>none</mode>
-							</watch>
-						</image>
-						<image>
 							<name>xjodoin/hbase:1.2.3</name>
 							<alias>hbase</alias>
 							<run>
+								<wait>
+									<tcp>
+										<mode>direct</mode>
+										<host>${docker.container.hbase.ip}</host>
+										<ports>
+											<port>2181</port>
+											<port>60000</port>
+											<port>60020</port>
+										</ports>
+									</tcp>
+									<time>30000</time>
+									<exec>
+										<postStart>sh /migration/migrate.sh</postStart>
+									</exec>
+								</wait>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/src/test/resources/hbase:/migration:ro</volume>
 									</bind>
 								</volumes>
-								<wait>
-									<log>Master has completed initialization</log>
-									<time>120000</time>
-									<exec>
-										<postStart>bash /migration/migrate.sh</postStart>
-									</exec>
-								</wait>
 								<log>
 									<color>blue</color>
 									<prefix>HBASE</prefix>
@@ -211,25 +198,61 @@
 							<name>peopleperhour/dynamodb:latest</name>
 							<alias>dynamodb</alias>
 							<run>
+								<wait>
+									<tcp>
+										<mode>direct</mode>
+										<host>${docker.container.dynamodb.ip}</host>
+										<ports>
+											<port>8000</port>
+										</ports>
+									</tcp>
+									<time>30000</time>
+									<exec>
+										<postStart>sh /migration/migrate.sh</postStart>
+									</exec>
+								</wait>
 								<volumes>
 									<bind>
 										<volume>${project.basedir}/src/test/resources/dynamodb:/migration:ro</volume>
 									</bind>
 								</volumes>
+								<log>
+									<color>green</color>
+									<prefix>DYNAMODB</prefix>
+								</log>
+							</run>
+							<watch>
+								<mode>none</mode>
+							</watch>
+						</image>
+						<image>
+							<name>andyshinn/dnsmasq:2.76</name>
+							<alias>dns</alias>
+							<run>
+								<entrypoint>dnsmasq -k --log-facility=-</entrypoint>
+								<capAdd>NET_ADMIN</capAdd>
+								<ports>
+									<port>53:53/udp</port>
+								</ports>
+								<links>
+									<link>hbase</link> <!-- names of containers below will be resolvable by this dns server -->
+								</links>
 								<wait>
-									<http>
-										<url>http://${docker.container.dynamodb.ip}:8000/shell</url>
-										<method>HEAD</method>
-										<status>302</status>
-									</http>
-									<time>60000</time>
+									<tcp>
+										<mode>direct</mode>
+										<host>${docker.container.dns.ip}</host>
+										<ports>
+											<port>53</port>
+										</ports>
+									</tcp>
+									<time>30000</time>
 									<exec>
 										<postStart>bash /migration/migrate.sh</postStart>
 									</exec>
 								</wait>
 								<log>
-									<color>green</color>
-									<prefix>DYNAMODB</prefix>
+									<color>yellow</color>
+									<prefix>DNS</prefix>
 								</log>
 							</run>
 							<watch>
