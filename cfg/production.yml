@@ -14,6 +14,6 @@ albums:
   endpoint: https://dynamodb.eu-west-1.amazonaws.com
 
 tracks:
-  zookeeperQuorum: ec2-54-154-242-96.eu-west-1.compute.amazonaws.com
+  zookeeperQuorum: ip-172-31-34-1
   zookeeperClientPort: 2181
-  hbaseMaster: ec2-54-154-178-185.eu-west-1.compute.amazonaws.com:16010
+  hbaseMaster: ip-172-31-34-1:60000
