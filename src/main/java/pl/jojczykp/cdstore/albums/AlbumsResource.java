@@ -97,7 +97,7 @@ public class AlbumsResource {
 	@DELETE
 	@Timed
 	@Path("/{album_id}")
-	@ApiOperation("Deletes a single album")
+	@ApiOperation("Deletes a single album with all its tracks")
 	@ApiResponses({
 			@ApiResponse(code = 204, message = "Album and all its tracks deleted"),
 			@ApiResponse(code = 404, message = "Album with given id not found")

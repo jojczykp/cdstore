@@ -11,9 +11,9 @@ swagger:
 
 albums:
   profile: cdstore
-  endpoint: to_be_overriden_by_system_property:_dw.albums.endpoint
+  endpoint: to_be_overriden_by_system_property:dw.albums.endpoint
 
 tracks:
-  zookeeperQuorum: to_be_overriden_by_system_property:_dw.tracks.zookeeperQuorum
-  zookeeperClientPort: to_be_overriden_by_system_property:_dw.tracks.zookeeperClientPort
-  hbaseMaster: to_be_overriden_by_system_property:_dw.tracks.hbaseMaster
+  zookeeperQuorum: to_be_overriden_by_system_property:dw.tracks.zookeeperQuorum
+  zookeeperClientPort: to_be_overriden_by_system_property:dw.tracks.zookeeperClientPort
+  hbaseMaster: to_be_overriden_by_system_property:dw.tracks.hbaseMaster
