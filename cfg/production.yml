@@ -11,9 +11,9 @@ swagger:
 
 albums:
   profile: cdstore
-  endpoint: https://dynamodb.eu-west-1.amazonaws.com
+  endpoint: https://cdstore-dynamodb
 
 tracks:
-  zookeeperQuorum: ip-172-31-34-1
+  zookeeperQuorum: cdstore-hbase
   zookeeperClientPort: 2181
-  hbaseMaster: ip-172-31-34-1:60000
+  hbaseMaster: cdstore-hbase:60000
