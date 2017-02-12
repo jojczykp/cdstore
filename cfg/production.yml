@@ -11,7 +11,7 @@ swagger:
 
 albums:
   profile: cdstore
-  endpoint: https://cdstore-dynamodb:8000
+  endpoint: http://cdstore-dynamodb:8000
 
 tracks:
   zookeeperQuorum: cdstore-hbase
