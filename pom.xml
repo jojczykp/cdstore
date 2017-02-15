@@ -235,7 +235,9 @@
 									<port>53:53/udp</port>
 								</ports>
 								<links>
-									<link>hbase</link> <!-- names of containers below will be resolvable by this dns server -->
+									<!-- names of containers below will be resolvable by this dns server -->
+									<link>hbase</link>
+									<link>dynamodb</link>
 								</links>
 								<wait>
 									<tcp>
