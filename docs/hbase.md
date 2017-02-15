@@ -173,17 +173,15 @@ We are starting with default Linux docker installation (no docker machine used).
 
 1. Routing - No changes needed. To verify: ```$ ping 172.17.0.1```
 
-2. DNS
+2. DNS: ```# echo "nameserver 127.0.0.1" >> /etc/resolv.conf ```
 
-   ```# echo "nameserver 127.0.0.1" >> /etc/resolv.conf ```
-
-   To verify:
+3. Verify DNS:
 
    ```$ nslookup 15efb1840ce0```
    
    ```$ ping 15efb1840ce0```
 
-3. To verify if HBase region is available from host: ```$ telnet 15efb1840ce0 60020```
+4. Verify region availability: ```$ telnet 15efb1840ce0 60020```
 
 
 More setup details - Windows
@@ -220,13 +218,13 @@ machine used).
     C:\> ipconfig /flushdns
     ```
    
-   To verify:
+3. Verify DNS:
 
    ```C:\> nslookup 15efb1840ce0```
    
    ```C:\> ping 15efb1840ce0```
 
-3. To verify if HBase region is available from host: ```C:\> telnet 15efb1840ce0 60020```
+3. Verify region availability: ```C:\> telnet 15efb1840ce0 60020```
 
 Now you can start application or run all tests:
 
