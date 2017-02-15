@@ -1,9 +1,15 @@
 CD Store - Lombok solutions
 ===========================
 
+* [What is Lombok?](#what-is-lombok)
+* [How it is used here?](#how-it-is-used-here)
+* [_Lomboked_ sources location](#lomboked-sources-location)
+* [Lombok and IntelliJ](#lombok-and-intellij)
+* [Lombok and Maven](#lombok-and-maven)
 
-What is Lombok
---------------
+
+What is Lombok?
+---------------
 
 Lombok is a nice technology saving us from writing a lot of boilerplate,
 'obvious' code.

@@ -1,6 +1,12 @@
 CD Store - HBase solutions
 ==========================
 
+* [What is HBase?](#what-is-hbase)
+* [Missing native tools on Windows](#missing-native-tools-on-windows)
+* [Docker setup update for Integration Testing](#docker-setup-update-for-integration-testing)
+* [More setup details - Linux](#more-setup-details---linux)
+* [More setup details - Windows](#more-setup-details---windows)
+
 
 What is HBase?
 --------------
@@ -164,7 +170,7 @@ One way to make it reachable from application running in host OS is:
    containers resolvable.
 
 
-More setup details - Linux 
+More setup details - Linux
 --------------------------
 
 We are starting with default Linux docker installation (no docker machine used).
