@@ -2,9 +2,8 @@ CD Store
 ========
 
 A pet project to play with:
-- Maven
 - Dropwizard
-- Swagger
+- Swagger ([Solved issues](docs/dynamodb.md))
 - DynamoDB ([Solved issues](docs/dynamodb.md))
 - HBase ([Solved issues](docs/hbase.md))
 - Lombok ([Solved issues](docs/lombok.md))
@@ -12,6 +11,7 @@ A pet project to play with:
 - jGitFlow
 - Docker ([Solved issues](docs/docker.md))
 - Java 8
+- Maven
 
 - RESTful
 - BDD

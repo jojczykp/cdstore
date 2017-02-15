@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 
 public class CdStoreConfiguration extends Configuration {
 
-    @NotNull
+	@NotNull
 	@JsonProperty
-    @Getter
+	@Getter
 	private SwaggerBundleConfiguration swagger;
 
 	@NotNull
