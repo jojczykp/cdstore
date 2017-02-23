@@ -57,7 +57,7 @@ stop() {
 wait_for_start() {
     local __resultvar=$1
     local i=0
-    while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 2 ]
+    while [ $(curl -s http://localhost:${ADMIN_PORT}/healthcheck?pretty=true | grep "healthy" | grep "true" | wc -l) -ne 3 ]
     do
         ((i++)) && ((i>10)) && { echo "ERROR: Waiting for ${SERVICE_NAME} to start timeout"; eval ${__resultvar}="0"; return; }
         echo "Waiting for ${SERVICE_NAME} health check (${i}) ..."
