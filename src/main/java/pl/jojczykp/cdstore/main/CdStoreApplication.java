@@ -11,6 +11,7 @@ import pl.jojczykp.cdstore.albums.AlbumsRepository;
 import pl.jojczykp.cdstore.albums.AlbumsResource;
 import pl.jojczykp.cdstore.exceptions.ItemAlreadyExistsExceptionMapper;
 import pl.jojczykp.cdstore.exceptions.ItemNotFoundExceptionMapper;
+import pl.jojczykp.cdstore.tracks.TracksHealthCheck;
 import pl.jojczykp.cdstore.tracks.TracksManager;
 import pl.jojczykp.cdstore.tracks.TracksRepository;
 import pl.jojczykp.cdstore.tracks.TracksResource;
@@ -53,6 +54,9 @@ public class CdStoreApplication extends Application<CdStoreConfiguration> {
 
 		AlbumsHealthCheck albumsHealthCheck = new AlbumsHealthCheck(albumsRepository);
 		environment.healthChecks().register(albumsHealthCheck.getName(), albumsHealthCheck);
+
+		TracksHealthCheck tracksHealthCheck = new TracksHealthCheck(tracksRepository);
+		environment.healthChecks().register(tracksHealthCheck.getName(), tracksHealthCheck);
 
 		environment.jersey().register(new ItemNotFoundExceptionMapper());
 		environment.jersey().register(new ItemAlreadyExistsExceptionMapper());
