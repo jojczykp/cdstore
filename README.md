@@ -3,7 +3,7 @@ CD Store
 
 A pet project to play with:
 - Dropwizard
-- Swagger ([Solved issues](docs/dynamodb.md))
+- Swagger ([Solved issues](docs/swagger.md))
 - DynamoDB ([Solved issues](docs/dynamodb.md))
 - HBase ([Solved issues](docs/hbase.md))
 - Lombok ([Solved issues](docs/lombok.md))
