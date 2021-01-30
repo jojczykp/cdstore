@@ -1,6 +1,8 @@
 CD Store
 ========
 
+Online: https://cdstore.alterbit.org
+
 A pet project to play with:
 - Dropwizard
 - Swagger ([Solved issues](docs/swagger.md))
@@ -11,7 +13,7 @@ A pet project to play with:
 - jGitFlow
 - Docker ([Solved issues](docs/docker.md))
 - Java 8
-- Maven
+- Maven 3.6.3
 
 - RESTful
 - BDD
