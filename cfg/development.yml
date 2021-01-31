@@ -8,6 +8,7 @@ server:
 
 swagger:
   resourcePackage: pl.jojczykp.cdstore
+  schemes: ['http']
 
 albums:
   profile: cdstore
