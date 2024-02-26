@@ -1,8 +1,6 @@
 CD Store
 ========
 
-Online: https://cdstore.alterbit.org
-
 A pet project to play with:
 - Dropwizard
 - Swagger ([Solved issues](docs/swagger.md))
