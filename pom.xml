@@ -38,7 +38,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<groovy.version>2.4.7</groovy.version>
+		<groovy.version>2.4.21</groovy.version>
 		<spock.version>1.1-groovy-2.4-rc-3</spock.version>
 		<aws.s3.region>us-west-2</aws.s3.region>
 		<lombok.version>1.16.12</lombok.version>
